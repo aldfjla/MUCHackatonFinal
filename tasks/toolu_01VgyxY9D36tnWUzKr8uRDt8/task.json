@@ -1,0 +1,15 @@
+{
+  "tool_use_id": "toolu_01VgyxY9D36tnWUzKr8uRDt8",
+  "agent_id": "a3255f37e80df7962",
+  "subagent_type": "reviewer",
+  "task_description": "Review confidence-index agent",
+  "token_usage": {
+    "input_tokens": 6,
+    "cache_creation_tokens": 26128,
+    "cache_read_tokens": 28177,
+    "output_tokens": 35,
+    "api_call_count": 3
+  },
+  "started_at": "2026-10-10T18:04:40.753626367+02:00",
+  "completed_at": "2026-10-10T18:05:45.508618206+02:00"
+}

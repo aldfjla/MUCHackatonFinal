@@ -1,0 +1,15 @@
+{
+  "tool_use_id": "toolu_016MDVUL1qBVSc3TomUELV4M",
+  "agent_id": "a40db9639252bd443",
+  "subagent_type": "coder",
+  "task_description": "Implement confidence-index agent",
+  "token_usage": {
+    "input_tokens": 18,
+    "cache_creation_tokens": 35394,
+    "cache_read_tokens": 207712,
+    "output_tokens": 173,
+    "api_call_count": 9
+  },
+  "started_at": "2026-10-10T18:02:53.316412073+02:00",
+  "completed_at": "2026-10-10T18:04:10.831336311+02:00"
+}
