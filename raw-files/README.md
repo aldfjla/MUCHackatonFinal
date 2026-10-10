@@ -8,4 +8,5 @@ Per-source reading notes behind [../RESOURCES.md](../RESOURCES.md). Each file is
 | 02-herold-2025-ai-buyer.md | Herold et al. 2025, JPSM | full |
 | 03-kelly-chicksand-2024-bargaining-review.md | Kelly and Chicksand 2024 | most |
 | 04-heunis-2025-strategic-adaptability.md | Heunis et al. 2025, JPSM | body |
-| 05-not-read.md | Kraljic, Malhotra and Bazerman, Princeton chapter | not read |
+| 05-not-read.md | Kraljic, Malhotra and Bazerman | not read |
+| 06-princeton-handbook-negotiation-chapter.md | Princeton Handbook chapter "Negotiation" (2025) | full body (not the references) |
