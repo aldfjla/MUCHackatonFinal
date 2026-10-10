@@ -2582,3 +2582,7 @@ ok can you push it to nikos version branch so then alex can take it and improve 
 ---
 
 ok, make a timeline of what we did (this will be used to make the presentation tomorrow and for reference in case we need to switch ai agents bc our limits went bad
+
+---
+
+ok push this to my branch and tell me if we have every run mapped in the backlog
