@@ -1,0 +1,45 @@
+{
+  "cli_version": "0.11.4",
+  "checkpoint_id": "01M4KNQN4296YV241BM6ZHJ1Y8",
+  "strategy": "manual-commit",
+  "branch": "local-alex-niko",
+  "checkpoints_count": 9,
+  "files_touched": [
+    "agent/arena_kit/agents/__init__.py",
+    "agent/arena_kit/cli.py",
+    "agent/arena_kit/evidence.py",
+    "agent/arena_kit/sim_cases/real_runs/evidence_router_P01.json",
+    "agent/arena_kit/sim_cases/real_runs/evidence_router_P02.json",
+    "agent/arena_kit/sim_cases/real_runs/evidence_router_P03.json",
+    "agent/arena_kit/sim_cases/real_runs/evidence_router_P04.json",
+    "agent/arena_kit/sim_cases/real_runs/evidence_router_P05.json",
+    "agent/arena_kit/sim_cases/real_runs/evidence_router_P07.json",
+    "agent/arena_kit/sim_cases/real_runs/evidence_router_P08.json",
+    "agent/arena_kit/sim_cases/real_runs/evidence_router_P10.json",
+    "agent/arena_kit/sim_cases/real_runs/evidence_router_P11.json",
+    "agent/arena_kit/sim_cases/real_runs/evidence_router_P18.json"
+  ],
+  "sessions": [
+    {
+      "metadata": "/0/metadata.json",
+      "transcript": "/0/full.jsonl",
+      "compact_transcript": "/0/transcript.jsonl",
+      "content_hash": "/0/content_hash.txt",
+      "prompt": "/0/prompt.txt"
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 1057,
+    "cache_creation_tokens": 1114628,
+    "cache_read_tokens": 118394221,
+    "output_tokens": 288402,
+    "api_call_count": 427,
+    "subagent_tokens": {
+      "input_tokens": 112,
+      "cache_creation_tokens": 317410,
+      "cache_read_tokens": 3690049,
+      "output_tokens": 11042,
+      "api_call_count": 53
+    }
+  }
+}

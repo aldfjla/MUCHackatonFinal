@@ -1,0 +1,15 @@
+{
+  "tool_use_id": "toolu_01Kma23S9DSFpBKwRwFWGBsk",
+  "agent_id": "ad2eb3b4be9be7f32",
+  "subagent_type": "reviewer",
+  "task_description": "Review evidence layer code",
+  "token_usage": {
+    "input_tokens": 20,
+    "cache_creation_tokens": 47345,
+    "cache_read_tokens": 266412,
+    "output_tokens": 328,
+    "api_call_count": 10
+  },
+  "started_at": "2026-10-10T21:22:08.456809+02:00",
+  "completed_at": "2026-10-10T21:24:24.034872+02:00"
+}
