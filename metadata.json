@@ -1,0 +1,35 @@
+{
+  "cli_version": "0.11.4",
+  "checkpoint_id": "01M4KXJKZGSMS5FNSY564EYV03",
+  "strategy": "manual-commit",
+  "branch": "version-alex",
+  "checkpoints_count": 24,
+  "files_touched": [
+    "agent/arena_kit/agents/__init__.py",
+    "agent/arena_kit/agents/evidence.py",
+    "agent/arena_kit/cli.py"
+  ],
+  "sessions": [
+    {
+      "metadata": "/0/metadata.json",
+      "transcript": "/0/full.jsonl",
+      "compact_transcript": "/0/transcript.jsonl",
+      "content_hash": "/0/content_hash.txt",
+      "prompt": "/0/prompt.txt"
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 4496,
+    "cache_creation_tokens": 904609,
+    "cache_read_tokens": 55455682,
+    "output_tokens": 240917,
+    "api_call_count": 250,
+    "subagent_tokens": {
+      "input_tokens": 70,
+      "cache_creation_tokens": 110915,
+      "cache_read_tokens": 1412112,
+      "output_tokens": 774,
+      "api_call_count": 34
+    }
+  }
+}

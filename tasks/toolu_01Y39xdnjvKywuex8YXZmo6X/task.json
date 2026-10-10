@@ -1,0 +1,15 @@
+{
+  "tool_use_id": "toolu_01Y39xdnjvKywuex8YXZmo6X",
+  "agent_id": "a3043a0f937b60e8f",
+  "subagent_type": "reviewer",
+  "task_description": "Review FinalAgent for correctness",
+  "token_usage": {
+    "input_tokens": 14,
+    "cache_creation_tokens": 41731,
+    "cache_read_tokens": 152415,
+    "output_tokens": 69,
+    "api_call_count": 7
+  },
+  "started_at": "2026-10-11T00:00:14.881830592+02:00",
+  "completed_at": "2026-10-11T00:01:54.35237999+02:00"
+}
