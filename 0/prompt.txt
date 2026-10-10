@@ -1,0 +1,13 @@
+idk what happened but I can now see the folders in the thing
+
+---
+
+soo you did more changes in the .claude and .entire then I can see in the github rn?
+
+---
+
+can you commit it
+
+---
+
+can you pupulate the README file with some stuff and then commit it
