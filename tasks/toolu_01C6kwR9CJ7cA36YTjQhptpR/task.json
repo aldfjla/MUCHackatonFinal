@@ -1,0 +1,15 @@
+{
+  "tool_use_id": "toolu_01C6kwR9CJ7cA36YTjQhptpR",
+  "agent_id": "aaab41a8afa9828d4",
+  "subagent_type": "general-purpose",
+  "task_description": "Attribute score gains and losses",
+  "token_usage": {
+    "input_tokens": 28,
+    "cache_creation_tokens": 115688,
+    "cache_read_tokens": 1115310,
+    "output_tokens": 160,
+    "api_call_count": 14
+  },
+  "started_at": "2026-10-11T00:18:49.155754+02:00",
+  "completed_at": "2026-10-11T00:21:34.616073+02:00"
+}

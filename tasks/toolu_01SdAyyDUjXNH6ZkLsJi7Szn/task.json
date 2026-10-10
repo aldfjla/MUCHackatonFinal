@@ -1,0 +1,15 @@
+{
+  "tool_use_id": "toolu_01SdAyyDUjXNH6ZkLsJi7Szn",
+  "agent_id": "a0a21b9c10c0efb0d",
+  "subagent_type": "teacher",
+  "task_description": "Explain simplify agent",
+  "token_usage": {
+    "input_tokens": 4,
+    "cache_creation_tokens": 42119,
+    "cache_read_tokens": 7093,
+    "output_tokens": 5443,
+    "api_call_count": 2
+  },
+  "started_at": "2026-10-10T23:19:59.20196+02:00",
+  "completed_at": "2026-10-10T23:20:26.088465+02:00"
+}
