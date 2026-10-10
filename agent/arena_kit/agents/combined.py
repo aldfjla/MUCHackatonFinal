@@ -10,10 +10,10 @@ Compose as EvidenceAgent(GuardedAgent(CombinedAgent()), data, questions=False), 
 - Listener rules on every sheet: frozen fields stay at the supplier's value, no payment faster than the
   supplier offered (unless it asked and it saves >= 0.3 %), never a sheet sent before, never worse than the
   opening or the alternative.
-- Closing: FinalAgent's closing_accept (cheapest valid sheet over all live threads); after a final offer, a
-  try at their price with cheaper non-price terms (tied terms and their effective date kept), also when their
-  own sheet misses a must-have or loses to the alternative (P07: 5.64 at 24 months). Refused: accept the best
-  acceptable sheet, else the next untried package. Never walks away while a supplier is alive (FinalAgent).
+- Closing: FinalAgent's closing_accept (cheapest valid sheet over all live threads). An acceptable final offer
+  is accepted at once (suppliers walk after a push). Only an unacceptable one (misses a must-have or loses to
+  the alternative, P07: 5.64 at 24 months) gets a try at their price with cheaper non-price terms (tied terms
+  and their effective date kept). Refused: accept the best acceptable sheet, else the next untried package. Never walks away while a supplier is alive (FinalAgent).
 """
 
 import json
@@ -25,11 +25,8 @@ from ..guard import satisfy_must_haves
 from ..listener import focus, supplier_model
 from ..play import latest, live_threads, moves_left
 from .final import FinalAgent
-from .listener import BODY_THEIR_PRICE, ListenerAgent, _tried_after_final
+from .listener import BODY_THEIR_PRICE, ListenerAgent
 from .reciprocal import _c_alt, _mine, _sup, _valid, case_c_open, closing_accept
-
-TRY_SAVING = 0.005  # the one try after a final offer must save at least this share of their sheet's cost
-
 
 def _limit(model):
     """The supplier says its price will not move ("no further concessions", same price twice, a final offer):
@@ -71,21 +68,20 @@ class CombinedAgent(FinalAgent):
         After our first try, only when no acceptable sheet exists (else FinalAgent accepts): the next untried one."""
         c_alt, c_open = _c_alt(case), case_c_open(case, threads)
         quoted = {s: ev for s, ev in threads.items() if _sup(ev)}
+        if closing_accept(case, quoted):
+            return None  # an acceptable sheet is on the table: FinalAgent accepts it, no extra push (suppliers walk)
         for sid in live_threads(threads):
             ev = threads[sid]
             if latest(ev).get("status") != "final_offer" or moves_left(case, ev) < 2:
                 continue  # keep the last message for the accept
-            if _tried_after_final(ev) and closing_accept(case, quoted):
-                return None  # they refused our try but a sheet is acceptable: FinalAgent accepts it
             std, model = standard_terms(ev), self._models.get(sid)
             priced = _valid(case, ev, std, math.inf, musts=False)
             if not priced or model is None:
                 continue
             c_best, best = min(priced, key=lambda v: v[0])
             terms = best["terms"]
-            # the saving rule only applies when their own sheet is acceptable as it stands
-            ok_as_is = must_haves_ok(case, terms, std) and c_best < c_alt
-            bar = c_best * (1 - TRY_SAVING) if ok_as_is else math.inf
+            if must_haves_ok(case, terms, std) and c_best < c_alt and c_best < c_open:
+                continue  # their final is acceptable as it stands: accept it, never push again
 
             def cost(t, std=std):
                 return total_cost(case, t, std)
@@ -106,7 +102,6 @@ class CombinedAgent(FinalAgent):
                     and must_haves_ok(case, at, std)
                     and self.ears._pay_filter(model, [at], cost, ref=terms)
                     and cost(at) < upper
-                    and cost(at) < bar
                 ):
                     return {"supplier_id": sid, "message": {"subject": case.get("title", "Our proposal"),
                                                             "body": BODY_THEIR_PRICE, "term_sheets": [{"terms": at}]}}

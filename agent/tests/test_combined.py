@@ -172,3 +172,30 @@ def test_guard_does_not_resend_a_refused_counter():
     sheet = complete_offer(c, satisfy_must_haves(c, dict(t), {}))
     ev[1] = {"from": "buyer", "body": "", "term_sheets": [{"terms": sheet}]}
     assert not g._eligible(c, {"sup:A": ev}, "sup:A")
+
+
+def test_acceptable_final_offer_is_accepted_at_once():
+    c = case("P05")  # no alternative; must-have lead <= 42
+    ev = [sup("Offer.", n=0, unit_price=40.0, **P05), buyer(unit_price=32.0, **P05),
+          sup("This is our final offer.", status="final_offer", n=1, unit_price=38.0, **P05)]
+    d = CombinedAgent().decide(c, {"sup:A": ev})
+    assert d["message"].get("action", {}).get("type") == "accept", d  # no "slower payment" push
+
+
+def test_unacceptable_final_offer_gets_one_try():
+    c, threads = case("P07"), _until_final("evidence_router_P07")
+    d = CombinedAgent().decide(c, threads)
+    assert len(sheets(d)) == 1 and not d["message"].get("action")
+
+
+def test_guard_last_move_does_not_resend_an_old_counter():
+    c = {**case("P05"), "round_limit": 2}
+    t = dict(unit_price=40.0, payment_days=30, lead_time_days=35)
+    from arena_kit.cost import complete_offer
+    from arena_kit.guard import satisfy_must_haves
+    old = complete_offer(c, satisfy_must_haves(c, dict(t), {}))
+    ev = [sup("Offer.", n=0, **t), {"from": "buyer", "body": "", "term_sheets": [{"terms": old}]},
+          sup("No.", n=1, **t)]
+    g = GuardedAgent(CombinedAgent())
+    d = g.decide(c, {"sup:A": ev})
+    assert all(x != old for x in sheets(d))
