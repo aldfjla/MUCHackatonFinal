@@ -1,0 +1,15 @@
+{
+  "tool_use_id": "toolu_01DmTtPG6qRz38Lh1waqUcwV",
+  "agent_id": "a0b82ba2963190e10",
+  "subagent_type": "reviewer",
+  "task_description": "Review merge + confident combos",
+  "token_usage": {
+    "input_tokens": 8,
+    "cache_creation_tokens": 27038,
+    "cache_read_tokens": 51258,
+    "output_tokens": 33,
+    "api_call_count": 4
+  },
+  "started_at": "2026-10-10T18:58:11.107370796+02:00",
+  "completed_at": "2026-10-10T18:59:08.690439518+02:00"
+}

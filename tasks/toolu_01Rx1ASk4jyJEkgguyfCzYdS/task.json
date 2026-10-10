@@ -1,0 +1,15 @@
+{
+  "tool_use_id": "toolu_01Rx1ASk4jyJEkgguyfCzYdS",
+  "agent_id": "ac204b1353b0e63bf",
+  "subagent_type": "coder",
+  "task_description": "Merge Niko's agents + confidence combos",
+  "token_usage": {
+    "input_tokens": 16,
+    "cache_creation_tokens": 43247,
+    "cache_read_tokens": 214248,
+    "output_tokens": 505,
+    "api_call_count": 8
+  },
+  "started_at": "2026-10-10T18:55:59.31113917+02:00",
+  "completed_at": "2026-10-10T18:57:45.536830253+02:00"
+}

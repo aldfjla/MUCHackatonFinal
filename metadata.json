@@ -1,0 +1,69 @@
+{
+  "cli_version": "0.11.4",
+  "checkpoint_id": "01M4KC5YXJ42HF2V2T29Q223K1",
+  "strategy": "manual-commit",
+  "branch": "version-alex",
+  "checkpoints_count": 5,
+  "files_touched": [
+    "Players/Originals/README.md",
+    "Players/Originals/_runner.py",
+    "Players/Originals/bold_ram.py",
+    "Players/Originals/chameleon.py",
+    "Players/Originals/curious_fox.py",
+    "Players/Originals/iron_turtle.py",
+    "Players/Originals/naive_baseline.py",
+    "Players/Originals/patient_hawk.py",
+    "Players/Originals/smart_petra.py",
+    "Players/Originals/wise_owl.py",
+    "Players/README.md",
+    "RESEARCH.md",
+    "RESOURCES.md",
+    "SCHOOLS.md",
+    "agent/arena_kit/agents/__init__.py",
+    "agent/arena_kit/agents/anchor.py",
+    "agent/arena_kit/agents/boulware.py",
+    "agent/arena_kit/agents/explorer.py",
+    "agent/arena_kit/agents/rational.py",
+    "agent/arena_kit/agents/router.py",
+    "agent/arena_kit/agents/switcher.py",
+    "agent/arena_kit/cli.py",
+    "agent/arena_kit/confidence.py",
+    "agent/tests/test_anchor.py",
+    "agent/tests/test_boulware.py",
+    "agent/tests/test_explorer.py",
+    "agent/tests/test_players_originals.py",
+    "agent/tests/test_rational.py",
+    "agent/tests/test_router.py",
+    "agent/tests/test_switcher.py",
+    "backlog.csv",
+    "raw-files/01-pon-getting-to-yes.md",
+    "raw-files/02-herold-2025-ai-buyer.md",
+    "raw-files/03-kelly-chicksand-2024-bargaining-review.md",
+    "raw-files/04-heunis-2025-strategic-adaptability.md",
+    "raw-files/05-not-read.md",
+    "raw-files/README.md"
+  ],
+  "sessions": [
+    {
+      "metadata": "/0/metadata.json",
+      "transcript": "/0/full.jsonl",
+      "compact_transcript": "/0/transcript.jsonl",
+      "content_hash": "/0/content_hash.txt",
+      "prompt": "/0/prompt.txt"
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 1812,
+    "cache_creation_tokens": 577170,
+    "cache_read_tokens": 22014290,
+    "output_tokens": 87913,
+    "api_call_count": 120,
+    "subagent_tokens": {
+      "input_tokens": 8,
+      "cache_creation_tokens": 34183,
+      "cache_read_tokens": 62120,
+      "output_tokens": 463,
+      "api_call_count": 4
+    }
+  }
+}
