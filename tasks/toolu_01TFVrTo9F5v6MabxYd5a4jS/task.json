@@ -1,0 +1,15 @@
+{
+  "tool_use_id": "toolu_01TFVrTo9F5v6MabxYd5a4jS",
+  "agent_id": "a440ca7f3827450eb",
+  "subagent_type": "reviewer",
+  "task_description": "Review rational agent code",
+  "token_usage": {
+    "input_tokens": 8,
+    "cache_creation_tokens": 23347,
+    "cache_read_tokens": 41838,
+    "output_tokens": 240,
+    "api_call_count": 4
+  },
+  "started_at": "2026-10-10T18:15:27.952401+02:00",
+  "completed_at": "2026-10-10T18:16:13.770579+02:00"
+}
