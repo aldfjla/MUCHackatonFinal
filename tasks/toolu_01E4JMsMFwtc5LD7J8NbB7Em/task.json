@@ -1,0 +1,15 @@
+{
+  "tool_use_id": "toolu_01E4JMsMFwtc5LD7J8NbB7Em",
+  "agent_id": "a7b3043edc0b6a26c",
+  "subagent_type": "reviewer",
+  "task_description": "Review concurrent play loop",
+  "token_usage": {
+    "input_tokens": 20,
+    "cache_creation_tokens": 42528,
+    "cache_read_tokens": 237567,
+    "output_tokens": 2161,
+    "api_call_count": 10
+  },
+  "started_at": "2026-10-10T22:37:15.640159+02:00",
+  "completed_at": "2026-10-10T22:38:44.996737+02:00"
+}

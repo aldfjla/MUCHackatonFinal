@@ -1,0 +1,15 @@
+{
+  "tool_use_id": "toolu_01NaiX8hmEt7PPVft3t6TKHv",
+  "agent_id": "ab0d4cd5a55fd87a3",
+  "subagent_type": "coder",
+  "task_description": "Register copy agent",
+  "token_usage": {
+    "input_tokens": 12,
+    "cache_creation_tokens": 24514,
+    "cache_read_tokens": 109186,
+    "output_tokens": 121,
+    "api_call_count": 6
+  },
+  "started_at": "2026-10-10T22:38:56.320376+02:00",
+  "completed_at": "2026-10-10T22:39:38.25751+02:00"
+}

@@ -1,0 +1,15 @@
+{
+  "tool_use_id": "toolu_014d8eGaiwok9H4Y1kCka9fv",
+  "agent_id": "aa3d27e58889a10ac",
+  "subagent_type": "reviewer",
+  "task_description": "Final review of play changes",
+  "token_usage": {
+    "input_tokens": 6,
+    "cache_creation_tokens": 15609,
+    "cache_read_tokens": 25802,
+    "output_tokens": 2251,
+    "api_call_count": 3
+  },
+  "started_at": "2026-10-10T23:04:31.344665+02:00",
+  "completed_at": "2026-10-10T23:05:28.883158+02:00"
+}
