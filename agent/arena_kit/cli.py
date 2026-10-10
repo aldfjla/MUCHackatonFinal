@@ -28,7 +28,7 @@ def load_env(path=".env"):
 
 AGENTS = [
     "naive", "smart", "confident", "rational", "explorer", "anchor", "switcher", "boulware", "router",
-    "confident_boulware", "confident_router", "guarded_boulware", "guarded_rational", "llm",
+    "confident_boulware", "confident_router", "guarded_boulware", "guarded_rational", "evidence_router", "evidence_rational", "llm",
 ]  # fmt: skip
 
 
@@ -39,6 +39,7 @@ def agent_factory(name, data):
         ConfidentAgent,
         ConfidentBoulwareAgent,
         ConfidentRouterAgent,
+        EvidenceAgent,
         ExplorerAgent,
         GuardedAgent,
         LLMAgent,
@@ -76,6 +77,11 @@ def agent_factory(name, data):
         return lambda: GuardedAgent(ConfidentBoulwareAgent())
     if name == "guarded_rational":
         return lambda: GuardedAgent(RationalAgent())
+    # the evidence wrapper replaces the delegate's body and refs by design (it cites verified data)
+    if name == "evidence_router":
+        return lambda: EvidenceAgent(ConfidentRouterAgent(), data)
+    if name == "evidence_rational":
+        return lambda: EvidenceAgent(GuardedAgent(RationalAgent()), data)
     package = None
     if data:
         from .data import DataPackage
