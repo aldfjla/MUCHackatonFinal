@@ -3,3 +3,6 @@ date,version,agent,environment,case_id,deal,c_open,c_deal,c_best,score,replay,no
 2026-10-10,v0,naive (kit baseline),simulator,case:S01,yes,119491.07,112451.50,105969.08,0.52,http://127.0.0.1:8000/replay/sim2,rerun of S01: same result (deterministic)
 2026-10-10,v0,naive (kit baseline),simulator,case:S02,yes,652603.76,614057.20,577486.85,0.51,http://127.0.0.1:8000/replay/sim3,RFQ with two suppliers
 2026-10-10,v0,naive (kit baseline),simulator,case:S03,yes,4342556.33,3864138.60,3636482.08,0.68,http://127.0.0.1:8000/replay/sim4,framework renewal
+2026-10-10,v1,smart (rule-based; kit clone only),simulator,case:S01,yes,119491.07,112185.50,105969.08,0.54,http://127.0.0.1:8000/replay/sim56,"unit_price 16.55, payment 60 days; first_cut 10%, 3 sheets per message, safety checks; code not yet in this repo"
+2026-10-10,v1,smart (rule-based; kit clone only),simulator,case:S02,yes,652603.76,612178.20,577486.85,0.54,http://127.0.0.1:8000/replay/sim57,"unit_price 16.29, DAP, 24 months"
+2026-10-10,v1,smart (rule-based; kit clone only),simulator,case:S03,yes,4342556.33,3853611.00,3636482.08,0.69,http://127.0.0.1:8000/replay/sim58,"unit_price 226.95, DAP, 60 days, 24 months; v0 lost on freight and payment terms"
