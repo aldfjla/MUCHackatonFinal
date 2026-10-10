@@ -1,0 +1,15 @@
+{
+  "tool_use_id": "toolu_014PBqjEignvfGymPrX2JGQd",
+  "agent_id": "a0fa8284cb84f3b6b",
+  "subagent_type": "general-purpose",
+  "task_description": "Read Kraljic, HBS, Princeton",
+  "token_usage": {
+    "input_tokens": 12,
+    "cache_creation_tokens": 60707,
+    "cache_read_tokens": 284366,
+    "output_tokens": 69,
+    "api_call_count": 6
+  },
+  "started_at": "2026-10-10T15:59:28.260633+02:00",
+  "completed_at": "2026-10-10T16:00:10.099469+02:00"
+}

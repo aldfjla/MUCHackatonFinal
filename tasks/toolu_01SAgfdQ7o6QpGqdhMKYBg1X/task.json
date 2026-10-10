@@ -1,0 +1,15 @@
+{
+  "tool_use_id": "toolu_01SAgfdQ7o6QpGqdhMKYBg1X",
+  "agent_id": "a008a410b6d6a5a08",
+  "subagent_type": "teacher",
+  "task_description": "Teacher explains notes",
+  "token_usage": {
+    "input_tokens": 6,
+    "cache_creation_tokens": 14412,
+    "cache_read_tokens": 17789,
+    "output_tokens": 1707,
+    "api_call_count": 3
+  },
+  "started_at": "2026-10-10T15:35:09.990026+02:00",
+  "completed_at": "2026-10-10T15:35:22.962272+02:00"
+}

@@ -1,0 +1,15 @@
+{
+  "tool_use_id": "toolu_01RmYhAKX3FEbgdVCyGNBi1S",
+  "agent_id": "a390082b921a4d484",
+  "subagent_type": "general-purpose",
+  "task_description": "Read Harvard PON articles",
+  "token_usage": {
+    "input_tokens": 4,
+    "cache_creation_tokens": 95236,
+    "cache_read_tokens": 46932,
+    "output_tokens": 64,
+    "api_call_count": 2
+  },
+  "started_at": "2026-10-10T15:59:28.273402+02:00",
+  "completed_at": "2026-10-10T16:00:02.466179+02:00"
+}
