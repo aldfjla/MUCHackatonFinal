@@ -1,0 +1,15 @@
+{
+  "tool_use_id": "toolu_018g9tsS3vWYURzxRgx34jeD",
+  "agent_id": "ab0580951be22473e",
+  "subagent_type": "reviewer",
+  "task_description": "Review switcher agent code",
+  "token_usage": {
+    "input_tokens": 8,
+    "cache_creation_tokens": 28470,
+    "cache_read_tokens": 53076,
+    "output_tokens": 300,
+    "api_call_count": 4
+  },
+  "started_at": "2026-10-10T18:27:48.979038+02:00",
+  "completed_at": "2026-10-10T18:29:10.111468+02:00"
+}

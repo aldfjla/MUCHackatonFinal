@@ -1,0 +1,15 @@
+{
+  "tool_use_id": "toolu_01QPzWkUhdKqkG5VXm44js5N",
+  "agent_id": "a500794f5a974d2d2",
+  "subagent_type": "coder",
+  "task_description": "Fix switcher review findings",
+  "token_usage": {
+    "input_tokens": 16,
+    "cache_creation_tokens": 35643,
+    "cache_read_tokens": 192556,
+    "output_tokens": 370,
+    "api_call_count": 8
+  },
+  "started_at": "2026-10-10T18:29:23.591778+02:00",
+  "completed_at": "2026-10-10T18:31:09.183635+02:00"
+}

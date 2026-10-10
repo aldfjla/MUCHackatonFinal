@@ -1,0 +1,15 @@
+{
+  "tool_use_id": "toolu_01LcHmsJRbrL9YhizuLAT8V3",
+  "agent_id": "ade83ea5f1371b609",
+  "subagent_type": "reviewer",
+  "task_description": "Review anchor agent code",
+  "token_usage": {
+    "input_tokens": 10,
+    "cache_creation_tokens": 28287,
+    "cache_read_tokens": 77381,
+    "output_tokens": 61,
+    "api_call_count": 5
+  },
+  "started_at": "2026-10-10T18:27:02.782109+02:00",
+  "completed_at": "2026-10-10T18:28:14.820751+02:00"
+}

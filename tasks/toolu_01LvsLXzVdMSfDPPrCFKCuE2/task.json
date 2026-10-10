@@ -1,0 +1,15 @@
+{
+  "tool_use_id": "toolu_01LvsLXzVdMSfDPPrCFKCuE2",
+  "agent_id": "a674452e13a9f72d1",
+  "subagent_type": "reviewer",
+  "task_description": "Review explorer agent code",
+  "token_usage": {
+    "input_tokens": 10,
+    "cache_creation_tokens": 35108,
+    "cache_read_tokens": 82917,
+    "output_tokens": 5975,
+    "api_call_count": 5
+  },
+  "started_at": "2026-10-10T18:25:04.58193+02:00",
+  "completed_at": "2026-10-10T18:26:29.385073+02:00"
+}

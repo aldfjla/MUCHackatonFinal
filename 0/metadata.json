@@ -1,0 +1,330 @@
+{
+  "cli_version": "0.11.4",
+  "checkpoint_id": "01M4KAGA7FHXQTC456AT1M42DW",
+  "session_id": "c839f125-523b-4765-9e0d-736b62052aff",
+  "strategy": "manual-commit",
+  "created_at": "2026-10-10T16:32:00.122592Z",
+  "branch": "v1-niko",
+  "checkpoints_count": 17,
+  "save_step_count": 18,
+  "files_touched": [
+    "agent/arena_kit/agents/__init__.py",
+    "agent/arena_kit/agents/anchor.py",
+    "agent/arena_kit/agents/boulware.py",
+    "agent/arena_kit/agents/explorer.py",
+    "agent/arena_kit/agents/switcher.py",
+    "agent/arena_kit/cli.py",
+    "agent/tests/test_anchor.py",
+    "agent/tests/test_boulware.py",
+    "agent/tests/test_explorer.py",
+    "agent/tests/test_switcher.py"
+  ],
+  "agent": "Claude Code",
+  "model": "claude-sonnet-5-5",
+  "turn_id": "f0ef3a1410b8",
+  "compact_transcript_start": 0,
+  "token_usage": {
+    "input_tokens": 837,
+    "cache_creation_tokens": 934608,
+    "cache_read_tokens": 97937174,
+    "output_tokens": 221203,
+    "api_call_count": 329,
+    "subagent_tokens": {
+      "input_tokens": 166,
+      "cache_creation_tokens": 396120,
+      "cache_read_tokens": 1636576,
+      "output_tokens": 31799,
+      "api_call_count": 82
+    }
+  },
+  "skill_events_version": 1,
+  "skill_events": [
+    {
+      "id": "claude-skill-toolu_01XisbE3fpoi7cwAoVYW8zSo",
+      "event_type": "tool_invocation",
+      "skill": {
+        "name": "claude-in-chrome"
+      },
+      "source": {
+        "agent": "claude-code",
+        "signal": "skill_tool_use",
+        "confidence": "explicit"
+      },
+      "turn_id": "280cb5401056",
+      "transcript_anchor": {
+        "unit": "line",
+        "start": 1647,
+        "end": 1648,
+        "entry_ids": [
+          "736b346a-30d5-4103-b836-0257d9b08dcf"
+        ],
+        "tool_use_id": "toolu_01XisbE3fpoi7cwAoVYW8zSo"
+      },
+      "native": {
+        "tool_name": "Skill",
+        "tool_use_id": "toolu_01XisbE3fpoi7cwAoVYW8zSo"
+      },
+      "collapse": {
+        "target": "tool_pair",
+        "label": "Skill: claude-in-chrome",
+        "default_collapsed": true
+      }
+    },
+    {
+      "id": "claude-skill-toolu_01NwTCQtA8aY9qR4HQFGsa8J",
+      "event_type": "tool_invocation",
+      "skill": {
+        "name": "anthropic-skills:deep-research"
+      },
+      "source": {
+        "agent": "claude-code",
+        "signal": "skill_tool_use",
+        "confidence": "explicit"
+      },
+      "turn_id": "adb3318188ae",
+      "transcript_anchor": {
+        "unit": "line",
+        "start": 1804,
+        "end": 1805,
+        "entry_ids": [
+          "5d32208c-4a11-4e41-9368-95090245be74"
+        ],
+        "tool_use_id": "toolu_01NwTCQtA8aY9qR4HQFGsa8J"
+      },
+      "native": {
+        "tool_name": "Skill",
+        "tool_use_id": "toolu_01NwTCQtA8aY9qR4HQFGsa8J"
+      },
+      "collapse": {
+        "target": "tool_pair",
+        "label": "Skill: anthropic-skills:deep-research",
+        "default_collapsed": true
+      }
+    }
+  ],
+  "session_metrics": {
+    "turn_count": 134
+  },
+  "initial_attribution": {
+    "calculated_at": "2026-10-10T16:31:59.72206Z",
+    "agent_lines": 0,
+    "agent_removed": 0,
+    "human_added": 1334,
+    "human_modified": 92,
+    "human_removed": 0,
+    "total_committed": 1401,
+    "total_lines_changed": 1426,
+    "agent_percentage": 0,
+    "metric_version": 2
+  },
+  "prompt_attributions": [
+    {
+      "checkpoint_number": 2,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 0,
+      "agent_lines_removed": 0
+    },
+    {
+      "checkpoint_number": 3,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 0,
+      "agent_lines_removed": 0
+    },
+    {
+      "checkpoint_number": 4,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 0,
+      "agent_lines_removed": 0
+    },
+    {
+      "checkpoint_number": 5,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 0,
+      "agent_lines_removed": 0
+    },
+    {
+      "checkpoint_number": 6,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 0,
+      "agent_lines_removed": 0
+    },
+    {
+      "checkpoint_number": 7,
+      "user_lines_added": 181,
+      "user_lines_removed": 4,
+      "agent_lines_added": 0,
+      "agent_lines_removed": 0,
+      "user_added_per_file": {
+        "agent/arena_kit/agents/__init__.py": 2,
+        "agent/arena_kit/agents/explorer.py": 108,
+        "agent/arena_kit/cli.py": 5,
+        "agent/tests/test_explorer.py": 66
+      },
+      "user_removed_per_file": {
+        "agent/arena_kit/agents/__init__.py": 1,
+        "agent/arena_kit/cli.py": 3
+      }
+    },
+    {
+      "checkpoint_number": 8,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 0,
+      "agent_lines_removed": 0
+    },
+    {
+      "checkpoint_number": 9,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 181,
+      "agent_lines_removed": 4
+    },
+    {
+      "checkpoint_number": 10,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 655,
+      "agent_lines_removed": 4
+    },
+    {
+      "checkpoint_number": 11,
+      "user_lines_added": 20,
+      "user_lines_removed": 13,
+      "agent_lines_added": 754,
+      "agent_lines_removed": 4,
+      "user_added_per_file": {
+        "agent/arena_kit/agents/explorer.py": 20
+      },
+      "user_removed_per_file": {
+        "agent/arena_kit/agents/explorer.py": 13
+      }
+    },
+    {
+      "checkpoint_number": 12,
+      "user_lines_added": 60,
+      "user_lines_removed": 4,
+      "agent_lines_added": 758,
+      "agent_lines_removed": 4,
+      "user_added_per_file": {
+        "agent/arena_kit/agents/switcher.py": 1,
+        "agent/tests/test_explorer.py": 59
+      },
+      "user_removed_per_file": {
+        "agent/arena_kit/agents/switcher.py": 1,
+        "agent/tests/test_explorer.py": 3
+      }
+    },
+    {
+      "checkpoint_number": 13,
+      "user_lines_added": 59,
+      "user_lines_removed": 3,
+      "agent_lines_added": 758,
+      "agent_lines_removed": 4,
+      "user_added_per_file": {
+        "agent/tests/test_explorer.py": 59
+      },
+      "user_removed_per_file": {
+        "agent/tests/test_explorer.py": 3
+      }
+    },
+    {
+      "checkpoint_number": 14,
+      "user_lines_added": 59,
+      "user_lines_removed": 3,
+      "agent_lines_added": 758,
+      "agent_lines_removed": 4,
+      "user_added_per_file": {
+        "agent/tests/test_explorer.py": 59
+      },
+      "user_removed_per_file": {
+        "agent/tests/test_explorer.py": 3
+      }
+    },
+    {
+      "checkpoint_number": 15,
+      "user_lines_added": 59,
+      "user_lines_removed": 3,
+      "agent_lines_added": 758,
+      "agent_lines_removed": 4,
+      "user_added_per_file": {
+        "agent/tests/test_explorer.py": 59
+      },
+      "user_removed_per_file": {
+        "agent/tests/test_explorer.py": 3
+      }
+    },
+    {
+      "checkpoint_number": 16,
+      "user_lines_added": 59,
+      "user_lines_removed": 3,
+      "agent_lines_added": 767,
+      "agent_lines_removed": 4,
+      "user_added_per_file": {
+        "agent/tests/test_explorer.py": 59
+      },
+      "user_removed_per_file": {
+        "agent/tests/test_explorer.py": 3
+      }
+    },
+    {
+      "checkpoint_number": 17,
+      "user_lines_added": 59,
+      "user_lines_removed": 3,
+      "agent_lines_added": 809,
+      "agent_lines_removed": 4,
+      "user_added_per_file": {
+        "agent/tests/test_explorer.py": 59
+      },
+      "user_removed_per_file": {
+        "agent/tests/test_explorer.py": 3
+      }
+    },
+    {
+      "checkpoint_number": 18,
+      "user_lines_added": 303,
+      "user_lines_removed": 28,
+      "agent_lines_added": 894,
+      "agent_lines_removed": 4,
+      "user_added_per_file": {
+        "agent/arena_kit/agents/router.py": 99,
+        "agent/arena_kit/agents/switcher.py": 47,
+        "agent/tests/test_boulware.py": 4,
+        "agent/tests/test_explorer.py": 59,
+        "agent/tests/test_router.py": 94
+      },
+      "user_removed_per_file": {
+        "agent/arena_kit/agents/switcher.py": 21,
+        "agent/tests/test_boulware.py": 4,
+        "agent/tests/test_explorer.py": 3
+      }
+    },
+    {
+      "checkpoint_number": 19,
+      "user_lines_added": 380,
+      "user_lines_removed": 14,
+      "agent_lines_added": 920,
+      "agent_lines_removed": 4,
+      "user_added_per_file": {
+        "agent/arena_kit/agents/__init__.py": 16,
+        "agent/arena_kit/agents/router.py": 99,
+        "agent/arena_kit/agents/switcher.py": 2,
+        "agent/arena_kit/cli.py": 22,
+        "agent/tests/test_explorer.py": 59,
+        "agent/tests/test_router.py": 94,
+        "agent/tests/test_switcher.py": 88
+      },
+      "user_removed_per_file": {
+        "agent/arena_kit/agents/__init__.py": 1,
+        "agent/arena_kit/agents/switcher.py": 2,
+        "agent/arena_kit/cli.py": 3,
+        "agent/tests/test_explorer.py": 3,
+        "agent/tests/test_switcher.py": 5
+      }
+    }
+  ]
+}

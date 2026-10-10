@@ -1,0 +1,42 @@
+{
+  "cli_version": "0.11.4",
+  "checkpoint_id": "01M4KAGA7FHXQTC456AT1M42DW",
+  "strategy": "manual-commit",
+  "branch": "v1-niko",
+  "checkpoints_count": 17,
+  "files_touched": [
+    "agent/arena_kit/agents/__init__.py",
+    "agent/arena_kit/agents/anchor.py",
+    "agent/arena_kit/agents/boulware.py",
+    "agent/arena_kit/agents/explorer.py",
+    "agent/arena_kit/agents/switcher.py",
+    "agent/arena_kit/cli.py",
+    "agent/tests/test_anchor.py",
+    "agent/tests/test_boulware.py",
+    "agent/tests/test_explorer.py",
+    "agent/tests/test_switcher.py"
+  ],
+  "sessions": [
+    {
+      "metadata": "/0/metadata.json",
+      "transcript": "/0/full.jsonl",
+      "compact_transcript": "/0/transcript.jsonl",
+      "content_hash": "/0/content_hash.txt",
+      "prompt": "/0/prompt.txt"
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 837,
+    "cache_creation_tokens": 934608,
+    "cache_read_tokens": 97937174,
+    "output_tokens": 221203,
+    "api_call_count": 329,
+    "subagent_tokens": {
+      "input_tokens": 166,
+      "cache_creation_tokens": 396120,
+      "cache_read_tokens": 1636576,
+      "output_tokens": 31799,
+      "api_call_count": 82
+    }
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "tool_use_id": "toolu_01XPuiZWaN5NQEf7CSxeRyom",
+  "agent_id": "abb517f849fabc92f",
+  "subagent_type": "reviewer",
+  "task_description": "Review boulware agent code",
+  "token_usage": {
+    "input_tokens": 6,
+    "cache_creation_tokens": 27070,
+    "cache_read_tokens": 32857,
+    "output_tokens": 7326,
+    "api_call_count": 3
+  },
+  "started_at": "2026-10-10T18:27:20.569275+02:00",
+  "completed_at": "2026-10-10T18:28:26.6251+02:00"
+}
