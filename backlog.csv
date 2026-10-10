@@ -4,9 +4,9 @@ date,version,agent,environment,case_id,deal,c_open,c_deal,c_best,score,replay,no
 2026-10-10,v0 - niko,naive (kit baseline),simulator,case:S02,yes,652603.76,614057.20,577486.85,0.51,http://127.0.0.1:8000/replay/sim3,RFQ with two suppliers
 2026-10-10,v0 - niko,naive (kit baseline),simulator,case:S03,yes,4342556.33,3864138.60,3636482.08,0.68,http://127.0.0.1:8000/replay/sim4,framework renewal
 2026-10-10,v0 - niko,naive (kit baseline),simulator,case:S02,yes,652603.76,614057.20,577486.85,0.51,http://127.0.0.1:8000/replay/sim5,rerun of S02: identical to the first run (simulator is deterministic)
-2026-10-10,v1-petra,smart (rule-based; kit clone only),simulator,case:S01,yes,119491.07,112185.50,105969.08,0.54,http://127.0.0.1:8000/replay/sim56,"unit_price 16.55, payment 60 days; first_cut 10%, 3 sheets per message, safety checks; code not yet in this repo"
-2026-10-10,v1-petra,smart (rule-based; kit clone only),simulator,case:S02,yes,652603.76,612178.20,577486.85,0.54,http://127.0.0.1:8000/replay/sim57,"unit_price 16.29, DAP, 24 months"
-2026-10-10,v1-petra,smart (rule-based; kit clone only),simulator,case:S03,yes,4342556.33,3853611.00,3636482.08,0.69,http://127.0.0.1:8000/replay/sim58,"unit_price 226.95, DAP, 60 days, 24 months; v0 lost on freight and payment terms"
+2026-10-10,v1-petra,smart (rule-based),simulator,case:S01,yes,119491.07,112185.50,105969.08,0.54,http://127.0.0.1:8000/replay/sim56,"unit_price 16.55, payment 60 days; first_cut 10%, 3 sheets per message, safety checks; code in agent/"
+2026-10-10,v1-petra,smart (rule-based),simulator,case:S02,yes,652603.76,612178.20,577486.85,0.54,http://127.0.0.1:8000/replay/sim57,"unit_price 16.29, DAP, 24 months"
+2026-10-10,v1-petra,smart (rule-based),simulator,case:S03,yes,4342556.33,3853611.00,3636482.08,0.69,http://127.0.0.1:8000/replay/sim58,"unit_price 226.95, DAP, 60 days, 24 months; v0 lost on freight and payment terms"
 2026-10-10,v0 - niko,naive (kit baseline),practice arena,case:P01,yes,1153779.74,1120579.36,1096815.78,0.58,https://arena.tacto.ai/replay/61a3f0f35b2d2a20,price increase (Brandlhuber); first real run
 2026-10-10,v0 - niko,naive (kit baseline),practice arena,case:P03,yes,4246314.02,4246314.02,3909043.10,0.00,https://arena.tacto.ai/replay/09a84f8d7ae6783d,renewal (Selvbrunn); c_deal equals c_open so the naive agent saved nothing
 2026-10-10,v0 - niko,naive (kit baseline),practice arena,case:P07,yes,391027.40,384383.40,299241.49,0.07,https://arena.tacto.ai/replay/64e29c737b5f69ae,bundling (Leitner); weak: far from c_best
