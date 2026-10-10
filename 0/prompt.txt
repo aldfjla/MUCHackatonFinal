@@ -2911,3 +2911,7 @@ call the copy agent 'Simplify'
 ---
 
 btw reciprocal.py has 2 errors
+
+---
+
+ok can you test simplify in the mock trials, do like 15 runs and log the,
