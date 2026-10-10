@@ -1,0 +1,357 @@
+{
+ "agent": "confident_router",
+ "case": "P11",
+ "result": {
+  "ended": true,
+  "deal": true,
+  "supplier_id": "sup:70140",
+  "offer_id": "offer:70140-1",
+  "terms": {
+   "payment_days": 60,
+   "lead_time_days": 56,
+   "volume_per_year": 15900,
+   "contract_months": 12,
+   "effective_date": "2027-01-01",
+   "index_clause": null,
+   "incoterm": "FCA",
+   "tooling_eur": 0.0,
+   "ppm_commitment": 1500,
+   "chargeback_eur_per_complaint": 0.0,
+   "unit_price": 47.0
+  },
+  "c_open": 817578.0,
+  "c_deal": 782518.5,
+  "c_alt": 894383.19,
+  "c_best": 722500.02,
+  "score": 0.3687446872556612,
+  "must_haves_ok": true,
+  "cost_breakdown": {
+   "price": 747300.0,
+   "uncovered_need": 0.0,
+   "fallback_risk": 0.0,
+   "payment_terms": 0.0,
+   "freight": 24486.0,
+   "late_delivery": 0.0,
+   "quality": 10732.5,
+   "tooling": 0.0,
+   "index_clause": 0.0,
+   "index_risk": 0.0,
+   "relationship": 0.0
+  }
+ },
+ "session": {
+  "session_id": "dcfe23947887234f",
+  "case_id": "case:P11",
+  "status": "ended",
+  "end_reason": "accepted",
+  "rounds": 2,
+  "set": "practice",
+  "opening": {
+   "sup:70140": {
+    "offer_id": "offer:70140-0",
+    "round": 0,
+    "status": "open",
+    "terms": {
+     "unit_price": 47.0,
+     "ppm_commitment": 6400
+    },
+    "alternatives": [],
+    "missing_fields": [
+     "chargeback_eur_per_complaint"
+    ],
+    "claims": [],
+    "claim_results": [],
+    "signals": {
+     "reply_delay_days": 4,
+     "validity_days": 30
+    },
+    "text": "Hello,\n\nThank you for your enquiry. Please find our Angebot below. We are very excited about the opportunity to work together with Hollerau Pumpenwerke GmbH and to prove ourselves as a reliable partner for your business!\n\nFor our offer, we can propose a price of €47.00 per unit, alongside a quality commitment of 6400 ppm. \n\nPlease note that this offer stays valid for 30 days. We are eager to show you what we can do and hope this initial quote meets your expectations. Let us know if you have any questions at all.\n\nKind regards\nMarek Lis\nExport Manager, Odlewnia Kalwisz Sp. z o.o."
+   }
+  },
+  "threads": {
+   "sup:70140": {
+    "offer_id": "offer:70140-1",
+    "status": "agreed",
+    "offers": 2,
+    "closed": null,
+    "seconds_left": null
+   }
+  },
+  "moves": [],
+  "result": {
+   "ended": true,
+   "deal": true,
+   "supplier_id": "sup:70140",
+   "offer_id": "offer:70140-1",
+   "terms": {
+    "payment_days": 60,
+    "lead_time_days": 56,
+    "volume_per_year": 15900,
+    "contract_months": 12,
+    "effective_date": "2027-01-01",
+    "index_clause": null,
+    "incoterm": "FCA",
+    "tooling_eur": 0.0,
+    "ppm_commitment": 1500,
+    "chargeback_eur_per_complaint": 0.0,
+    "unit_price": 47.0
+   },
+   "c_open": 817578.0,
+   "c_deal": 782518.5,
+   "c_alt": 894383.19,
+   "c_best": 722500.02,
+   "score": 0.3687446872556612,
+   "must_haves_ok": true,
+   "cost_breakdown": {
+    "price": 747300.0,
+    "uncovered_need": 0.0,
+    "fallback_risk": 0.0,
+    "payment_terms": 0.0,
+    "freight": 24486.0,
+    "late_delivery": 0.0,
+    "quality": 10732.5,
+    "tooling": 0.0,
+    "index_clause": 0.0,
+    "index_risk": 0.0,
+    "relationship": 0.0
+   },
+   "trace": [
+    {
+     "round": 0,
+     "actor": "sup:70140",
+     "move": {
+      "offer_id": "offer:70140-0",
+      "round": 0,
+      "status": "open",
+      "terms": {
+       "unit_price": 47.0,
+       "ppm_commitment": 6400
+      },
+      "alternatives": [],
+      "missing_fields": [
+       "chargeback_eur_per_complaint"
+      ],
+      "claims": [],
+      "claim_results": [],
+      "signals": {
+       "reply_delay_days": 4,
+       "validity_days": 30
+      },
+      "text": "Hello,\n\nThank you for your enquiry. Please find our Angebot below. We are very excited about the opportunity to work together with Hollerau Pumpenwerke GmbH and to prove ourselves as a reliable partner for your business!\n\nFor our offer, we can propose a price of €47.00 per unit, alongside a quality commitment of 6400 ppm. \n\nPlease note that this offer stays valid for 30 days. We are eager to show you what we can do and hope this initial quote meets your expectations. Let us know if you have any questions at all.\n\nKind regards\nMarek Lis\nExport Manager, Odlewnia Kalwisz Sp. z o.o."
+     },
+     "reasons": []
+    },
+    {
+     "round": 1,
+     "actor": "buyer",
+     "move": {
+      "type": "message",
+      "message_id": null,
+      "subject": "Our proposal",
+      "body": "We can proceed at your price if the terms below work for you; please confirm.",
+      "refs": [],
+      "term_sheets": [
+       {
+        "term_sheet_id": null,
+        "terms": {
+         "ppm_commitment": 1500,
+         "chargeback_eur_per_complaint": 0,
+         "unit_price": 47.0
+        }
+       }
+      ],
+      "interpreted": {
+       "claims": []
+      },
+      "supplier_id": "sup:70140"
+     },
+     "reasons": []
+    },
+    {
+     "round": 1,
+     "actor": "sup:70140",
+     "move": {
+      "offer_id": "offer:70140-1",
+      "round": 1,
+      "status": "agreed",
+      "terms": {
+       "unit_price": 47.0,
+       "ppm_commitment": 1500,
+       "chargeback_eur_per_complaint": 0.0
+      },
+      "alternatives": [],
+      "missing_fields": [],
+      "claims": [],
+      "claim_results": [],
+      "signals": {
+       "reply_delay_days": 4,
+       "validity_days": 30
+      },
+      "text": "Hello,\n\nHi, that works for us! We can accept your terms and await your order. We can do the 1500 ppm at the 47.00 EUR price with zero chargebacks. To be clear, our offer is a price of €47.00 per unit, a quality commitment of 1500 ppm, a chargeback of €0.00 per complaint. Our general terms and conditions apply; the quote lists our standard terms. The offer stays valid for 30 days. Let's get this moving, we are ready to start production.\n\nKind regards\nMarek Lis\nExport Manager, Odlewnia Kalwisz Sp. z o.o."
+     },
+     "reasons": [
+      "Hi, that works for us!",
+      "We can do the … ppm at the … EUR price with zero chargebacks.",
+      "Let's get this moving, we are ready to start production.",
+      "Our general terms and conditions apply; the quote lists our standard terms."
+     ]
+    },
+    {
+     "round": 1,
+     "actor": "buyer",
+     "move": {
+      "type": "accept",
+      "offer_id": "offer:70140-1",
+      "supplier_id": "sup:70140"
+     },
+     "reasons": []
+    }
+   ]
+  },
+  "replay_url": "/replay/dcfe23947887234f"
+ },
+ "threads": {
+  "sup:70140": {
+   "supplier_id": "sup:70140",
+   "offer_id": "offer:70140-1",
+   "status": "agreed",
+   "closed": null,
+   "messages": [
+    {
+     "thread_id": "thread:P11:70140",
+     "message_id": "msg:70140-0-0",
+     "in_reply_to": null,
+     "from": "sales@70140",
+     "from_name": "Export Manager, Odlewnia Kalwisz Sp. z o.o.",
+     "to": "Hollerau Pumpenwerke GmbH",
+     "subject": "Quote from Odlewnia Kalwisz Sp. z o.o.: Kalwisz: bearing brackets in red",
+     "body": "Hello,\n\nThank you for your enquiry. Please find our Angebot below. We are very excited about the opportunity to work together with Hollerau Pumpenwerke GmbH and to prove ourselves as a reliable partner for your business!\n\nFor our offer, we can propose a price of €47.00 per unit, alongside a quality commitment of 6400 ppm. \n\nPlease note that this offer stays valid for 30 days. We are eager to show you what we can do and hope this initial quote meets your expectations. Let us know if you have any questions at all.\n\nKind regards\nMarek Lis\nExport Manager, Odlewnia Kalwisz Sp. z o.o.",
+     "attachments": [
+      {
+       "attachment_id": "att:70140-0-quote",
+       "name": "quote-offer-70140-0.pdf",
+       "type": "pdf",
+       "content_b64": null
+      }
+     ],
+     "term_sheets": [
+      {
+       "term_sheet_id": "offer:70140-0",
+       "terms": {
+        "unit_price": 47.0,
+        "ppm_commitment": 6400
+       }
+      }
+     ],
+     "refs": [],
+     "action": null,
+     "status": "open",
+     "signals": {
+      "reply_delay_days": 4,
+      "validity_days": 30
+     },
+     "missing_fields": [
+      "chargeback_eur_per_complaint"
+     ],
+     "claim_results": []
+    },
+    {
+     "from": "buyer",
+     "subject": "Our proposal",
+     "body": "We can proceed at your price if the terms below work for you; please confirm.",
+     "term_sheets": [
+      {
+       "terms": {
+        "ppm_commitment": 1500,
+        "chargeback_eur_per_complaint": 0,
+        "unit_price": 47.0
+       }
+      }
+     ]
+    },
+    {
+     "thread_id": "thread:P11:70140",
+     "message_id": "msg:70140-1-2",
+     "in_reply_to": null,
+     "from": "sales@70140",
+     "from_name": "Export Manager, Odlewnia Kalwisz Sp. z o.o.",
+     "to": "Hollerau Pumpenwerke GmbH",
+     "subject": "Re: Our proposal",
+     "body": "Hello,\n\nHi, that works for us! We can accept your terms and await your order. We can do the 1500 ppm at the 47.00 EUR price with zero chargebacks. To be clear, our offer is a price of €47.00 per unit, a quality commitment of 1500 ppm, a chargeback of €0.00 per complaint. Our general terms and conditions apply; the quote lists our standard terms. The offer stays valid for 30 days. Let's get this moving, we are ready to start production.\n\nKind regards\nMarek Lis\nExport Manager, Odlewnia Kalwisz Sp. z o.o.",
+     "attachments": [
+      {
+       "attachment_id": "att:70140-1-quote",
+       "name": "quote-offer-70140-1.pdf",
+       "type": "pdf",
+       "content_b64": null
+      }
+     ],
+     "term_sheets": [
+      {
+       "term_sheet_id": "offer:70140-1",
+       "terms": {
+        "unit_price": 47.0,
+        "ppm_commitment": 1500,
+        "chargeback_eur_per_complaint": 0.0
+       }
+      }
+     ],
+     "refs": [],
+     "action": null,
+     "status": "agreed",
+     "signals": {
+      "reply_delay_days": 4,
+      "validity_days": 30
+     },
+     "missing_fields": [],
+     "claim_results": []
+    },
+    {
+     "from": "buyer",
+     "action": {
+      "type": "accept",
+      "term_sheet_id": "offer:70140-1"
+     }
+    },
+    {
+     "thread_id": "thread:P11:70140",
+     "message_id": "msg:70140-1-4",
+     "in_reply_to": null,
+     "from": "sales@70140",
+     "from_name": "Export Manager, Odlewnia Kalwisz Sp. z o.o.",
+     "to": "Hollerau Pumpenwerke GmbH",
+     "subject": "Re: Our proposal",
+     "body": "Hello,\n\nThank you for your order. Our order confirmation is attached. \n\nWe are very happy to work with you and are looking forward to building a great long-term partnership together! Please let us know if you need anything else.\n\nKind regards\nMarek Lis\nExport Manager, Odlewnia Kalwisz Sp. z o.o.",
+     "attachments": [
+      {
+       "attachment_id": "att:70140-1-order_confirmation",
+       "name": "order-confirmation-offer-70140-1.pdf",
+       "type": "pdf",
+       "content_b64": null
+      }
+     ],
+     "term_sheets": [
+      {
+       "term_sheet_id": "offer:70140-1",
+       "terms": {
+        "unit_price": 47.0,
+        "ppm_commitment": 1500,
+        "chargeback_eur_per_complaint": 0.0
+       }
+      }
+     ],
+     "refs": [],
+     "action": null,
+     "status": "agreed",
+     "signals": {
+      "reply_delay_days": 4,
+      "validity_days": 30
+     },
+     "missing_fields": [],
+     "claim_results": []
+    }
+   ],
+   "timeouts": []
+  }
+ }
+}
