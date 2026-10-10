@@ -1,0 +1,59 @@
+{
+  "cli_version": "0.11.4",
+  "checkpoint_id": "01M4KJ51SGZVHFNC523ECHGK3Z",
+  "strategy": "manual-commit",
+  "branch": "local-alex-niko",
+  "checkpoints_count": 10,
+  "files_touched": [
+    "agent/arena_kit/sim_cases/real/D01.json",
+    "agent/arena_kit/sim_cases/real/D02.json",
+    "agent/arena_kit/sim_cases/real/P01.json",
+    "agent/arena_kit/sim_cases/real/P02.json",
+    "agent/arena_kit/sim_cases/real/P03.json",
+    "agent/arena_kit/sim_cases/real/P04.json",
+    "agent/arena_kit/sim_cases/real/P05.json",
+    "agent/arena_kit/sim_cases/real/P06.json",
+    "agent/arena_kit/sim_cases/real/P07.json",
+    "agent/arena_kit/sim_cases/real/P08.json",
+    "agent/arena_kit/sim_cases/real/P09.json",
+    "agent/arena_kit/sim_cases/real/P10.json",
+    "agent/arena_kit/sim_cases/real/P11.json",
+    "agent/arena_kit/sim_cases/real/P12.json",
+    "agent/arena_kit/sim_cases/real/P13.json",
+    "agent/arena_kit/sim_cases/real/P14.json",
+    "agent/arena_kit/sim_cases/real/P15.json",
+    "agent/arena_kit/sim_cases/real/P16.json",
+    "agent/arena_kit/sim_cases/real/P17.json",
+    "agent/arena_kit/sim_cases/real/P18.json",
+    "agent/arena_kit/sim_cases/real/P19.json",
+    "agent/arena_kit/sim_cases/real_runs/confident_router_P05.json",
+    "agent/arena_kit/sim_cases/real_runs/confident_router_P10.json",
+    "agent/arena_kit/sim_cases/real_runs/guarded_rational_P02.json",
+    "agent/arena_kit/sim_cases/real_runs/guarded_rational_P05.json",
+    "agent/arena_kit/sim_cases/real_runs/log.txt",
+    "backlog.csv"
+  ],
+  "sessions": [
+    {
+      "metadata": "/0/metadata.json",
+      "transcript": "/0/full.jsonl",
+      "compact_transcript": "/0/transcript.jsonl",
+      "content_hash": "/0/content_hash.txt",
+      "prompt": "/0/prompt.txt"
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 983,
+    "cache_creation_tokens": 1048886,
+    "cache_read_tokens": 113304387,
+    "output_tokens": 257156,
+    "api_call_count": 394,
+    "subagent_tokens": {
+      "input_tokens": 0,
+      "cache_creation_tokens": 0,
+      "cache_read_tokens": 0,
+      "output_tokens": 0,
+      "api_call_count": 0
+    }
+  }
+}

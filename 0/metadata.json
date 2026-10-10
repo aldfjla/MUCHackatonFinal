@@ -1,0 +1,329 @@
+{
+  "cli_version": "0.11.4",
+  "checkpoint_id": "01M4KJ51SGZVHFNC523ECHGK3Z",
+  "session_id": "c839f125-523b-4765-9e0d-736b62052aff",
+  "strategy": "manual-commit",
+  "created_at": "2026-10-10T18:45:38.647558Z",
+  "branch": "local-alex-niko",
+  "checkpoints_count": 10,
+  "save_step_count": 11,
+  "files_touched": [
+    "agent/arena_kit/sim_cases/real/D01.json",
+    "agent/arena_kit/sim_cases/real/D02.json",
+    "agent/arena_kit/sim_cases/real/P01.json",
+    "agent/arena_kit/sim_cases/real/P02.json",
+    "agent/arena_kit/sim_cases/real/P03.json",
+    "agent/arena_kit/sim_cases/real/P04.json",
+    "agent/arena_kit/sim_cases/real/P05.json",
+    "agent/arena_kit/sim_cases/real/P06.json",
+    "agent/arena_kit/sim_cases/real/P07.json",
+    "agent/arena_kit/sim_cases/real/P08.json",
+    "agent/arena_kit/sim_cases/real/P09.json",
+    "agent/arena_kit/sim_cases/real/P10.json",
+    "agent/arena_kit/sim_cases/real/P11.json",
+    "agent/arena_kit/sim_cases/real/P12.json",
+    "agent/arena_kit/sim_cases/real/P13.json",
+    "agent/arena_kit/sim_cases/real/P14.json",
+    "agent/arena_kit/sim_cases/real/P15.json",
+    "agent/arena_kit/sim_cases/real/P16.json",
+    "agent/arena_kit/sim_cases/real/P17.json",
+    "agent/arena_kit/sim_cases/real/P18.json",
+    "agent/arena_kit/sim_cases/real/P19.json",
+    "agent/arena_kit/sim_cases/real_runs/confident_router_P05.json",
+    "agent/arena_kit/sim_cases/real_runs/confident_router_P10.json",
+    "agent/arena_kit/sim_cases/real_runs/guarded_rational_P02.json",
+    "agent/arena_kit/sim_cases/real_runs/guarded_rational_P05.json",
+    "agent/arena_kit/sim_cases/real_runs/log.txt",
+    "backlog.csv"
+  ],
+  "agent": "Claude Code",
+  "model": "claude-sonnet-5-5",
+  "turn_id": "c74b3231fb40",
+  "compact_transcript_start": 0,
+  "token_usage": {
+    "input_tokens": 983,
+    "cache_creation_tokens": 1048886,
+    "cache_read_tokens": 113304387,
+    "output_tokens": 257156,
+    "api_call_count": 394,
+    "subagent_tokens": {
+      "input_tokens": 0,
+      "cache_creation_tokens": 0,
+      "cache_read_tokens": 0,
+      "output_tokens": 0,
+      "api_call_count": 0
+    }
+  },
+  "skill_events_version": 1,
+  "skill_events": [
+    {
+      "id": "claude-skill-toolu_01XisbE3fpoi7cwAoVYW8zSo",
+      "event_type": "tool_invocation",
+      "skill": {
+        "name": "claude-in-chrome"
+      },
+      "source": {
+        "agent": "claude-code",
+        "signal": "skill_tool_use",
+        "confidence": "explicit"
+      },
+      "turn_id": "280cb5401056",
+      "transcript_anchor": {
+        "unit": "line",
+        "start": 1647,
+        "end": 1648,
+        "entry_ids": [
+          "736b346a-30d5-4103-b836-0257d9b08dcf"
+        ],
+        "tool_use_id": "toolu_01XisbE3fpoi7cwAoVYW8zSo"
+      },
+      "native": {
+        "tool_name": "Skill",
+        "tool_use_id": "toolu_01XisbE3fpoi7cwAoVYW8zSo"
+      },
+      "collapse": {
+        "target": "tool_pair",
+        "label": "Skill: claude-in-chrome",
+        "default_collapsed": true
+      }
+    },
+    {
+      "id": "claude-skill-toolu_01NwTCQtA8aY9qR4HQFGsa8J",
+      "event_type": "tool_invocation",
+      "skill": {
+        "name": "anthropic-skills:deep-research"
+      },
+      "source": {
+        "agent": "claude-code",
+        "signal": "skill_tool_use",
+        "confidence": "explicit"
+      },
+      "turn_id": "adb3318188ae",
+      "transcript_anchor": {
+        "unit": "line",
+        "start": 1804,
+        "end": 1805,
+        "entry_ids": [
+          "5d32208c-4a11-4e41-9368-95090245be74"
+        ],
+        "tool_use_id": "toolu_01NwTCQtA8aY9qR4HQFGsa8J"
+      },
+      "native": {
+        "tool_name": "Skill",
+        "tool_use_id": "toolu_01NwTCQtA8aY9qR4HQFGsa8J"
+      },
+      "collapse": {
+        "target": "tool_pair",
+        "label": "Skill: anthropic-skills:deep-research",
+        "default_collapsed": true
+      }
+    }
+  ],
+  "session_metrics": {
+    "turn_count": 160
+  },
+  "initial_attribution": {
+    "calculated_at": "2026-10-10T18:45:38.287777Z",
+    "agent_lines": 6511,
+    "agent_removed": 0,
+    "human_added": 60780,
+    "human_modified": 0,
+    "human_removed": 0,
+    "total_committed": 67291,
+    "total_lines_changed": 67291,
+    "agent_percentage": 9.675885333848509,
+    "metric_version": 2
+  },
+  "prompt_attributions": [
+    {
+      "checkpoint_number": 2,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 0,
+      "agent_lines_removed": 0
+    },
+    {
+      "checkpoint_number": 3,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 0,
+      "agent_lines_removed": 0
+    },
+    {
+      "checkpoint_number": 4,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 0,
+      "agent_lines_removed": 0
+    },
+    {
+      "checkpoint_number": 5,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 0,
+      "agent_lines_removed": 0
+    },
+    {
+      "checkpoint_number": 6,
+      "user_lines_added": 3964,
+      "user_lines_removed": 0,
+      "agent_lines_added": 2671,
+      "agent_lines_removed": 0,
+      "user_added_per_file": {
+        "agent/arena_kit/sim_cases/real_runs/guarded_rational_P01.json": 717,
+        "agent/arena_kit/sim_cases/real_runs/guarded_rational_P03.json": 632,
+        "agent/arena_kit/sim_cases/real_runs/guarded_rational_P04.json": 593,
+        "agent/arena_kit/sim_cases/real_runs/guarded_rational_P07.json": 709,
+        "agent/arena_kit/sim_cases/real_runs/guarded_rational_P08.json": 633,
+        "agent/arena_kit/sim_cases/real_runs/guarded_rational_P18.json": 674,
+        "agent/arena_kit/sim_cases/real_runs/log.txt": 6
+      }
+    },
+    {
+      "checkpoint_number": 7,
+      "user_lines_added": 4414,
+      "user_lines_removed": 0,
+      "agent_lines_added": 2671,
+      "agent_lines_removed": 0,
+      "user_added_per_file": {
+        "agent/arena_kit/sim_cases/real_runs/guarded_rational_P01.json": 717,
+        "agent/arena_kit/sim_cases/real_runs/guarded_rational_P03.json": 632,
+        "agent/arena_kit/sim_cases/real_runs/guarded_rational_P04.json": 593,
+        "agent/arena_kit/sim_cases/real_runs/guarded_rational_P07.json": 709,
+        "agent/arena_kit/sim_cases/real_runs/guarded_rational_P08.json": 633,
+        "agent/arena_kit/sim_cases/real_runs/guarded_rational_P10.json": 449,
+        "agent/arena_kit/sim_cases/real_runs/guarded_rational_P18.json": 674,
+        "agent/arena_kit/sim_cases/real_runs/log.txt": 7
+      }
+    },
+    {
+      "checkpoint_number": 8,
+      "user_lines_added": 10189,
+      "user_lines_removed": 0,
+      "agent_lines_added": 3701,
+      "agent_lines_removed": 0,
+      "user_added_per_file": {
+        "agent/arena_kit/sim_cases/real_runs/confident_router_P01.json": 1095,
+        "agent/arena_kit/sim_cases/real_runs/confident_router_P02.json": 752,
+        "agent/arena_kit/sim_cases/real_runs/confident_router_P03.json": 461,
+        "agent/arena_kit/sim_cases/real_runs/confident_router_P04.json": 593,
+        "agent/arena_kit/sim_cases/real_runs/confident_router_P07.json": 709,
+        "agent/arena_kit/sim_cases/real_runs/confident_router_P08.json": 649,
+        "agent/arena_kit/sim_cases/real_runs/confident_router_P18.json": 548,
+        "agent/arena_kit/sim_cases/real_runs/guarded_rational_P01.json": 717,
+        "agent/arena_kit/sim_cases/real_runs/guarded_rational_P03.json": 632,
+        "agent/arena_kit/sim_cases/real_runs/guarded_rational_P04.json": 593,
+        "agent/arena_kit/sim_cases/real_runs/guarded_rational_P07.json": 709,
+        "agent/arena_kit/sim_cases/real_runs/guarded_rational_P08.json": 633,
+        "agent/arena_kit/sim_cases/real_runs/guarded_rational_P10.json": 449,
+        "agent/arena_kit/sim_cases/real_runs/guarded_rational_P11.json": 959,
+        "agent/arena_kit/sim_cases/real_runs/guarded_rational_P18.json": 674,
+        "agent/arena_kit/sim_cases/real_runs/log.txt": 16
+      }
+    },
+    {
+      "checkpoint_number": 9,
+      "user_lines_added": 10547,
+      "user_lines_removed": 0,
+      "agent_lines_added": 3701,
+      "agent_lines_removed": 0,
+      "user_added_per_file": {
+        "agent/arena_kit/sim_cases/real_runs/confident_router_P01.json": 1095,
+        "agent/arena_kit/sim_cases/real_runs/confident_router_P02.json": 752,
+        "agent/arena_kit/sim_cases/real_runs/confident_router_P03.json": 461,
+        "agent/arena_kit/sim_cases/real_runs/confident_router_P04.json": 593,
+        "agent/arena_kit/sim_cases/real_runs/confident_router_P07.json": 709,
+        "agent/arena_kit/sim_cases/real_runs/confident_router_P08.json": 649,
+        "agent/arena_kit/sim_cases/real_runs/confident_router_P11.json": 357,
+        "agent/arena_kit/sim_cases/real_runs/confident_router_P18.json": 548,
+        "agent/arena_kit/sim_cases/real_runs/guarded_rational_P01.json": 717,
+        "agent/arena_kit/sim_cases/real_runs/guarded_rational_P03.json": 632,
+        "agent/arena_kit/sim_cases/real_runs/guarded_rational_P04.json": 593,
+        "agent/arena_kit/sim_cases/real_runs/guarded_rational_P07.json": 709,
+        "agent/arena_kit/sim_cases/real_runs/guarded_rational_P08.json": 633,
+        "agent/arena_kit/sim_cases/real_runs/guarded_rational_P10.json": 449,
+        "agent/arena_kit/sim_cases/real_runs/guarded_rational_P11.json": 959,
+        "agent/arena_kit/sim_cases/real_runs/guarded_rational_P18.json": 674,
+        "agent/arena_kit/sim_cases/real_runs/log.txt": 17
+      }
+    },
+    {
+      "checkpoint_number": 10,
+      "user_lines_added": 10549,
+      "user_lines_removed": 0,
+      "agent_lines_added": 6582,
+      "agent_lines_removed": 0,
+      "user_added_per_file": {
+        "agent/arena_kit/sim_cases/real_runs/confident_router_P01.json": 1095,
+        "agent/arena_kit/sim_cases/real_runs/confident_router_P02.json": 752,
+        "agent/arena_kit/sim_cases/real_runs/confident_router_P03.json": 461,
+        "agent/arena_kit/sim_cases/real_runs/confident_router_P04.json": 593,
+        "agent/arena_kit/sim_cases/real_runs/confident_router_P07.json": 709,
+        "agent/arena_kit/sim_cases/real_runs/confident_router_P08.json": 649,
+        "agent/arena_kit/sim_cases/real_runs/confident_router_P11.json": 357,
+        "agent/arena_kit/sim_cases/real_runs/confident_router_P18.json": 548,
+        "agent/arena_kit/sim_cases/real_runs/guarded_rational_P01.json": 717,
+        "agent/arena_kit/sim_cases/real_runs/guarded_rational_P03.json": 632,
+        "agent/arena_kit/sim_cases/real_runs/guarded_rational_P04.json": 593,
+        "agent/arena_kit/sim_cases/real_runs/guarded_rational_P07.json": 709,
+        "agent/arena_kit/sim_cases/real_runs/guarded_rational_P08.json": 633,
+        "agent/arena_kit/sim_cases/real_runs/guarded_rational_P10.json": 449,
+        "agent/arena_kit/sim_cases/real_runs/guarded_rational_P11.json": 959,
+        "agent/arena_kit/sim_cases/real_runs/guarded_rational_P18.json": 674,
+        "agent/arena_kit/sim_cases/real_runs/log.txt": 19
+      }
+    },
+    {
+      "checkpoint_number": 11,
+      "user_lines_added": 10549,
+      "user_lines_removed": 0,
+      "agent_lines_added": 6582,
+      "agent_lines_removed": 0,
+      "user_added_per_file": {
+        "agent/arena_kit/sim_cases/real_runs/confident_router_P01.json": 1095,
+        "agent/arena_kit/sim_cases/real_runs/confident_router_P02.json": 752,
+        "agent/arena_kit/sim_cases/real_runs/confident_router_P03.json": 461,
+        "agent/arena_kit/sim_cases/real_runs/confident_router_P04.json": 593,
+        "agent/arena_kit/sim_cases/real_runs/confident_router_P07.json": 709,
+        "agent/arena_kit/sim_cases/real_runs/confident_router_P08.json": 649,
+        "agent/arena_kit/sim_cases/real_runs/confident_router_P11.json": 357,
+        "agent/arena_kit/sim_cases/real_runs/confident_router_P18.json": 548,
+        "agent/arena_kit/sim_cases/real_runs/guarded_rational_P01.json": 717,
+        "agent/arena_kit/sim_cases/real_runs/guarded_rational_P03.json": 632,
+        "agent/arena_kit/sim_cases/real_runs/guarded_rational_P04.json": 593,
+        "agent/arena_kit/sim_cases/real_runs/guarded_rational_P07.json": 709,
+        "agent/arena_kit/sim_cases/real_runs/guarded_rational_P08.json": 633,
+        "agent/arena_kit/sim_cases/real_runs/guarded_rational_P10.json": 449,
+        "agent/arena_kit/sim_cases/real_runs/guarded_rational_P11.json": 959,
+        "agent/arena_kit/sim_cases/real_runs/guarded_rational_P18.json": 674,
+        "agent/arena_kit/sim_cases/real_runs/log.txt": 19
+      }
+    },
+    {
+      "checkpoint_number": 12,
+      "user_lines_added": 10549,
+      "user_lines_removed": 0,
+      "agent_lines_added": 6582,
+      "agent_lines_removed": 0,
+      "user_added_per_file": {
+        "agent/arena_kit/sim_cases/real_runs/confident_router_P01.json": 1095,
+        "agent/arena_kit/sim_cases/real_runs/confident_router_P02.json": 752,
+        "agent/arena_kit/sim_cases/real_runs/confident_router_P03.json": 461,
+        "agent/arena_kit/sim_cases/real_runs/confident_router_P04.json": 593,
+        "agent/arena_kit/sim_cases/real_runs/confident_router_P07.json": 709,
+        "agent/arena_kit/sim_cases/real_runs/confident_router_P08.json": 649,
+        "agent/arena_kit/sim_cases/real_runs/confident_router_P11.json": 357,
+        "agent/arena_kit/sim_cases/real_runs/confident_router_P18.json": 548,
+        "agent/arena_kit/sim_cases/real_runs/guarded_rational_P01.json": 717,
+        "agent/arena_kit/sim_cases/real_runs/guarded_rational_P03.json": 632,
+        "agent/arena_kit/sim_cases/real_runs/guarded_rational_P04.json": 593,
+        "agent/arena_kit/sim_cases/real_runs/guarded_rational_P07.json": 709,
+        "agent/arena_kit/sim_cases/real_runs/guarded_rational_P08.json": 633,
+        "agent/arena_kit/sim_cases/real_runs/guarded_rational_P10.json": 449,
+        "agent/arena_kit/sim_cases/real_runs/guarded_rational_P11.json": 959,
+        "agent/arena_kit/sim_cases/real_runs/guarded_rational_P18.json": 674,
+        "agent/arena_kit/sim_cases/real_runs/log.txt": 19
+      }
+    }
+  ]
+}
