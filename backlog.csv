@@ -103,3 +103,7 @@ date,version,agent,environment,case_id,deal,c_open,c_deal,c_best,score,replay,no
 2026-10-10,v13 - niko,evidence_router (Confident Owl + cited data evidence layer),practice arena,case:P10,no,1932492.18,,1328926.89,0,https://arena.tacto.ai/replay/21d5da5648075a01,all claims verified; end: no_deal
 2026-10-10,v13 - niko,evidence_router (Confident Owl + cited data evidence layer),practice arena,case:P11,yes,817578.0,782518.5,722500.02,0.37,https://arena.tacto.ai/replay/2027fca2b6025f4c,all claims verified; end: accepted
 2026-10-10,v13 - niko,evidence_router (Confident Owl + cited data evidence layer),practice arena,case:P18,yes,295173.23,293245.63,222651.27,0.03,https://arena.tacto.ai/replay/41f12c2bd83bcfcf,all claims verified; end: accepted
+2026-10-10,v15 - niko,simplify (slimmed reciprocal + evidence),mock arena,set:real x15 seeds,99% deals,,,,0.596,,"mean over 15 seeds, 0 API; worst case P08 0.22; mock only, not a real score"
+2026-10-10,v15 - niko,reciprocal_evidence (baseline),mock arena,set:real x15 seeds,97% deals,,,,0.537,,"mean over 15 seeds, 0 API; worst case P08 0.16; mock only, not a real score"
+2026-10-10,v15 - niko,simplify (slimmed reciprocal + evidence),mock arena,set:dev x15 seeds,90% deals,,,,0.511,,"mean over 15 seeds, 0 API; worst case GD13 0.00; mock only, not a real score"
+2026-10-10,v15 - niko,reciprocal_evidence (baseline),mock arena,set:dev x15 seeds,89% deals,,,,0.456,,"mean over 15 seeds, 0 API; worst case GD13 0.00; mock only, not a real score"
