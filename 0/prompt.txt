@@ -415,3 +415,7 @@ open full documents and start reading the original files. jot down all ofthe mos
   
   Not checked: Table 4 and Fig. 4 of paper 2, and any separate conclusion section. I also did not follow any of the cited primary studies.
 </agent-message>
+
+---
+
+ok, put then in a folder called raw files, and then do an analysis which you will put in resources file that will have tips and tricks for being better at negotiation
