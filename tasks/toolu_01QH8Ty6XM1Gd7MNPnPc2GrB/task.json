@@ -1,0 +1,15 @@
+{
+  "tool_use_id": "toolu_01QH8Ty6XM1Gd7MNPnPc2GrB",
+  "agent_id": "a85178ef3a2ef6b8c",
+  "subagent_type": "reviewer",
+  "task_description": "Review reciprocal agent code",
+  "token_usage": {
+    "input_tokens": 20,
+    "cache_creation_tokens": 48686,
+    "cache_read_tokens": 304640,
+    "output_tokens": 72,
+    "api_call_count": 10
+  },
+  "started_at": "2026-10-10T21:56:36.732023+02:00",
+  "completed_at": "2026-10-10T21:58:34.672526+02:00"
+}
