@@ -1,0 +1,116 @@
+just push a trial run. I want to see that we are able to make changes, we are yet to make a project for the hackathon
+
+---
+
+can you explain ponytail github project to me rn
+
+---
+
+is it working and is it a security risk. this is a hackathon so it doesn't matter a lot but still
+
+---
+
+ok, set it up on my machine I want to use it for the project
+
+---
+
+wdym you set up 6 agents. who are they and why do you have them
+
+---
+
+I saw this thing where one person made a github project that puts adds when the agent things and you pocket part of the ad money. can you factcheck it and see actually if its good and how much money can I make per hour with it
+
+---
+
+can you dig a bit in, use github reviews and stars. Its coffe money yes, but I'm a student and a couple of bucks at the end of the month are a bigger deal for me than the average joe, but  Idon't want to jeoperdise my online safety even more
+
+---
+
+ok, thats fine. Don't install it then. now explain how I can run multiple agents (sub-agents) bc this time I want to be able to deligate tasks more efficiently and have a specific tools ofr each agent, like a manager, coder, reviewer, critic, optimist and a teacher that explains it. how can I DO ALL of this
+
+---
+
+how would a preoffessional set those agents up? bring citations
+
+---
+
+ok, with what subagents should I start and how should I set up my main agent. also what models of claude should they run?
+
+---
+
+ok, implement the base version of this plan, keep in mind that my team should also have access to these subagents so that we keep working productively
+
+---
+
+yes push it. also tell me how to review the entire set up so that I can see who pushes and how
+
+---
+
+I can't see any subagnets using /agents
+
+---
+
+ls .claude/agents
+
+---
+
+yes, I verified them. they are there. now tell me how can I open up the entire dashboard
+
+---
+
+yo why is the entire dashboard say that the MUCKHackatonFinal project is inactive? can we fix it
+
+---
+
+bro fix it yourself. here is a screenshot[Image #1]
+
+---
+
+nice job
+
+---
+
+ok, can my teamates see these different agents if they work on the github project (they clone it rn)
+
+---
+
+ok, now will everything pass in the workflow with multiple agents if I start coding
+
+---
+
+we are still unsure which project to work on. this is one option: 
+
+<pasted_content id="f141">
+Hey everyone 👋 Adrian from Tacto here.
+
+**Tacto Negotiation Arena:** you build an AI buyer that negotiates by e-mail with our suppliers. They're agents too, and they don't give anything away for free. Sunday at 12:00 your agent goes up against suppliers it has never met. Whoever gets the best deals wins.
+
+**Start here:** https://arena.tacto.ai
+Brief, starter kit and data: https://github.com/tacto-ai/negotiation-arena-kit
+
+**Get your key**
+1. Apply on https://arena.tacto.ai/apply
+2. Come to the Tacto table and show us your match code
+3. Copy the key. It's shown once
+
+No key yet? Run the Hello World from the README locally. Three commands.
+
+**How you win**
+Sunday's Live Final: five waves, eight minutes each, every team at once. We score total cost, not price. The top 10 pitch at 13:00, 5 min + 2 min questions.
+
+You don't need big credits. Our own reference agent runs on a small, cheap model. Reading the data beats a bigger model.
+
+**Find us**
+Deep dive today 12:00–13:00, ground floor. After that we're at the Tacto table, and here on Discord until 23:00.
+One thread per question, please. And never post your key.
+
+Have fun, and go get some good deals.
+</pasted_content id="f141">
+
+---
+
+make a file that will store all the dedicated information about the challenge and put it in the github. in it analyze and compile the most relevant information from this file as well :https://github.com/tacto-ai/negotiation-arena-kit
+
+---
+
+this as well :https://arena.tacto.ai/
