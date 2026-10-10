@@ -28,7 +28,7 @@ def load_env(path=".env"):
 
 AGENTS = [
     "naive", "smart", "confident", "rational", "explorer", "anchor", "switcher", "boulware", "router",
-    "confident_boulware", "confident_router", "guarded_boulware", "guarded_rational", "evidence_router", "evidence_rational", "llm",
+    "confident_boulware", "confident_router", "guarded_boulware", "guarded_rational", "evidence_router", "evidence_rational", "listener", "llm",
 ]  # fmt: skip
 
 
@@ -42,6 +42,7 @@ def agent_factory(name, data):
         EvidenceAgent,
         ExplorerAgent,
         GuardedAgent,
+        ListenerAgent,
         LLMAgent,
         NaiveAgent,
         RationalAgent,
@@ -82,6 +83,8 @@ def agent_factory(name, data):
         return lambda: EvidenceAgent(ConfidentRouterAgent(), data)
     if name == "evidence_rational":
         return lambda: EvidenceAgent(GuardedAgent(RationalAgent()), data)
+    if name == "listener":  # v4-petra: supplier model + packages, inside the guard and the evidence layer
+        return lambda: EvidenceAgent(GuardedAgent(ListenerAgent()), data)
     package = None
     if data:
         from .data import DataPackage
