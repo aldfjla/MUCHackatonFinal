@@ -10,10 +10,14 @@ not in the language model.
 
 import math
 import operator
+from contextvars import ContextVar
 from datetime import date
 
 # Strategic and bottleneck goals: leaving the supplier below a sustainable margin costs.
 RELATIONSHIP_GOALS = {"stabilise", "secure_supply"}
+# Hook for agents: inside `HEALTH.set({"full_cost": .., "interest_rate": ..})` every C without an explicit
+# `supplier` prices the relationship term with this estimate (its standard terms come from the call).
+HEALTH = ContextVar("health", default=None)
 OPS = {
     "<=": operator.le,
     "<": operator.lt,
@@ -126,6 +130,8 @@ def cost_breakdown(case, terms, standard=None, supplier=None):
     """C by part. `standard`: the supplier's standard terms for anything the term sheet leaves out.
     `supplier`: your estimate of the supplier for the relationship term (`supplier_value`)."""
     b, t = case["buyer"], closing_terms(case, terms, standard)
+    if supplier is None and (est := HEALTH.get()):
+        supplier = {**est, "standard": closing_terms(case, {}, standard)}
     if t.get("unit_price") is None:
         raise ValueError("no unit_price: a term sheet without a price has no cost")
     years = _years(case, t)

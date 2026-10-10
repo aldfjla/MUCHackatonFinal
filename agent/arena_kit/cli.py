@@ -28,13 +28,14 @@ def load_env(path=".env"):
 
 AGENTS = [
     "naive", "smart", "confident", "rational", "explorer", "anchor", "switcher", "boulware", "router",
-    "confident_boulware", "confident_router", "guarded_boulware", "guarded_rational", "evidence_router", "evidence_rational", "reciprocal", "reciprocal_evidence", "simplify", "llm",
+    "confident_boulware", "confident_router", "guarded_boulware", "guarded_rational", "evidence_router", "evidence_rational", "reciprocal", "reciprocal_evidence", "simplify", "better", "50", "llm",
 ]  # fmt: skip
 
 
 def agent_factory(name, data):
     from .agents import (
         AnchorAgent,
+        BetterAgent,
         BoulwareAgent,
         ConfidentAgent,
         ConfidentBoulwareAgent,
@@ -42,6 +43,7 @@ def agent_factory(name, data):
         SimplifyAgent,
         EvidenceAgent,
         ExplorerAgent,
+        FiftyAgent,
         GuardedAgent,
         LLMAgent,
         NaiveAgent,
@@ -52,6 +54,7 @@ def agent_factory(name, data):
         SwitcherAgent,
         llm_from_env,
     )
+    from .agents.better_agent import HealthScope
 
     if name == "naive":
         return NaiveAgent
@@ -90,6 +93,10 @@ def agent_factory(name, data):
         return lambda: EvidenceAgent(GuardedAgent(ReciprocalAgent()), data)
     if name == "simplify":
         return lambda: EvidenceAgent(GuardedAgent(SimplifyAgent()), data)
+    if name == "better":
+        return lambda: EvidenceAgent(HealthScope(GuardedAgent(BetterAgent())), data)
+    if name == "50":
+        return lambda: EvidenceAgent(GuardedAgent(FiftyAgent()), data)
     package = None
     if data:
         from .data import DataPackage

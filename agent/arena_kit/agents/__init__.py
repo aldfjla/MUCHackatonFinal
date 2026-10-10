@@ -1,9 +1,11 @@
 from ..guard import GuardedAgent
 from .anchor import AnchorAgent
+from .better_agent import BetterAgent
 from .boulware import BoulwareAgent
 from .confident import ConfidentAgent
 from .confident_boulware import ConfidentBoulwareAgent
 from .confident_router import ConfidentRouterAgent
+from .fifty_agent import FiftyAgent
 from .evidence import EvidenceAgent
 from .explorer import ExplorerAgent
 from .llm import LLMAgent, llm_from_env
@@ -17,6 +19,7 @@ from .switcher import SwitcherAgent
 
 __all__ = [
     "AnchorAgent",
+    "BetterAgent",
     "BoulwareAgent",
     "ClosingAgent",
     "ConfidentAgent",
@@ -24,6 +27,7 @@ __all__ = [
     "ConfidentRouterAgent",
     "EvidenceAgent",
     "ExplorerAgent",
+    "FiftyAgent",
     "GuardedAgent",
     "LLMAgent",
     "NaiveAgent",
