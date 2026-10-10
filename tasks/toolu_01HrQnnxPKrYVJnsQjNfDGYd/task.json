@@ -1,0 +1,18 @@
+{
+  "tool_use_id": "toolu_01HrQnnxPKrYVJnsQjNfDGYd",
+  "agent_id": "abace76f0a7829b44",
+  "subagent_type": "general-purpose",
+  "task_description": "Find new Harvard sources",
+  "files": [
+    "research_notes/Negotiation research reading list/new_sources_harvard.md"
+  ],
+  "token_usage": {
+    "input_tokens": 18,
+    "cache_creation_tokens": 95675,
+    "cache_read_tokens": 613937,
+    "output_tokens": 4596,
+    "api_call_count": 9
+  },
+  "started_at": "2026-10-10T17:31:47.527046+02:00",
+  "completed_at": "2026-10-10T17:33:35.550652+02:00"
+}

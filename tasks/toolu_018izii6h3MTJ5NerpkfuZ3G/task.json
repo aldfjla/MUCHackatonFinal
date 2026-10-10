@@ -1,0 +1,18 @@
+{
+  "tool_use_id": "toolu_018izii6h3MTJ5NerpkfuZ3G",
+  "agent_id": "a615d7d1063584352",
+  "subagent_type": "general-purpose",
+  "task_description": "Find open textbooks and surveys",
+  "files": [
+    "research_notes/Negotiation research reading list/new_sources_textbooks_open.md"
+  ],
+  "token_usage": {
+    "input_tokens": 66,
+    "cache_creation_tokens": 122903,
+    "cache_read_tokens": 3048405,
+    "output_tokens": 6666,
+    "api_call_count": 33
+  },
+  "started_at": "2026-10-10T17:31:47.514911+02:00",
+  "completed_at": "2026-10-10T17:42:46.177269+02:00"
+}

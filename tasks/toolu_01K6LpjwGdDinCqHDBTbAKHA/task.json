@@ -1,0 +1,15 @@
+{
+  "tool_use_id": "toolu_01K6LpjwGdDinCqHDBTbAKHA",
+  "agent_id": "a8efd8f4a770b7a4c",
+  "subagent_type": "general-purpose",
+  "task_description": "Find new Princeton/MIT sources",
+  "token_usage": {
+    "input_tokens": 36,
+    "cache_creation_tokens": 110524,
+    "cache_read_tokens": 1447431,
+    "output_tokens": 580,
+    "api_call_count": 18
+  },
+  "started_at": "2026-10-10T17:31:47.522378+02:00",
+  "completed_at": "2026-10-10T17:35:09.832665+02:00"
+}

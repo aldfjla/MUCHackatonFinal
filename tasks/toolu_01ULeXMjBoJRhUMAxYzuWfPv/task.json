@@ -1,0 +1,18 @@
+{
+  "tool_use_id": "toolu_01ULeXMjBoJRhUMAxYzuWfPv",
+  "agent_id": "a9c0061346907944c",
+  "subagent_type": "general-purpose",
+  "task_description": "Research replication and meta-analyses",
+  "files": [
+    "research_notes/Negotiation research reading list/replication_and_robustness.md"
+  ],
+  "token_usage": {
+    "input_tokens": 16,
+    "cache_creation_tokens": 75891,
+    "cache_read_tokens": 520022,
+    "output_tokens": 6570,
+    "api_call_count": 8
+  },
+  "started_at": "2026-10-10T17:27:32.386837+02:00",
+  "completed_at": "2026-10-10T17:29:36.071862+02:00"
+}
