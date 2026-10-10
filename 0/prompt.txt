@@ -1067,3 +1067,7 @@ ok, can the teacher answer me in 2 sentances what is the fundamental question of
 ---
 
 ok, what are the big schools of thought in this field then
+
+---
+
+ok, can you jot them all down in a bit more detail (using general info and a lot of the resources you found) to make a text file that will then be used to create player agents like the naive.py one text back when you made that file
