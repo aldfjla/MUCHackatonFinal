@@ -9,6 +9,7 @@ from .explorer import ExplorerAgent
 from .llm import LLMAgent, llm_from_env
 from .naive import NaiveAgent
 from .rational import RationalAgent
+from .reciprocal import ClosingAgent, ReciprocalAgent
 from .router import RouterAgent
 from .smart import SmartAgent
 from .switcher import SwitcherAgent
@@ -16,6 +17,7 @@ from .switcher import SwitcherAgent
 __all__ = [
     "AnchorAgent",
     "BoulwareAgent",
+    "ClosingAgent",
     "ConfidentAgent",
     "ConfidentBoulwareAgent",
     "ConfidentRouterAgent",
@@ -25,6 +27,7 @@ __all__ = [
     "LLMAgent",
     "NaiveAgent",
     "RationalAgent",
+    "ReciprocalAgent",
     "RouterAgent",
     "SmartAgent",
     "SwitcherAgent",

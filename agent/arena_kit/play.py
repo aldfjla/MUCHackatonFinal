@@ -105,6 +105,15 @@ def standing(events):
     return (sheets[0]["term_sheet_id"], sheets[0]["terms"]) if sheets else (None, {})
 
 
+def find_sheet(events, sheet_id):
+    """Terms of `sheet_id` among the sheets of the supplier's newest message that has any (so its
+    alternatives count, an older superseded sheet does not), or None."""
+    for m in reversed(events):
+        if m.get("from") != "buyer" and m.get("term_sheets"):
+            return next((s["terms"] for s in m["term_sheets"] if s.get("term_sheet_id") == sheet_id), None)
+    return None
+
+
 def live_threads(threads):
     """Suppliers whose thread has not ended."""
     return [sid for sid, ev in threads.items() if latest(ev).get("status") not in ENDED]
@@ -128,15 +137,28 @@ def closing_move(case, threads, stds=None):
     (C with each supplier's standard terms), else walk away - what to do when time runs out."""
     alt = case["buyer"].get("alternative") or {}
     c_alt = total_cost(case, alt["terms"]) if alt.get("terms", {}).get("unit_price") else float("inf")
-    best = None
+    from .agents.reciprocal import case_c_open  # lazy: that module imports this one
+
+    c_open, best = case_c_open(case, threads), None  # a deal worse than the opening quote scores 0 (equal: kept, it is full marks when nothing can be won)
     for sid in live_threads(threads):
         sheet_id, terms = standing(threads[sid])
         std = (stds or {}).get(sid) or standard_terms(threads[sid])
-        if sheet_id and must_haves_ok(case, terms, std) and (c := total_cost(case, terms, std)) < c_alt:
+        if sheet_id and must_haves_ok(case, terms, std) and (c := total_cost(case, terms, std)) < c_alt and c <= c_open:
             best = min(best or (c, sid, sheet_id), (c, sid, sheet_id))
     if best is None:
         return {"supplier_id": live_threads(threads)[0], "message": {"action": {"type": "walk_away"}}}
     return {"supplier_id": best[1], "message": {"action": {"type": "accept", "term_sheet_id": best[2]}}}
+
+
+def _safe_accept(case, threads, sid, terms):
+    """The thread's standing sheet is live, keeps the must-haves and beats both the alternative and the opening."""
+    from .agents.reciprocal import _c_alt, case_c_open  # lazy: that module imports this one
+
+    ev, std = threads[sid], standard_terms(threads[sid])
+    if latest(ev).get("status") in ENDED or terms.get("unit_price") is None or not must_haves_ok(case, terms, std):
+        return False
+    c = total_cost(case, terms, std)
+    return c < _c_alt(case) and c < case_c_open(case, threads)
 
 
 def play(table, case_id, agent, deadline=None):
@@ -163,7 +185,15 @@ def play(table, case_id, agent, deadline=None):
         try:
             if msg.get("action"):
                 log.info("%s %s", sid, msg["action"])
-                return table.close(sid, msg)
+                try:
+                    return table.close(sid, msg)
+                except ArenaError as e:  # a refused accept id (422): retry once with the thread's standing sheet
+                    stand, terms = standing(threads[sid])
+                    if (e.status != 422 or msg["action"].get("type") != "accept" or stand in (None, msg["action"].get("term_sheet_id"))
+                            or not _safe_accept(case, threads, sid, terms)):
+                        raise
+                    log.warning("%s: accept refused (%s) - retrying with %s", sid, e.detail, stand)
+                    return table.close(sid, {"action": {"type": "accept", "term_sheet_id": stand}})
             reply = table.send(sid, msg)
         except ArenaError as e:
             if e.status != 409:

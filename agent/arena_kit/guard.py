@@ -165,7 +165,7 @@ class GuardedAgent:
         sid, action = decision.get("supplier_id"), decision["message"]["action"]
         if sid not in threads or latest(threads[sid]).get("status") in ENDED:
             return False
-        sheet_id, terms = standing(threads[sid])
+        sheet_id, terms = standing(threads[sid])  # only the standing id: an `-a` id is not verified to be accepted
         if sheet_id is None or sheet_id != action.get("term_sheet_id"):
             return False
         std = standard_terms(threads[sid])
@@ -234,9 +234,31 @@ class GuardedAgent:
             return True
         return total_cost(case, terms, std) <= EARLY_ACCEPT * total_cost(case, opening, std)
 
+    @staticmethod
+    def _hopeless(case, threads):
+        """Every live thread is at its final offer (or out of messages) and even its must-have-fixed sheet costs
+        no less than the alternative: a counter could only end above the alternative's C."""
+        alt = (case["buyer"].get("alternative") or {}).get("terms") or {}
+        if not alt.get("unit_price"):
+            return False
+        c_alt = total_cost(case, alt)
+        for sid in live_threads(threads):
+            ev = threads[sid]
+            if latest(ev).get("status") != "final_offer" and moves_left(case, ev) >= 1:
+                return False
+            terms = standing(ev)[1]
+            if terms.get("unit_price") is not None:
+                std = standard_terms(ev)
+                if total_cost(case, satisfy_must_haves(case, dict(terms), std), std) < c_alt:
+                    return False
+        return True
+
     def _keep_going(self, case, threads, preferred, reason):
         """Rule d: never walk while something sensible is left."""
         close = closing_move(case, threads)
+        if close["message"]["action"]["type"] == "walk_away" and reason == "delegate wanted to walk" and self._hopeless(case, threads):
+            self.log.info("%s guard: walk away stands (every thread is final, no counter beats the alternative)", self._case_id)
+            return close
         if close["message"]["action"]["type"] == "accept":
             asid = close["supplier_id"]
             if (moves_left(case, threads[asid]) <= 1 or not self._eligible(case, threads, asid)
