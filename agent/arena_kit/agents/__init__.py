@@ -6,6 +6,7 @@ from .confident_boulware import ConfidentBoulwareAgent
 from .confident_router import ConfidentRouterAgent
 from .evidence import EvidenceAgent
 from .explorer import ExplorerAgent
+from .final import FinalAgent
 from .llm import LLMAgent, llm_from_env
 from .naive import NaiveAgent
 from .rational import RationalAgent
@@ -24,6 +25,7 @@ __all__ = [
     "ConfidentRouterAgent",
     "EvidenceAgent",
     "ExplorerAgent",
+    "FinalAgent",
     "GuardedAgent",
     "LLMAgent",
     "NaiveAgent",

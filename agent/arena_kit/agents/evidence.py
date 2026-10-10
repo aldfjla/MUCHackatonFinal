@@ -22,11 +22,11 @@ def _cited(events):
 
 
 class EvidenceAgent:
-    def __init__(self, delegate, data=None):
-        self.delegate, self.data, self._pkg, self._loaded = delegate, data, None, False
+    def __init__(self, delegate, data=None, *, questions=True):
+        self.delegate, self.data, self._pkg, self._loaded, self.questions = delegate, data, None, False, questions
 
     def __getattr__(self, name):  # e.g. `.chosen` of a wrapped router
-        if name in ("delegate", "data", "_pkg", "_loaded"):
+        if name in ("delegate", "data", "_pkg", "_loaded", "questions"):
             raise AttributeError(name)
         return getattr(self.delegate, name)
 
@@ -79,6 +79,8 @@ class EvidenceAgent:
         last = theirs[-1]
         if not any(m.get("term_sheets") for m in theirs):
             asks.append("Could you please send us your quote?")
+        elif not self.questions:
+            pass
         elif sum(m.get("from") == "buyer" for m in events) == 0:
             asks.append("Could you send us a breakdown of the costs behind your price?")
         elif last.get("status") == "final_offer" or re.search(r"\b(limit|cap|allocation)", last.get("body") or "", re.I):
