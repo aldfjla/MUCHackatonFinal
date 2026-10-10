@@ -3331,3 +3331,7 @@ ok put back the stall and keep the deadband, do 5 mocks to see if anything is br
   
   Changed only `simplify_agent.py` and `test_simplify_agent.py` in `/Users/nikolaydidiletsov/Documents/Codex/MUCHackatonFinal/agent`. No commit.
 </agent-message>
+
+---
+
+sure, also run 5 actual runs from the api
