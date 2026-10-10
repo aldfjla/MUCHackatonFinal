@@ -8,6 +8,7 @@ import json
 import logging
 import os
 import statistics
+import sys
 import zipfile
 from pathlib import Path
 
@@ -79,6 +80,11 @@ def agent_factory(name, data):
     if name == "guarded_rational":
         return lambda: GuardedAgent(RationalAgent())
     # the evidence wrapper replaces the delegate's body and refs by design (it cites verified data)
+    if name in ("evidence_router", "evidence_rational", "listener"):
+        from .evidence import package_problem
+
+        if why := package_problem(data):  # say it before any session opens, not once per message
+            print(f"WARNING: {why} - messages will cite NO data. Pass --data <folder with world.sqlite>.", file=sys.stderr)
     if name == "evidence_router":
         return lambda: EvidenceAgent(ConfidentRouterAgent(), data)
     if name == "evidence_rational":

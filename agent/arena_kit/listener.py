@@ -62,6 +62,10 @@ DISMISSED = {  # evidence kind -> words the supplier uses for it when it says th
     "quote": r"other offer|alternative quote",
 }
 NOT_CHANGE = r"(does not|doesn'?t|do not) (change|impact)|not change our (position|calculation)"
+FASTER_PAY = (  # the supplier itself asks to be paid sooner (not just "payment matters")
+    r"faster payment|pay (us )?(faster|sooner|earlier)|earlier payment|shorter payment|need the (cash|money)"
+    r"|schneller(e)? zahlung|frühere zahlung"
+)
 _SENT = re.compile(r"(?<=[.!?])\s+|\n+")
 
 
@@ -90,6 +94,9 @@ def supplier_model(case, events):
         "small_moves": False,
         "dismissed": set(),
         "prices": [],
+        "asks_faster_pay": bool(re.search(FASTER_PAY, allt)),
+        "min_pay": None,  # the shortest payment days the supplier itself put on a sheet
+        "tied": set(),  # fields the supplier ties to its price: they differ between its packages
     }
 
     for i, t in enumerate(texts):  # words: recent messages weigh more
@@ -114,6 +121,9 @@ def supplier_model(case, events):
     for i, m in enumerate(events):
         sheets = _sheets(m)
         if m.get("from") != "buyer":
+            pays = [s["payment_days"] for s in sheets if isinstance(s.get("payment_days"), int | float)]
+            if pays:
+                model["min_pay"] = min(pays + ([model["min_pay"]] if model["min_pay"] is not None else []))
             if sheets and sheets[0].get("unit_price") is not None:
                 model["prices"].append(sheets[0]["unit_price"])
                 prev_theirs = sheets[0]
@@ -149,6 +159,7 @@ def supplier_model(case, events):
         model["price_frozen"] = True
     standing = next((_sheets(m) for m in reversed(events) if m.get("from") != "buyer" and m.get("term_sheets")), [])
     if standing:
+        model["tied"] = {f for f in fields for a in standing for b in standing if a.get(f) != b.get(f)}
         cheapest = min(standing, key=lambda s: s.get("unit_price") or float("inf"))
         for f in fields:  # what they want: the value on their cheapest package, else on their standing sheet
             if f in cheapest:
@@ -184,7 +195,7 @@ def _priced(model, sheets, fields):
 def focus(model, case):
     """What the evidence layer should aim at: the supplier's currency, frozen fields and evidence it shrugged off."""
     q = {
-        "payment": "We can pay faster: what price can you offer us at {days} days?",
+        "payment": "What price can you offer us at {days}-day payment?",
         "capacity": "What would it take for you to free capacity for our volume: a longer contract or a longer lead time?",
         "duration": "What price could you offer us for a longer contract term?",
         "quality": "Which price works for you at the quality level in our term sheet?",
@@ -197,7 +208,8 @@ def focus(model, case):
         if model["currency"] in ("payment", "capacity", "duration", "quality", "leadtime", "index", "relationship")
         else "price"
     ]
-    days = min([o for o in (case.get("term_options") or {}).get("payment_days") or [] if o] or [14])
+    # their own payment days, never the shortest option: volunteering 14 days bought ~0.5 % in P01/P02
+    days = model["preferred"].get("payment_days") or model.get("min_pay") or case["buyer"].get("reference_payment_days", 60)
     return {
         "currency": model["currency"],
         "frozen": set(model["frozen"]),

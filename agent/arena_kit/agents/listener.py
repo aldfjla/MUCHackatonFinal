@@ -23,6 +23,7 @@ from .rational import estimate_floor
 ASK_QUOTE = "Could you please send us your quote?"
 BODY = "Thank you for your offer. Please find our proposals in the term sheets; which of them works best for you?"
 BODY_THEIR_PRICE = "We accept your price; please confirm the terms below."
+PAY_MARGIN = 0.003  # paying faster than they offered must save at least this share of total cost
 
 
 def _sheets(m):
@@ -97,26 +98,32 @@ class ListenerAgent:
 
         price = self._price(case, model, best, mine_prices)
 
-        def usable(packages):  # must-haves first (they beat a frozen field), then safe, new and valid
+        def usable(packages):  # must-haves first (they beat a frozen field), then safe, new, valid, no volunteered fast pay
             fixed = [satisfy_must_haves(case, p, std[sid]) for p in packages]
-            return [
+            ok = [
                 p
                 for i, p in enumerate(fixed)
                 if p not in fixed[:i] and p not in mine and must_haves_ok(case, p, std[sid]) and cost(sid, p) <= upper
             ]
+            return self._pay_filter(model, ok, lambda t: cost(sid, t))
 
         fresh = usable(self._packages(case, model, best, price, lambda t: cost(sid, t), upper))
 
         if status == "final_offer" or left <= 1:
             if _tried_after_final(events):  # one non-price try per thread after a final offer, then close
                 return accept if final_ok(sid, terms) else closing_move(case, threads)
-            # one last try: their price with the non-price terms that cost us least (not sent before)
+            # one last try: their price with the non-price terms that cost us least (not sent before). Terms the
+            # supplier tied to its price (P10: 31.90 only with 54 days) and its effective date stay as it sent them.
+            hold = self._held(model, best)
             at_theirs = satisfy_must_haves(
-                case, self._best_terms(case, model, dict(best), lambda t: cost(sid, t), strict=True), std[sid]
+                case,
+                self._best_terms(case, model, dict(best), lambda t: cost(sid, t), strict=True, hold=hold),
+                std[sid],
             )
             if (
                 (left > 1 or status == "final_offer")
                 and at_theirs not in mine
+                and self._pay_filter(model, [at_theirs], lambda t: cost(sid, t), ref=best)
                 and final_ok(sid, at_theirs)
                 and cost(sid, at_theirs) < cost(sid, best) * 0.995
                 and left >= 1
@@ -196,11 +203,35 @@ class ListenerAgent:
             opts.append(base.get(f))
         return opts
 
-    def _best_terms(self, case, model, base, cost, strict=False):
-        """Greedy, field by field: the option of each non-frozen field with the lowest value for us."""
+    @staticmethod
+    def _held(model, best):
+        """Fields we may not change when we answer with the supplier's own price: the ones it tied to that price
+        (they differ between its packages, or it charged for them) and its effective date, unless it moved on it."""
+        hold = set(model.get("tied", set())) | set(model.get("priced", {})) | set(model.get("frozen", set()))
+        if model.get("flex", {}).get("effective_date", 0) <= 0:
+            hold.add("effective_date")
+        return {f for f in hold if f in best}
+
+    @staticmethod
+    def _pay_filter(model, packages, cost, ref=None, margin=PAY_MARGIN):
+        """Drop packages that pay faster than the supplier ever offered, unless it asked for faster payment itself
+        and the package beats our best other one (or `ref`, their sheet) by a real margin."""
+        floor = model.get("min_pay")
+        if floor is None:
+            return packages
+        slow = [p for p in packages if (p.get("payment_days") or floor) >= floor]
+        base = min((cost(p) for p in slow + ([ref] if ref else [])), default=math.inf)
+        return [
+            p
+            for p in packages
+            if p in slow or (model.get("asks_faster_pay") and cost(p) < base * (1 - margin))
+        ]
+
+    def _best_terms(self, case, model, base, cost, strict=False, hold=()):
+        """Greedy, field by field: the option of each non-frozen, non-held field with the lowest value for us."""
         t = complete_offer(case, base)
         price = t.get("unit_price")
-        fields = [f for f in case["negotiable"] if f != "unit_price"]
+        fields = [f for f in case["negotiable"] if f != "unit_price" and f not in hold]
         for _ in range(2):
             for f in fields:
                 options = self._options(case, model, f, t)
@@ -229,10 +260,10 @@ class ListenerAgent:
             give = model["priced"].get(fc) or self.give * price
             pref = model["preferred"].get(fc, best.get(fc))
             opts = sorted([o for o in (case.get("term_options") or {}).get(fc) or [] if isinstance(o, int | float)])
-            if fc == "payment_days" and opts:  # cash-short: pay at their terms, and faster still, for a lower price
+            if fc == "payment_days" and opts:  # cash-short: pay at their terms; faster still only if they asked
                 faster = [o for o in opts if pref is not None and o < pref]
                 out.append(complete_offer(case, {**a, fc: pref, "unit_price": round(price - give, 2)}))
-                if faster:
+                if faster and model.get("asks_faster_pay"):  # the nearest faster option, never the shortest by default
                     out.append(complete_offer(case, {**a, fc: faster[-1], "unit_price": round(price - 1.5 * give, 2)}))
             elif opts:  # duration, lead time ...: the value it prefers, at our price
                 out.append(

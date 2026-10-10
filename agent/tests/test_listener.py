@@ -273,3 +273,95 @@ def test_evidence_focus_only_for_the_supplier_the_listener_chose():
     ev = EvidenceAgent(Stub())
     d = ev.decide(c, {"sup:70410": upto("P10", "sup:70410", 1)})
     assert "LISTENER-QUESTION" not in (d["message"].get("body") or "")
+
+
+# --- payment, tied terms, effective date (P01/P02/P10 replays, v4-petra runs 2026-10-10) -----------
+
+
+def _p01_thread():
+    c = case("P01")
+    base = {"effective_date": "2026-11-01", "payment_days": 30}
+    return c, [
+        sup("We announce a price increase.", unit_price=138.55, **base),
+        buyer(unit_price=121.92, effective_date="2027-04-01", payment_days=90),
+        {
+            "from": "sales@x",
+            "status": "open",
+            "body": "90 days would incur additional financing costs. At 30 days we can offer 136.20.",
+            "term_sheets": [
+                {"term_sheet_id": "offer:x-2", "terms": {"unit_price": 138.40, "effective_date": "2026-11-01", "payment_days": 90}},
+                {"term_sheet_id": "offer:x-3", "terms": {"unit_price": 136.20, "effective_date": "2026-11-01", "payment_days": 30}},
+            ],
+        },
+    ]
+
+
+def test_never_volunteers_faster_payment_than_the_supplier_offered():
+    c, events = _p01_thread()
+    d = ListenerAgent().decide(c, {"sup:70110": events})
+    days = [s["terms"]["payment_days"] for s in d["message"].get("term_sheets", [])]
+    assert days and min(days) >= 30  # P01/P02: we proposed 14 days ourselves and got ~0.5 %
+    f = focus(supplier_model(c, events), c)
+    assert "14" not in f["question"]
+
+
+def test_faster_payment_allowed_only_when_asked_and_clearly_cheaper():
+    from arena_kit.agents.listener import ListenerAgent as L
+
+    fast, slow = {"payment_days": 14, "unit_price": 1.0}, {"payment_days": 30, "unit_price": 1.0}
+    cost = {14: 97.0, 30: 100.0}
+    pick = lambda m: L._pay_filter(m, [fast, slow], lambda t: cost[t["payment_days"]])  # noqa: E731
+    assert pick({"min_pay": 30, "asks_faster_pay": False}) == [slow]
+    assert pick({"min_pay": 30, "asks_faster_pay": True}) == [fast, slow]
+    cost[14] = 99.9  # asked, but only 0.1 % cheaper: not worth it
+    assert pick({"min_pay": 30, "asks_faster_pay": True}) == [slow]
+    assert pick({"min_pay": None}) == [fast, slow]  # payment not on the table: no filter
+
+
+def test_keeps_the_lead_time_the_supplier_tied_to_its_price():
+    c = case("P10")  # final offer: 34.90 with 35 days, or 31.90 only with 56 days
+    t = {"volume_per_year": 23400, "contract_months": 24}
+    events = [
+        sup("Our offer.", unit_price=32.20, volume_per_year=19890, contract_months=12, lead_time_days=56),
+        buyer(unit_price=28.34, volume_per_year=23400, contract_months=24, lead_time_days=35),
+        {
+            "from": "sales@x",
+            "status": "final_offer",
+            "body": "Final offer: 34.90 at 35 days lead time, or 31.90 with 56 days.",
+            "term_sheets": [
+                {"term_sheet_id": "offer:x-2", "terms": {"unit_price": 34.90, "lead_time_days": 35, **t}},
+                {"term_sheet_id": "offer:x-3", "terms": {"unit_price": 31.90, "lead_time_days": 56, **t}},
+            ],
+        },
+    ]
+    d = ListenerAgent().decide(c, {"sup:70410": events})
+    pairs = {34.90: 35, 31.90: 56}
+    for s in d["message"].get("term_sheets", []):
+        p = s["terms"]["unit_price"]
+        if p in pairs:
+            assert s["terms"]["lead_time_days"] == pairs[p], s["terms"]
+    if d["message"].get("action"):
+        assert d["message"]["action"]["type"] == "accept"
+
+
+def test_their_price_keeps_their_effective_date():
+    c = case("P01")  # P01 run: we answered 134.70 with 2027-04-01 while they quoted 2026-11-01
+    events = [
+        sup("Price increase.", unit_price=138.55, effective_date="2026-11-01", payment_days=30),
+        buyer(unit_price=123.31, effective_date="2027-04-01", payment_days=30),
+        sup("This is our final offer.", status="final_offer", unit_price=134.70, effective_date="2026-11-01", payment_days=30),
+    ]
+    d = ListenerAgent().decide(c, {"sup:70110": events})
+    for s in d["message"].get("term_sheets", []):
+        if s["terms"]["unit_price"] == 134.70:
+            assert s["terms"]["effective_date"] == "2026-11-01"
+
+
+def test_startup_warns_when_the_package_has_no_sqlite(tmp_path, capsys):
+    from arena_kit.cli import agent_factory
+    from arena_kit.evidence import package_problem
+
+    (tmp_path / "facts.json").write_text("{}")  # the learning_information copy: facts but no world.sqlite
+    assert "world.sqlite" in package_problem(str(tmp_path))
+    agent_factory("listener", str(tmp_path))
+    assert "cite NO data" in capsys.readouterr().err
