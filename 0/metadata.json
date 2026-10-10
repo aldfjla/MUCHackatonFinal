@@ -1,0 +1,274 @@
+{
+  "cli_version": "0.11.4",
+  "checkpoint_id": "01M4KGJBP5YWKRGEQ8MJGX4T60",
+  "session_id": "c839f125-523b-4765-9e0d-736b62052aff",
+  "strategy": "manual-commit",
+  "created_at": "2026-10-10T18:17:57.774942Z",
+  "branch": "v1-niko",
+  "checkpoints_count": 14,
+  "save_step_count": 15,
+  "files_touched": [
+    "SIM_PLAN.md",
+    "backlog.csv"
+  ],
+  "agent": "Claude Code",
+  "model": "claude-sonnet-5-5",
+  "turn_id": "752731cc3d92",
+  "compact_transcript_start": 0,
+  "token_usage": {
+    "input_tokens": 921,
+    "cache_creation_tokens": 1030891,
+    "cache_read_tokens": 109875540,
+    "output_tokens": 246885,
+    "api_call_count": 363,
+    "subagent_tokens": {
+      "input_tokens": 28,
+      "cache_creation_tokens": 48758,
+      "cache_read_tokens": 312966,
+      "output_tokens": 157,
+      "api_call_count": 14
+    }
+  },
+  "skill_events_version": 1,
+  "skill_events": [
+    {
+      "id": "claude-skill-toolu_01XisbE3fpoi7cwAoVYW8zSo",
+      "event_type": "tool_invocation",
+      "skill": {
+        "name": "claude-in-chrome"
+      },
+      "source": {
+        "agent": "claude-code",
+        "signal": "skill_tool_use",
+        "confidence": "explicit"
+      },
+      "turn_id": "280cb5401056",
+      "transcript_anchor": {
+        "unit": "line",
+        "start": 1647,
+        "end": 1648,
+        "entry_ids": [
+          "736b346a-30d5-4103-b836-0257d9b08dcf"
+        ],
+        "tool_use_id": "toolu_01XisbE3fpoi7cwAoVYW8zSo"
+      },
+      "native": {
+        "tool_name": "Skill",
+        "tool_use_id": "toolu_01XisbE3fpoi7cwAoVYW8zSo"
+      },
+      "collapse": {
+        "target": "tool_pair",
+        "label": "Skill: claude-in-chrome",
+        "default_collapsed": true
+      }
+    },
+    {
+      "id": "claude-skill-toolu_01NwTCQtA8aY9qR4HQFGsa8J",
+      "event_type": "tool_invocation",
+      "skill": {
+        "name": "anthropic-skills:deep-research"
+      },
+      "source": {
+        "agent": "claude-code",
+        "signal": "skill_tool_use",
+        "confidence": "explicit"
+      },
+      "turn_id": "adb3318188ae",
+      "transcript_anchor": {
+        "unit": "line",
+        "start": 1804,
+        "end": 1805,
+        "entry_ids": [
+          "5d32208c-4a11-4e41-9368-95090245be74"
+        ],
+        "tool_use_id": "toolu_01NwTCQtA8aY9qR4HQFGsa8J"
+      },
+      "native": {
+        "tool_name": "Skill",
+        "tool_use_id": "toolu_01NwTCQtA8aY9qR4HQFGsa8J"
+      },
+      "collapse": {
+        "target": "tool_pair",
+        "label": "Skill: anthropic-skills:deep-research",
+        "default_collapsed": true
+      }
+    }
+  ],
+  "session_metrics": {
+    "turn_count": 150
+  },
+  "initial_attribution": {
+    "calculated_at": "2026-10-10T18:17:57.403907Z",
+    "agent_lines": 44,
+    "agent_removed": 6,
+    "human_added": 3102,
+    "human_modified": 0,
+    "human_removed": 0,
+    "total_committed": 3146,
+    "total_lines_changed": 3152,
+    "agent_percentage": 1.5862944162436547,
+    "metric_version": 2
+  },
+  "prompt_attributions": [
+    {
+      "checkpoint_number": 2,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 0,
+      "agent_lines_removed": 0
+    },
+    {
+      "checkpoint_number": 3,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 0,
+      "agent_lines_removed": 0
+    },
+    {
+      "checkpoint_number": 4,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 0,
+      "agent_lines_removed": 0
+    },
+    {
+      "checkpoint_number": 5,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 0,
+      "agent_lines_removed": 0
+    },
+    {
+      "checkpoint_number": 6,
+      "user_lines_added": 282,
+      "user_lines_removed": 0,
+      "agent_lines_added": 0,
+      "agent_lines_removed": 0,
+      "user_added_per_file": {
+        "verification/README.md": 11,
+        "verification/run_verification.sh": 20,
+        "verification/verify_backlog.py": 251
+      }
+    },
+    {
+      "checkpoint_number": 7,
+      "user_lines_added": 282,
+      "user_lines_removed": 0,
+      "agent_lines_added": 6,
+      "agent_lines_removed": 6,
+      "user_added_per_file": {
+        "verification/README.md": 11,
+        "verification/run_verification.sh": 20,
+        "verification/verify_backlog.py": 251
+      }
+    },
+    {
+      "checkpoint_number": 8,
+      "user_lines_added": 282,
+      "user_lines_removed": 0,
+      "agent_lines_added": 6,
+      "agent_lines_removed": 6,
+      "user_added_per_file": {
+        "verification/README.md": 11,
+        "verification/run_verification.sh": 20,
+        "verification/verify_backlog.py": 251
+      }
+    },
+    {
+      "checkpoint_number": 9,
+      "user_lines_added": 282,
+      "user_lines_removed": 0,
+      "agent_lines_added": 6,
+      "agent_lines_removed": 6,
+      "user_added_per_file": {
+        "verification/README.md": 11,
+        "verification/run_verification.sh": 20,
+        "verification/verify_backlog.py": 251
+      }
+    },
+    {
+      "checkpoint_number": 10,
+      "user_lines_added": 282,
+      "user_lines_removed": 0,
+      "agent_lines_added": 6,
+      "agent_lines_removed": 6,
+      "user_added_per_file": {
+        "verification/README.md": 11,
+        "verification/run_verification.sh": 20,
+        "verification/verify_backlog.py": 251
+      }
+    },
+    {
+      "checkpoint_number": 11,
+      "user_lines_added": 282,
+      "user_lines_removed": 0,
+      "agent_lines_added": 6,
+      "agent_lines_removed": 6,
+      "user_added_per_file": {
+        "verification/README.md": 11,
+        "verification/run_verification.sh": 20,
+        "verification/verify_backlog.py": 251
+      }
+    },
+    {
+      "checkpoint_number": 12,
+      "user_lines_added": 282,
+      "user_lines_removed": 0,
+      "agent_lines_added": 6,
+      "agent_lines_removed": 6,
+      "user_added_per_file": {
+        "verification/README.md": 11,
+        "verification/run_verification.sh": 20,
+        "verification/verify_backlog.py": 251
+      }
+    },
+    {
+      "checkpoint_number": 13,
+      "user_lines_added": 282,
+      "user_lines_removed": 0,
+      "agent_lines_added": 6,
+      "agent_lines_removed": 6,
+      "user_added_per_file": {
+        "verification/README.md": 11,
+        "verification/run_verification.sh": 20,
+        "verification/verify_backlog.py": 251
+      }
+    },
+    {
+      "checkpoint_number": 14,
+      "user_lines_added": 282,
+      "user_lines_removed": 0,
+      "agent_lines_added": 6,
+      "agent_lines_removed": 6,
+      "user_added_per_file": {
+        "verification/README.md": 11,
+        "verification/run_verification.sh": 20,
+        "verification/verify_backlog.py": 251
+      }
+    },
+    {
+      "checkpoint_number": 15,
+      "user_lines_added": 282,
+      "user_lines_removed": 0,
+      "agent_lines_added": 6,
+      "agent_lines_removed": 6,
+      "user_added_per_file": {
+        "verification/README.md": 11,
+        "verification/run_verification.sh": 20,
+        "verification/verify_backlog.py": 251
+      }
+    },
+    {
+      "checkpoint_number": 16,
+      "user_lines_added": 282,
+      "user_lines_removed": 0,
+      "agent_lines_added": 44,
+      "agent_lines_removed": 6,
+      "user_added_per_file": {
+        "verification/README.md": 11,
+        "verification/run_verification.sh": 20,
+        "verification/verify_backlog.py": 251
+      }
+    }
+  ]
+}
