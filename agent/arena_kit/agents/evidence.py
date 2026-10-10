@@ -53,6 +53,8 @@ class EvidenceAgent:
         used = set().union(*(_cited(e) for e in threads.values()))
         used = {i for i in used if not i.startswith("offer:")} | {i for i in _cited(events) if i.startswith("offer:")}
         focus = getattr(self.delegate, "focus", None) or {}  # the Listener's supplier model, if the delegate has one
+        if focus.get("supplier_id", sid) != sid:
+            focus = {}  # the guard redirected to another supplier: that model is not this supplier's
         claims = [c for c in build_claims(case, self._pkg, sid, price)
                   if not used & set(c["ids"]) and c["kind"] not in focus.get("dismissed", ())]
         asks = []

@@ -184,3 +184,92 @@ def test_every_real_turn_gives_a_safe_decision(path):
                 alt = (c["buyer"].get("alternative") or {}).get("terms") or {}
                 terms = next(x for x in reversed(msgs[: i + 1]) if x.get("from") != "buyer")["term_sheets"][0]["terms"]
                 assert not alt.get("unit_price") or total_cost(c, terms) < total_cost(c, alt)
+
+
+# --- review fixes ----------------------------------------------------------------------------
+
+
+def test_a_payment_limit_does_not_freeze_the_price():
+    c = case("P05")
+    m = supplier_model(c, [sup("Price is EUR 31.00 per unit. 30 days is our absolute limit for payment.", unit_price=31.0)])
+    assert "payment_days" in m["hard"] and not m["price_frozen"]
+    m = supplier_model(c, [sup("EUR 31.00 per unit is our absolute limit.", unit_price=31.0)])
+    assert m["price_frozen"]
+
+
+def test_price_frozen_when_their_price_stays_the_same_over_two_replies():
+    c = case("P05")
+    ev = [sup("Offer.", unit_price=31.0), buyer(unit_price=29.0), sup("Offer.", unit_price=31.0),
+          buyer(unit_price=29.5), sup("Offer.", unit_price=31.0)]
+    assert supplier_model(c, ev)["price_frozen"]
+    assert not supplier_model(c, ev[:3])["price_frozen"]
+
+
+def test_lead_time_sentence_is_not_a_payment_constraint():
+    m = supplier_model(case("P05"), [sup("We can keep 35 days lead time for you.", unit_price=31.0)])
+    assert "payment_days" not in m["hard"]
+
+
+def test_only_one_try_after_a_final_offer():
+    c = case("P07")
+    events = upto("P07", "sup:70610", 4)  # final offer at 5.64
+    a = ListenerAgent()
+    t = a.decide(c, {"sup:70610": events})["message"]["term_sheets"][0]["terms"]
+    # it answers our try with another, slightly different final offer: we take it, no second try
+    events = events + [{"from": "buyer", "body": "", "term_sheets": [{"terms": t}]},
+                       sup("This is our final offer.", status="final_offer", **{**t, "contract_months": 12, "unit_price": 5.63})]
+    d = ListenerAgent().decide(c, {"sup:70610": events})
+    assert d["message"].get("action", {}).get("type") in ("accept", "walk_away") or not d["message"].get("term_sheets")
+
+
+def test_last_move_never_resends_a_sheet():
+    c = {**case("P07"), "round_limit": 3}
+    events = upto("P07", "sup:70610", 1)  # their two packages, 5.70 and 5.63
+    two = events[-1]
+    d1 = ListenerAgent().decide(c, {"sup:70610": events})
+    sent = [s["terms"] for s in d1["message"].get("term_sheets") or []]
+    events = events + [{"from": "buyer", "body": "", "term_sheets": [{"terms": t} for t in sent]}, two]
+    d2 = ListenerAgent().decide(c, {"sup:70610": events})
+    mine = [s["terms"] for m in events if m.get("from") == "buyer" for s in (m.get("term_sheets") or [])[:1]]
+    assert all(s["terms"] not in mine for s in d2["message"].get("term_sheets") or [])
+
+
+def test_accept_never_worse_than_the_opening():
+    c = case("P07")
+    opening = upto("P07", "sup:70610", 0)
+    worse = {**opening[0]["term_sheets"][0]["terms"], "unit_price": 5.80}
+    ev = opening + [buyer(**worse), sup("We can accept your terms.", status="agreed", **worse)]
+    d = ListenerAgent().decide(c, {"sup:70610": ev})
+    assert d["message"].get("action", {}).get("type") != "accept"
+
+
+def test_spent_thread_hands_over_to_a_supplier_with_moves():
+    c = {**case("P05"), "round_limit": 1}
+    a = [sup("Offer.", unit_price=30.5, payment_days=30, lead_time_days=35), buyer(unit_price=29.0)]  # spent
+    b = [sup("Offer.", unit_price=30.0, payment_days=30, lead_time_days=35), buyer(unit_price=28.0),
+         sup("Offer.", unit_price=30.2, payment_days=30, lead_time_days=35)]
+    c = {**c, "round_limit": 2}
+    a = a + [buyer(unit_price=29.5)]  # A has used both moves, B one
+    d = ListenerAgent().decide(c, {"sup:A": a, "sup:B": b})
+    assert d["supplier_id"] == "sup:B"
+
+
+def test_capacity_packages_survive_non_numeric_options():
+    c = {**case("P10"), "term_options": {**case("P10")["term_options"], "contract_months": ["open"]}}
+    d = ListenerAgent().decide(c, {"sup:70410": upto("P10", "sup:70410", 1)})
+    assert d["message"].get("term_sheets") or d["message"].get("action")
+
+
+def test_evidence_focus_only_for_the_supplier_the_listener_chose():
+    from arena_kit.agents.evidence import EvidenceAgent
+
+    class Stub:
+        focus = {"supplier_id": "sup:OTHER", "question": "LISTENER-QUESTION?", "frozen": set(), "dismissed": set()}
+
+        def decide(self, case_, threads):
+            return {"supplier_id": "sup:70410", "message": {"subject": "s", "body": "b", "term_sheets": []}}
+
+    c = case("P10")
+    ev = EvidenceAgent(Stub())
+    d = ev.decide(c, {"sup:70410": upto("P10", "sup:70410", 1)})
+    assert "LISTENER-QUESTION" not in (d["message"].get("body") or "")

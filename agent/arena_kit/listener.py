@@ -23,10 +23,11 @@ TOPIC = {  # negotiable field -> the "currency" it belongs to
     "tooling_eur": "cash",
 }
 CURRENCY = {  # topic -> phrases that show the supplier cares about it (a hit adds 1 to its priority)
-    "payment": r"faster payment|pay (us )?(faster|sooner|earlier)|need the (cash|money)|pay (for )?(our|the) (own )?(bills|guys|material)"
-    r"|cash flow|liquidit|financing|extended financing|stick to \d+ days|payment must stay|\d+ days (payment|net) .{0,20}(limit|only)"
-    r"|only with \d+ days|(would|must) (increase|necessitate)[^.]{0,30}(price|unit price)[^.]{0,40}90|90[^.]{0,30}(higher|increase)[^.]{0,20}price"
-    r"|zahlungsziel[^.]{0,40}(halten|bleiben)|schneller(e)? zahlung|liquidität",
+    "payment": r"faster payment|pay (us )?(faster|sooner|earlier)|need the (cash|money)|pay (for )?(our|the) (own )?(bills|wages|staff|suppliers|material)"
+    r"|cash flow|liquidit|financing|stick to \d+[- ]?days|payment must stay|\d+[- ]?days (payment|net) .{0,20}(limit|only)"
+    r"|only with \d+[- ]?days|(would|must) (increase|necessitate)[^.]{0,30}price[^.]{0,40}\d+[- ]?days"
+    r"|\d+[- ]?days[^.]{0,30}(higher|increase)[^.]{0,20}price|(longer|extended) payment[^.]{0,40}(increase|higher|raise)"
+    r"|zahlung\w*[^.]{0,40}(halten|bleiben)|schneller(e)? zahlung|liquidität",
     "capacity": r"capacity|fully utili[sz]ed|allocat|maximum available volume|cannot increase|kapazität|ausgelastet",
     "duration": r"longer (contract|term|commitment)|contract (length|duration)|multi-year|planning security|planungssicherheit|laufzeit",
     "relationship": r"long-standing|core account|long-term partner|partnership|relationship|for generations",
@@ -35,15 +36,18 @@ CURRENCY = {  # topic -> phrases that show the supplier cares about it (a hit ad
     "leadtime": r"overtime|at a premium|faster deliver|express",
 }
 WEIGHT = {"relationship": 0.3}  # partnership words are mostly letterhead politeness, not a lever
-HARD = {  # field -> phrases that make it a hard constraint (frozen at the supplier's value)
+HARD = {  # field -> phrases that make it a hard constraint (frozen at the supplier's value), matched per sentence
     "volume_per_year": r"cannot increase the allocation|capacity (is )?(fully|full)|fully utili[sz]ed|maximum available volume|strictly limit|voll ausgelastet",
-    "payment_days": r"payment must stay|stick to \d+ days|\d+ days is our absolute limit|only with \d+ days|really need the \d+ days|need the money in \d+ days"
-    r"|must maintain our standard \d+-day|propose maintaining \d+ days",
+    "payment_days": r"(payment|zahlung)\w*[^.]{0,40}(must|has to|have to|need to) (stay|remain)|(stick to|maintain|keep|stay at|remain at|only with|need the money in|really need the)[^.]{0,25}\d+[- ]?(days?|tage)"
+    r"|\d+[- ]?(days?|tage)[^.]{0,30}(absolute limit|only option|non-negotiable|nicht verhandelbar)|standard \d+[- ]?day",
 }
-PRICE_FROZEN = (
+OWN_WORDS = {"payment_days": r"pay|zahlung|\bnet\b"}  # a hard payment phrase must sit next to a payment word
+PRICE_FROZEN = (  # always about price: no more concessions
     r"no further concessions|cannot make any further|unable to offer further|no room for further|leaving no room|cannot give up margin"
-    r"|absolute limit|final word|have to stick to|hold our angebot|maintain our offer|keinen spielraum|nicht möglich|endgültig"
+    r"|keinen spielraum"
 )
+LIMIT = r"absolute limit|final word|have to stick to|hold our (offer|price|angebot)|maintain our (offer|price)|nicht möglich|endgültig"
+PRICE_WORDS = r"price|preis|€|eur\b|per unit|concession"  # a generic limit phrase freezes price only next to these
 SMALL_MOVES = (
     r"adjustment was (minimal|again very small|very small|small)|only make a (small|minor) concession|didn'?t move|did not move"
     r"|without movement on your side|flexibility from both|no movement"
@@ -92,10 +96,12 @@ def supplier_model(case, events):
         w = 1.0 + i / max(len(texts), 1)
         for topic, rx in CURRENCY.items():
             model["priority"][topic] += w * WEIGHT.get(topic, 1.0) * len(re.findall(rx, t))
+    sents = [x for t in texts for x in _SENT.split(t)]
     for f, rx in HARD.items():
-        if f in fields and re.search(rx, allt):
+        if f in fields and any(re.search(rx, x) and re.search(OWN_WORDS.get(f, ""), x) for x in sents):
             model["hard"].add(f)
-    model["price_frozen"] = bool(re.search(PRICE_FROZEN, last)) or (
+    limit = any(re.search(LIMIT, x) and re.search(PRICE_WORDS, x) for x in _SENT.split(last))
+    model["price_frozen"] = bool(re.search(PRICE_FROZEN, last)) or limit or (
         sup[-1].get("status") == "final_offer" if sup else False
     )
     model["small_moves"] = bool(re.search(SMALL_MOVES, last))
@@ -138,6 +144,9 @@ def supplier_model(case, events):
                 model["flex"][f] -= 1
                 _bump(model, f, 1)
 
+    p = model["prices"]
+    if len(p) >= 3 and p[-1] == p[-2] == p[-3]:  # their price stayed the same over 2 consecutive replies
+        model["price_frozen"] = True
     standing = next((_sheets(m) for m in reversed(events) if m.get("from") != "buyer" and m.get("term_sheets")), [])
     if standing:
         cheapest = min(standing, key=lambda s: s.get("unit_price") or float("inf"))

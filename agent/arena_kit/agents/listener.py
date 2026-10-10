@@ -69,17 +69,20 @@ class ListenerAgent:
         def cost(s, t):
             return total_cost(case, t, std[s])
 
-        def final_ok(s, t):
-            return must_haves_ok(case, t, std[s]) and cost(s, t) < c_alt
+        def final_ok(s, t):  # a deal worse than the opening scores 0, so check both
+            return must_haves_ok(case, t, std[s]) and cost(s, t) < c_alt and cost(s, t) <= c_open
 
         def best_sheet(s):  # their cheapest package in the latest reply (valid ones first)
             sheets = [t for t in _sheets(latest(threads[s])) if t.get("unit_price") is not None]
             return min(sheets, key=lambda t: (not final_ok(s, t), cost(s, t))) if sheets else standing(threads[s])[1]
 
-        sid = min(quoting, key=lambda s: (not must_haves_ok(case, best_sheet(s), std[s]), cost(s, best_sheet(s))))
+        talkable = [s for s in quoting if moves_left(case, threads[s]) > 0]  # a spent thread cannot take a move
+        if not talkable:
+            return closing_move(case, threads)
+        sid = min(talkable, key=lambda s: (not must_haves_ok(case, best_sheet(s), std[s]), cost(s, best_sheet(s))))
         events = threads[sid]
         model = self.model = supplier_model(case, events)
-        self.focus = focus(model, case)
+        self.focus = {**focus(model, case), "supplier_id": sid}
         sheet_id, terms = standing(events)
         status, left = latest(events).get("status"), moves_left(case, events)
         accept = {"supplier_id": sid, "message": {"action": {"type": "accept", "term_sheet_id": sheet_id}}}
@@ -105,6 +108,8 @@ class ListenerAgent:
         fresh = usable(self._packages(case, model, best, price, lambda t: cost(sid, t), upper))
 
         if status == "final_offer" or left <= 1:
+            if _tried_after_final(events):  # one non-price try per thread after a final offer, then close
+                return accept if final_ok(sid, terms) else closing_move(case, threads)
             # one last try: their price with the non-price terms that cost us least (not sent before)
             at_theirs = satisfy_must_haves(
                 case, self._best_terms(case, model, dict(best), lambda t: cost(sid, t), strict=True), std[sid]
@@ -117,16 +122,15 @@ class ListenerAgent:
                 and left >= 1
             ):
                 return _message(case, sid, [at_theirs], BODY_THEIR_PRICE)
+            theirs_full = complete_offer(case, best)  # what we would actually send
             if (
                 best != terms
                 and final_ok(sid, best)
-                and best not in mine
+                and theirs_full not in mine
                 and left >= 1
                 and cost(sid, best) < cost(sid, terms)
             ):
-                return _message(
-                    case, sid, [complete_offer(case, best)], BODY_THEIR_PRICE
-                )  # make their cheaper package standing
+                return _message(case, sid, [theirs_full], BODY_THEIR_PRICE)  # make their cheaper package standing
             if final_ok(sid, terms):
                 return accept
             return closing_move(case, threads)
@@ -238,9 +242,10 @@ class ListenerAgent:
             model["currency"] == "capacity"
         ):  # capacity is full: offer what could free it (longer term, longer lead time)
             more = {
-                f: max(o for o in (case.get("term_options") or {}).get(f) or [0] if isinstance(o, int | float))
+                f: v
                 for f in ("contract_months", "lead_time_days")
                 if f in case["negotiable"] and f not in model["frozen"]
+                and (v := max((o for o in (case.get("term_options") or {}).get(f) or [] if isinstance(o, int | float)), default=None))
             }
             if more:
                 out.append(
@@ -257,6 +262,12 @@ class ListenerAgent:
                 seen.append(p)
                 keep.append(p)
         return ([traded] + [p for p in keep if p != traded]) if traded in keep else keep  # lead with their currency
+
+
+def _tried_after_final(events):
+    """We already sent a sheet after the supplier's first final offer in this thread."""
+    i = next((i for i, m in enumerate(events) if m.get("from") != "buyer" and m.get("status") == "final_offer"), None)
+    return i is not None and any(m.get("from") == "buyer" and m.get("term_sheets") for m in events[i + 1 :])
 
 
 def _first(events):
