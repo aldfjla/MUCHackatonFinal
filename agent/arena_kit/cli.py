@@ -37,6 +37,7 @@ def agent_factory(name, data):
     from .agents import (
         AnchorAgent,
         BoulwareAgent,
+        CombinedAgent,
         ConfidentAgent,
         ConfidentBoulwareAgent,
         ConfidentRouterAgent,
@@ -83,7 +84,7 @@ def agent_factory(name, data):
     if name == "guarded_rational":
         return lambda: GuardedAgent(RationalAgent())
     # the evidence wrapper replaces the delegate's body and refs by design (it cites verified data)
-    if name in ("evidence_router", "evidence_rational", "listener"):
+    if name in ("evidence_router", "evidence_rational", "listener", "combined"):
         from .evidence import package_problem
 
         if why := package_problem(data):  # say it before any session opens, not once per message
@@ -102,6 +103,8 @@ def agent_factory(name, data):
         return lambda: EvidenceAgent(GuardedAgent(FinalAgent()), data, questions=False)
     if name == "final_match":
         return lambda: EvidenceAgent(GuardedAgent(FinalAgent(match=1.0)), data, questions=False)
+    if name == "combined":  # v6-petra: Alex's final agent moves + the listener's supplier model
+        return lambda: EvidenceAgent(GuardedAgent(CombinedAgent()), data, questions=False)
     if name == "listener":  # v4-petra: supplier model + packages, inside the guard and the evidence layer
         return lambda: EvidenceAgent(GuardedAgent(ListenerAgent()), data)
     package = None
