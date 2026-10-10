@@ -434,3 +434,121 @@ def test_question_only_reply_looks_back_to_the_last_sheet():
     d = GuardedAgent(ReciprocalAgent()).decide(c, {"s": ev})
     assert d["message"]["term_sheets"][0]["terms"]["unit_price"] > 5.49
     assert standing(ev)[0] is None
+
+
+class FakeTable:
+    """A table whose send() sleeps per supplier; all state is per instance, guarded by a lock."""
+
+    def __init__(self, statuses, delays, stop_after=99, conflict=(), opening=None, fail=()):
+        import threading
+
+        self.lock, self.events, self.closed, self.missed_for = threading.Lock(), [], [], []
+        self.statuses, self.delays, self.stop_after, self.conflict = statuses, delays, stop_after, set(conflict)
+        self.opening, self.fail = opening or {}, set(fail)
+        self.done, self.case = None, case("P05")
+        self.active = self.peak = 0
+
+    def _reply(self, status="open", price=6.1):
+        return reply(sheet("1", price, payment_days=30, lead_time_days=35, contract_months=12), status=status)
+
+    def open(self, case_id):
+        return self.case, {s: [self._reply(st, self.opening.get(s, 6.1))] for s, st in self.statuses.items()}
+
+    def send(self, sid, msg):
+        import time
+
+        from arena_kit.client import ArenaError
+
+        with self.lock:
+            self.active += 1
+            self.peak = max(self.peak, self.active)
+            self.events.append(("start", sid))
+        time.sleep(self.delays[sid])
+        with self.lock:
+            self.active -= 1
+            self.events.append(("end", sid))
+            n = sum(e[0] == "end" for e in self.events)
+            if sid in self.fail:
+                self.fail.discard(sid)
+                raise RuntimeError("boom")
+            if sid in self.conflict:
+                self.conflict.discard(sid)
+                raise ArenaError(409, "late")
+        return {"result": {"deal": False}} if n >= self.stop_after else self._reply()
+
+    def missed(self, sid, error):
+        self.missed_for.append(sid)
+        return self._reply()
+
+    def close(self, sid, msg):
+        with self.lock:
+            self.closed.append((sid, self.active))
+        return {"deal": True}
+
+    def starts(self, sid):
+        return [i for i, e in enumerate(self.events) if e == ("start", sid)]
+
+
+def test_play_answers_every_open_thread_beside_a_final_offer():
+    from arena_kit.play import play
+
+    t = FakeTable({"a": "final_offer", "b": "open", "c": "open"}, {"a": 0, "b": 0.2, "c": 0.2}, stop_after=2)
+    assert play(t, "case:P05", ReciprocalAgent()) == {"deal": False}
+    assert sorted(e[1] for e in t.events[:2]) == ["b", "c"] and not t.starts("a") and t.peak == 2
+
+
+def test_play_answers_a_fast_thread_again_while_a_slow_one_is_pending():
+    from arena_kit.play import play
+
+    t = FakeTable({"a": "open", "b": "open"}, {"a": 0.1, "b": 0.6}, stop_after=4)
+    play(t, "case:P05", ReciprocalAgent())
+    assert t.events.index(("end", "b")) > t.starts("a")[1]  # a's second message went out before b's first reply came
+
+
+def test_play_runs_an_accept_alone_after_the_sends_in_flight():
+    from arena_kit.play import play
+
+    t = FakeTable({"a": "open", "b": "open"}, {"a": 0.2, "b": 0.2})
+    calls = []
+
+    class Agent:
+        def decide(self, case, threads):
+            calls.append(1)
+            if len(calls) == 1:
+                return {"supplier_id": "a", "message": {"subject": "s", "body": "b"}}
+            return {"supplier_id": "b", "message": {"action": {"type": "accept", "term_sheet_id": "offer:1"}}}
+
+    assert play(t, "case:P05", Agent()) == {"deal": True}
+    assert t.closed == [("b", 0)] and t.starts("a") and not t.starts("b")
+
+
+def test_play_handles_a_409_on_one_thread():
+    from arena_kit.play import play
+
+    t = FakeTable({"a": "open", "b": "open"}, {"a": 0.05, "b": 0.05}, stop_after=4, conflict=["b"])
+    assert play(t, "case:P05", ReciprocalAgent()) == {"deal": False}
+    assert t.missed_for == ["b"] and t.starts("a") and t.starts("b")
+
+
+def test_play_answers_the_replied_thread_even_if_a_pending_one_is_cheaper():
+    from arena_kit.play import play
+
+    t = FakeTable({"a": "open", "b": "open"}, {"a": 0.1, "b": 0.8}, stop_after=4, opening={"b": 5.9})
+    play(t, "case:P05", ReciprocalAgent())
+    assert t.events.index(("end", "b")) > t.starts("a")[1]
+
+
+def test_play_survives_a_non_409_error_on_one_thread():
+    from arena_kit.play import play
+
+    t = FakeTable({"a": "open", "b": "open"}, {"a": 0.05, "b": 0.05}, stop_after=5, fail=["b"])
+    assert play(t, "case:P05", ReciprocalAgent()) == {"deal": False}
+    assert len(t.starts("a")) >= 2
+
+
+def test_play_raises_when_every_thread_errors():
+    from arena_kit.play import play
+
+    t = FakeTable({"a": "open"}, {"a": 0}, fail=["a"])
+    with pytest.raises(RuntimeError):
+        play(t, "case:P05", ReciprocalAgent())

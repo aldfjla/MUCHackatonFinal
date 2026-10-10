@@ -28,7 +28,7 @@ def load_env(path=".env"):
 
 AGENTS = [
     "naive", "smart", "confident", "rational", "explorer", "anchor", "switcher", "boulware", "router",
-    "confident_boulware", "confident_router", "guarded_boulware", "guarded_rational", "evidence_router", "evidence_rational", "reciprocal", "reciprocal_evidence", "llm",
+    "confident_boulware", "confident_router", "guarded_boulware", "guarded_rational", "evidence_router", "evidence_rational", "reciprocal", "reciprocal_evidence", "simplify", "llm",
 ]  # fmt: skip
 
 
@@ -39,6 +39,7 @@ def agent_factory(name, data):
         ConfidentAgent,
         ConfidentBoulwareAgent,
         ConfidentRouterAgent,
+        SimplifyAgent,
         EvidenceAgent,
         ExplorerAgent,
         GuardedAgent,
@@ -87,6 +88,8 @@ def agent_factory(name, data):
         return lambda: GuardedAgent(ReciprocalAgent())
     if name == "reciprocal_evidence":
         return lambda: EvidenceAgent(GuardedAgent(ReciprocalAgent()), data)
+    if name == "simplify":
+        return lambda: EvidenceAgent(GuardedAgent(SimplifyAgent()), data)
     package = None
     if data:
         from .data import DataPackage

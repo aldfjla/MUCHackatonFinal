@@ -11,6 +11,7 @@ from .naive import NaiveAgent
 from .rational import RationalAgent
 from .reciprocal import ClosingAgent, ReciprocalAgent
 from .router import RouterAgent
+from .simplify_agent import SimplifyAgent
 from .smart import SmartAgent
 from .switcher import SwitcherAgent
 
@@ -29,6 +30,7 @@ __all__ = [
     "RationalAgent",
     "ReciprocalAgent",
     "RouterAgent",
+    "SimplifyAgent",
     "SmartAgent",
     "SwitcherAgent",
     "llm_from_env",
