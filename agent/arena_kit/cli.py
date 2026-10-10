@@ -27,12 +27,33 @@ def load_env(path=".env"):
 
 
 def agent_factory(name, data):
-    from .agents import LLMAgent, NaiveAgent, RationalAgent, SmartAgent, llm_from_env
+    from .agents import (
+        AnchorAgent,
+        BoulwareAgent,
+        ExplorerAgent,
+        LLMAgent,
+        NaiveAgent,
+        RationalAgent,
+        RouterAgent,
+        SmartAgent,
+        SwitcherAgent,
+        llm_from_env,
+    )
 
     if name == "naive":
         return NaiveAgent
     if name == "rational":
         return RationalAgent
+    if name == "explorer":
+        return ExplorerAgent
+    if name == "anchor":
+        return AnchorAgent
+    if name == "switcher":
+        return SwitcherAgent
+    if name == "boulware":
+        return BoulwareAgent
+    if name == "router":
+        return RouterAgent
     if name == "smart":
         return SmartAgent
     package = None
@@ -69,11 +90,11 @@ def main(argv=None):
     c.add_argument("--set", **sets)
     p = sub.add_parser("play", help="play one case")
     p.add_argument("case_id")
-    p.add_argument("--agent", default="naive", choices=["naive", "smart", "rational", "llm"])
+    p.add_argument("--agent", default="naive", choices=["naive", "smart", "rational", "explorer", "anchor", "switcher", "boulware", "router", "llm"])
     p.add_argument("--data", **data)
     a = sub.add_parser("run", help="play every case of a set in parallel")
     a.add_argument("--set", **sets)
-    a.add_argument("--agent", default="naive", choices=["naive", "smart", "rational", "llm"])
+    a.add_argument("--agent", default="naive", choices=["naive", "smart", "rational", "explorer", "anchor", "switcher", "boulware", "router", "llm"])
     a.add_argument("--data", **data)
     a.add_argument("--parallel", type=int, default=8, help="cases at once (at most 10)")
     a.add_argument("--waves", type=int, default=5, help="final: stop after this many waves have closed")
