@@ -1,8 +1,8 @@
 # Negotiation tips and tricks for our buyer agent
 
-Analysis of the sources we could read, tied to the Tacto Negotiation Arena rules ([CHALLENGE.md](CHALLENGE.md)). Per-source notes are in [raw-files/](raw-files/) (own-words summaries, with links and how much was read). How to run and edit the agent: [SETUP.md](SETUP.md). Log every experiment in [backlog.csv](backlog.csv).
+Analysis of the sources we could read, tied to the Tacto Negotiation Arena rules ([CHALLENGE.md](CHALLENGE.md)). Per-source notes are in [RESEARCH.md](RESEARCH.md) (Part B) (own-words summaries, with links and how much was read). How to run and edit the agent: [SETUP.md](SETUP.md). Log every experiment in [backlog.csv](backlog.csv).
 
-**How much to trust this:** the sources are popular Harvard write-ups, one AI-vs-human experiment, one literature review and one teaching study. None tests an agent against Tacto's bots. Treat every tip as a **hypothesis to test in practice runs**, not a fact. Three sources could not be read (see [raw-files/05-not-read.md](raw-files/05-not-read.md)).
+**How much to trust this:** the sources are popular Harvard write-ups, one AI-vs-human experiment, one literature review and one teaching study. None tests an agent against Tacto's bots. Treat every tip as a **hypothesis to test in practice runs**, not a fact. Two sources could not be read (see [RESEARCH.md](RESEARCH.md), Part B, "Sources we could not read").
 
 ## The most important fact
 
@@ -71,6 +71,21 @@ Real example: on P03 our naive agent closed at exactly the opening cost and save
 - **Students vs professionals:** professional suppliers resisted much harder (savings about 1-5.5% vs near 10%). Assume Tacto's bots are closer to the professionals.
 - **Single shot vs relationship:** the experiment had no repeat relationship. Tacto bots remember only within a case, so the relationship value is within-case: tone, appreciation and trades.
 
+## Update: Princeton Handbook chapter (read in full)
+
+Source: Schweitzer, Krueger, Boothby and Cooney (2025), "Negotiation", Handbook of Social Psychology, 6th ed. Notes: [RESEARCH.md](RESEARCH.md), Part B, Princeton Handbook chapter notes. Findings are as reported in the chapter (lab-heavy; we did not check the primary studies). It has **nothing on AI agents negotiating**.
+
+What it adds or changes for our rules:
+
+- **Alternatives are the main source of power**, and a weak alternative can anchor you lower than having none. Hold the best alternative in reserve. [strong]
+- **First offers:** assertive, specific first offers anchor the outcome, so "never go first" is not a rule when you know the bargaining zone. Extreme offers can push a supplier to other buyers. [moderate, lab-based]
+- **Information:** add issues, trade across them, send multiple packages and read which one the supplier prefers. Ask direct questions; never reveal your walk-away price. Verify claimed priorities, since a counterpart may feign interest in an issue to extract trades. [moderate to strong]
+- **Concessions:** concede in shrinking steps, low-priority terms first, each with a reason, and ask for something back. [weak to moderate]
+- **Emotion (qualifies our "warm tone" rule):** warmth builds trust, but gratitude and positive emotion can reduce concessions, and anger helps only against weak-alternative counterparts. So: **polite and neutral, no threats, no repeated thanks.** [moderate]
+- **Deception:** once caught, it destroys trust. Do not lie or invent figures. [strong]
+- **Closing:** re-check the final terms against the thread. A deal accepted at once is a hint we opened too soft. An impasse is not always failure, and people drift past their limits mid-talk, so **hard-code the walk-away limit.** [weak to strong]
+- **Relationships:** they matter economically mainly for services, much less for plain goods purchases.
+
 ## Experiments to run (use `backlog.csv`)
 
 Change one thing per version, run the same cases, compare scores. Start with practice cases where the house agent is beatable (P05, P10, P11, P18) and one solved case (P01) as control.
@@ -85,5 +100,5 @@ Change one thing per version, run the same cases, compare scores. Start with pra
 
 ## What would make this better
 
-- Read the three missing sources (Kraljic, Malhotra and Bazerman, the Princeton chapter) and the books through your own library access; add short notes under `raw-files/`.
+- Read the three missing sources (Kraljic, Malhotra and Bazerman, the Princeton chapter) and the books through your own library access; add short notes to `RESEARCH.md` (Part B).
 - Read the full replays of practice cases: they show how the real bots respond, which no paper does.

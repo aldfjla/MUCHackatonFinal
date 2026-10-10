@@ -40,8 +40,9 @@ def _sheets(case, events, standard):
     return out
 
 
-def confidence_report(case, events, standard=None):
-    """{"score": 0..1, "parts": {name: value}, "notes": [str]}; each part is what it added to 1.0."""
+def confidence_report(case, events, standard=None, *, include_rounds=True):
+    """{"score": 0..1, "parts": {name: value}, "notes": [str]}; each part is what it added to 1.0.
+    include_rounds=False skips the rounds multiplier (the caller already models time)."""
     standard = standard or {}
     last = latest(events)
     status = last.get("status")
@@ -95,12 +96,12 @@ def confidence_report(case, events, standard=None):
 
     score = max(0.0, min(1.0, 1.0 + sum(parts.values())))
     limit = case.get("round_limit", 10)
-    factor = min(1.0, 0.5 + 0.5 * moves_left(case, events) / limit) if limit > 0 else 1.0
+    factor = min(1.0, 0.5 + 0.5 * moves_left(case, events) / limit) if include_rounds and limit > 0 else 1.0
     parts["rounds"] = factor
     if factor < 1.0:
         notes.append(f"rounds factor {factor:.2f}")
     return {"score": max(0.0, min(1.0, score * factor)), "parts": parts, "notes": notes}
 
 
-def confidence(case, events, standard=None):
-    return confidence_report(case, events, standard)["score"]
+def confidence(case, events, standard=None, *, include_rounds=True):
+    return confidence_report(case, events, standard, include_rounds=include_rounds)["score"]
