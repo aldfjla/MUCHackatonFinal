@@ -1,0 +1,453 @@
+{
+ "agent": "confident_router",
+ "case": "P10",
+ "result": {
+  "ended": true,
+  "deal": false,
+  "supplier_id": null,
+  "offer_id": null,
+  "terms": null,
+  "c_open": 1932492.18,
+  "c_deal": null,
+  "c_alt": null,
+  "c_best": 1328926.89,
+  "score": 0.0,
+  "must_haves_ok": null,
+  "cost_breakdown": null
+ },
+ "session": {
+  "session_id": "d082e58295385232",
+  "case_id": "case:P10",
+  "status": "ended",
+  "end_reason": "no_deal",
+  "rounds": 3,
+  "set": "practice",
+  "opening": {
+   "sup:70410": {
+    "offer_id": "offer:70410-0",
+    "round": 0,
+    "status": "open",
+    "terms": {
+     "unit_price": 32.2,
+     "lead_time_days": 54,
+     "volume_per_year": 19890,
+     "contract_months": 12
+    },
+    "alternatives": [],
+    "missing_fields": [],
+    "claims": [],
+    "claim_results": [],
+    "signals": {
+     "reply_delay_days": 2,
+     "validity_days": 30
+    },
+    "text": "Dear Sir or Madam,\n\nThank you for your enquiry. Please find our Angebot below.\n\nWe offer a volume of 19890 pcs per year at a price of €32.20 per unit. The requested contract term is 12 months, and our Lieferzeit is 54 days. \n\nPlease note that this offer remains valid for 30 days. We look forward to proceeding according to our standard commercial procedure upon receipt of your confirmation.\n\nMit freundlichen Grüßen\nMonika Zellner\nSegment Manager, Dichtungswerk Ravensteiner GmbH"
+   }
+  },
+  "threads": {
+   "sup:70410": {
+    "offer_id": null,
+    "status": "walked_away",
+    "offers": 3,
+    "closed": "walked_away",
+    "seconds_left": null
+   }
+  },
+  "moves": [],
+  "result": {
+   "ended": true,
+   "deal": false,
+   "supplier_id": null,
+   "offer_id": null,
+   "terms": null,
+   "c_open": 1932492.18,
+   "c_deal": null,
+   "c_alt": null,
+   "c_best": 1328926.89,
+   "score": 0.0,
+   "must_haves_ok": null,
+   "cost_breakdown": null,
+   "trace": [
+    {
+     "round": 0,
+     "actor": "sup:70410",
+     "move": {
+      "offer_id": "offer:70410-0",
+      "round": 0,
+      "status": "open",
+      "terms": {
+       "unit_price": 32.2,
+       "lead_time_days": 54,
+       "volume_per_year": 19890,
+       "contract_months": 12
+      },
+      "alternatives": [],
+      "missing_fields": [],
+      "claims": [],
+      "claim_results": [],
+      "signals": {
+       "reply_delay_days": 2,
+       "validity_days": 30
+      },
+      "text": "Dear Sir or Madam,\nThank you for your enquiry. Please find our Angebot below.\nOur terms: a price of €32.20 per unit, Lieferzeit 54 days, a volume of 19890 pcs per year, a contract term of 12 months.\nWe will process your next message according to our standard procedure.\nMit freundlichen Grüßen\nMonika Zellner\nSegment Manager, Dichtungswerk Ravensteiner GmbH"
+     },
+     "reasons": []
+    },
+    {
+     "round": 1,
+     "actor": "buyer",
+     "move": {
+      "type": "message",
+      "message_id": null,
+      "subject": "Ravensteiner cuts the seal allocation",
+      "body": "Which matters most to you: price or payment timing? These two packages are equivalent for us.",
+      "refs": [],
+      "term_sheets": [
+       {
+        "term_sheet_id": null,
+        "terms": {
+         "unit_price": 29.62,
+         "volume_per_year": 23400,
+         "contract_months": 12,
+         "lead_time_days": 56
+        }
+       }
+      ],
+      "interpreted": {
+       "claims": []
+      },
+      "supplier_id": "sup:70410"
+     },
+     "reasons": []
+    },
+    {
+     "round": 1,
+     "actor": "sup:70410",
+     "move": {
+      "offer_id": "offer:70410-1",
+      "round": 1,
+      "status": "open",
+      "terms": {
+       "unit_price": 32.0,
+       "lead_time_days": 56,
+       "volume_per_year": 19890,
+       "contract_months": 12
+      },
+      "alternatives": [],
+      "missing_fields": [],
+      "claims": [],
+      "claim_results": [],
+      "signals": {
+       "reply_delay_days": 2,
+       "validity_days": 30
+      },
+      "text": "Dear Sir or Madam,\nWe acknowledge receipt of your message.\nWe have reviewed your offer and can adjust our Angebot as follows.\nOur terms: a price of €32.00 per unit, Lieferzeit 56 days, a volume of 19890 pcs per year, a contract term of 12 months.\nPlease note:\nOur standard payment terms are fixed and not subject to negotiation.\nWe accept the 56-day lead time and offer a revised price of €32.00 per unit.\nOur Lieferzeit is 56 days.\nPlease address any further questions in writing to this office.\nMit freundlichen Grüßen\nMonika Zellner\nSegment Manager, Dichtungswerk Ravensteiner GmbH"
+     },
+     "reasons": [
+      "Our standard payment terms are fixed and not subject to negotiation.",
+      "We accept the 56-day lead time and offer a revised price of €… per unit.",
+      "Our Lieferzeit is … days."
+     ]
+    },
+    {
+     "round": 2,
+     "actor": "buyer",
+     "move": {
+      "type": "message",
+      "message_id": null,
+      "subject": "Ravensteiner cuts the seal allocation",
+      "body": "Our position is unchanged: the terms below are what we can offer.",
+      "refs": [],
+      "term_sheets": [
+       {
+        "term_sheet_id": null,
+        "terms": {
+         "unit_price": 29.86,
+         "volume_per_year": 23400,
+         "contract_months": 12,
+         "lead_time_days": 56
+        }
+       }
+      ],
+      "interpreted": {
+       "claims": []
+      },
+      "supplier_id": "sup:70410"
+     },
+     "reasons": []
+    },
+    {
+     "round": 2,
+     "actor": "sup:70410",
+     "move": {
+      "offer_id": "offer:70410-2",
+      "round": 2,
+      "status": "final_offer",
+      "terms": {
+       "unit_price": 31.9,
+       "lead_time_days": 56,
+       "volume_per_year": 19890,
+       "contract_months": 12
+      },
+      "alternatives": [],
+      "missing_fields": [],
+      "claims": [],
+      "claim_results": [],
+      "signals": {
+       "reply_delay_days": 3,
+       "validity_days": 7
+      },
+      "text": "Dear Sir or Madam,\nThank you for your message, which we have processed.\nThis is our final offer (letztes Angebot). Please decide.\nOur terms: a price of €31.90 per unit, Lieferzeit 56 days, a volume of 19890 pcs per year, a contract term of 12 months.\nFor the record:\nWe acknowledge your revised price, but must reiterate that our allocation cap strictly limits the volume to 19,890 pieces per year.\nBased on this maximum available volume, we can offer a minor adjustment to €31.90 per unit.\nPlease confirm your acceptance of these terms.\nWhich volume can you commit to?\nThese are our standard conditions for this product.\nWe will process your next message according to our standard procedure.\nMit freundlichen Grüßen\nMonika Zellner\nSegment Manager, Dichtungswerk Ravensteiner GmbH"
+     },
+     "reasons": [
+      "We acknowledge your revised price, but must reiterate that our allocation cap strictly limits the volume to … pieces per year.",
+      "Based on this maximum available volume, we can offer a minor adjustment to €… per unit.",
+      "Please confirm your acceptance of these terms.",
+      "Which volume can you commit to?"
+     ]
+    },
+    {
+     "round": 3,
+     "actor": "buyer",
+     "move": {
+      "type": "message",
+      "message_id": null,
+      "subject": "Our proposal",
+      "body": "We can proceed at your price if the terms below work for you; please confirm.",
+      "refs": [],
+      "term_sheets": [
+       {
+        "term_sheet_id": null,
+        "terms": {
+         "unit_price": 31.9,
+         "volume_per_year": 23400,
+         "contract_months": 12,
+         "lead_time_days": 56
+        }
+       }
+      ],
+      "interpreted": {
+       "claims": []
+      },
+      "supplier_id": "sup:70410"
+     },
+     "reasons": []
+    },
+    {
+     "round": 3,
+     "actor": "sup:70410",
+     "move": {
+      "offer_id": null,
+      "round": 3,
+      "status": "walked_away",
+      "terms": {},
+      "alternatives": [],
+      "missing_fields": [],
+      "claims": [],
+      "claim_results": [],
+      "signals": {
+       "reply_delay_days": 3,
+       "validity_days": 14
+      },
+      "text": "Dear Sir or Madam,\n\nWe are withdrawing from this negotiation. Please be advised that we are therefore terminating this negotiation. Our standard procedure applies to all further standard inquiries.\n\nMit freundlichen Grüßen\nMonika Zellner\nSegment Manager, Dichtungswerk Ravensteiner GmbH"
+     },
+     "reasons": [
+      "We are therefore terminating this negotiation."
+     ]
+    }
+   ]
+  },
+  "replay_url": "/replay/d082e58295385232"
+ },
+ "threads": {
+  "sup:70410": {
+   "supplier_id": "sup:70410",
+   "offer_id": null,
+   "status": "walked_away",
+   "closed": "walked_away",
+   "messages": [
+    {
+     "thread_id": "thread:P10:70410",
+     "message_id": "msg:70410-0-0",
+     "in_reply_to": null,
+     "from": "sales@70410",
+     "from_name": "Segment Manager, Dichtungswerk Ravensteiner GmbH",
+     "to": "Hollerau Pumpenwerke GmbH",
+     "subject": "Quote from Dichtungswerk Ravensteiner GmbH: Ravensteiner cuts the seal allocation",
+     "body": "Dear Sir or Madam,\n\nThank you for your enquiry. Please find our Angebot below.\n\nWe offer a volume of 19890 pcs per year at a price of €32.20 per unit. The requested contract term is 12 months, and our Lieferzeit is 54 days. \n\nPlease note that this offer remains valid for 30 days. We look forward to proceeding according to our standard commercial procedure upon receipt of your confirmation.\n\nMit freundlichen Grüßen\nMonika Zellner\nSegment Manager, Dichtungswerk Ravensteiner GmbH",
+     "attachments": [
+      {
+       "attachment_id": "att:70410-0-quote",
+       "name": "quote-offer-70410-0.pdf",
+       "type": "pdf",
+       "content_b64": null
+      }
+     ],
+     "term_sheets": [
+      {
+       "term_sheet_id": "offer:70410-0",
+       "terms": {
+        "unit_price": 32.2,
+        "lead_time_days": 54,
+        "volume_per_year": 19890,
+        "contract_months": 12
+       }
+      }
+     ],
+     "refs": [],
+     "action": null,
+     "status": "open",
+     "signals": {
+      "reply_delay_days": 2,
+      "validity_days": 30
+     },
+     "missing_fields": [],
+     "claim_results": []
+    },
+    {
+     "from": "buyer",
+     "subject": "Ravensteiner cuts the seal allocation",
+     "body": "Which matters most to you: price or payment timing? These two packages are equivalent for us.",
+     "term_sheets": [
+      {
+       "terms": {
+        "unit_price": 29.62,
+        "volume_per_year": 23400,
+        "contract_months": 12,
+        "lead_time_days": 56
+       }
+      }
+     ]
+    },
+    {
+     "thread_id": "thread:P10:70410",
+     "message_id": "msg:70410-1-2",
+     "in_reply_to": null,
+     "from": "sales@70410",
+     "from_name": "Segment Manager, Dichtungswerk Ravensteiner GmbH",
+     "to": "Hollerau Pumpenwerke GmbH",
+     "subject": "Re: Ravensteiner cuts the seal allocation",
+     "body": "Dear Sir or Madam,\n\nWe have reviewed your offer and can adjust our Angebot as follows.\n\nOur revised Angebot provides a price of €32.00 per unit, a Lieferzeit of 56 days, a volume of 19890 pcs per year, and a contract term of 12 months. We accept the 56-day lead time and offer a revised price of €32.00 per unit. Our Lieferzeit is 56 days. \n\nPlease note that our standard payment terms are fixed and not subject to negotiation. Our standard Zahlungsziel is 30 days net. This offer remains valid for 30 days.\n\nMit freundlichen Grüßen\nMonika Zellner\nSegment Manager, Dichtungswerk Ravensteiner GmbH",
+     "attachments": [
+      {
+       "attachment_id": "att:70410-1-delivery_schedule",
+       "name": "delivery-schedule.xlsx",
+       "type": "xlsx",
+       "content_b64": null
+      }
+     ],
+     "term_sheets": [
+      {
+       "term_sheet_id": "offer:70410-1",
+       "terms": {
+        "unit_price": 32.0,
+        "lead_time_days": 56,
+        "volume_per_year": 19890,
+        "contract_months": 12
+       }
+      }
+     ],
+     "refs": [],
+     "action": null,
+     "status": "open",
+     "signals": {
+      "reply_delay_days": 2,
+      "validity_days": 30
+     },
+     "missing_fields": [],
+     "claim_results": []
+    },
+    {
+     "from": "buyer",
+     "subject": "Ravensteiner cuts the seal allocation",
+     "body": "Our position is unchanged: the terms below are what we can offer.",
+     "term_sheets": [
+      {
+       "terms": {
+        "unit_price": 29.86,
+        "volume_per_year": 23400,
+        "contract_months": 12,
+        "lead_time_days": 56
+       }
+      }
+     ]
+    },
+    {
+     "thread_id": "thread:P10:70410",
+     "message_id": "msg:70410-2-4",
+     "in_reply_to": null,
+     "from": "sales@70410",
+     "from_name": "Segment Manager, Dichtungswerk Ravensteiner GmbH",
+     "to": "Hollerau Pumpenwerke GmbH",
+     "subject": "Re: Ravensteiner cuts the seal allocation",
+     "body": "Dear Sir or Madam,\n\nWe acknowledge your revised price, but must reiterate that our allocation cap strictly limits the volume to 19,890 pieces per year. \n\nBased on this maximum available volume, we can offer a minor adjustment to €31.90 per unit. Our offer stands at a price of €31.90 per unit, Lieferzeit 56 days, a volume of 19890 pcs per year, and a contract term of 12 months. This offer stays valid for 7 days.\n\nThis is our final offer (letztes Angebot). Please decide. Please confirm your acceptance of these terms. Which volume can you commit to?\n\nMit freundlichen Grüßen\nMonika Zellner\nSegment Manager, Dichtungswerk Ravensteiner GmbH",
+     "attachments": [
+      {
+       "attachment_id": "att:70410-2-quote",
+       "name": "quote-offer-70410-2.pdf",
+       "type": "pdf",
+       "content_b64": null
+      }
+     ],
+     "term_sheets": [
+      {
+       "term_sheet_id": "offer:70410-2",
+       "terms": {
+        "unit_price": 31.9,
+        "lead_time_days": 56,
+        "volume_per_year": 19890,
+        "contract_months": 12
+       }
+      }
+     ],
+     "refs": [],
+     "action": null,
+     "status": "final_offer",
+     "signals": {
+      "reply_delay_days": 3,
+      "validity_days": 7
+     },
+     "missing_fields": [],
+     "claim_results": []
+    },
+    {
+     "from": "buyer",
+     "subject": "Our proposal",
+     "body": "We can proceed at your price if the terms below work for you; please confirm.",
+     "term_sheets": [
+      {
+       "terms": {
+        "unit_price": 31.9,
+        "volume_per_year": 23400,
+        "contract_months": 12,
+        "lead_time_days": 56
+       }
+      }
+     ]
+    },
+    {
+     "thread_id": "thread:P10:70410",
+     "message_id": "msg:70410-3-6",
+     "in_reply_to": null,
+     "from": "sales@70410",
+     "from_name": "Segment Manager, Dichtungswerk Ravensteiner GmbH",
+     "to": "Hollerau Pumpenwerke GmbH",
+     "subject": "Re: Our proposal",
+     "body": "Dear Sir or Madam,\n\nWe are withdrawing from this negotiation. Please be advised that we are therefore terminating this negotiation. Our standard procedure applies to all further standard inquiries.\n\nMit freundlichen Grüßen\nMonika Zellner\nSegment Manager, Dichtungswerk Ravensteiner GmbH",
+     "attachments": [],
+     "term_sheets": [],
+     "refs": [],
+     "action": null,
+     "status": "walked_away",
+     "signals": {
+      "reply_delay_days": 3,
+      "validity_days": 14
+     },
+     "missing_fields": [],
+     "claim_results": []
+    }
+   ],
+   "timeouts": []
+  }
+ }
+}
