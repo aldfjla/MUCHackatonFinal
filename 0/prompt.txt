@@ -1048,3 +1048,7 @@ can you organize it into a cleanly named folder and push it to my branch (niko s
 ---
 
 can you organize the all raw official information that you searched a few minutes back into a cleanly named folder and push it to my branch (niko something something was it)
+
+---
+
+nah merge the raw files and the research. I want one big research file. do the changes and update the branch
