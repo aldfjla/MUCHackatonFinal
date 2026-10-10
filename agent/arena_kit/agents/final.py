@@ -2,8 +2,8 @@
 
 - No throttle by default (`match=None`): the supplier mirrors our concessions, so a step of 0.25 x its
   last move got equally tiny moves back and froze (P08 v16: ours 4.79 -> 4.92 -> 4.93, theirs 5.51 -> 5.47).
-- Cases of type "price_increase": anchor at our current price, not 20% below their quote (that made the
-  supplier move backwards on P02). Every other case anchors as the parent does (`anchor` x their price).
+- Anchoring price-increase cases at our current price was tried on 2026-10-11 and lost on P01/P02 in real
+  runs, so it was removed: the anchor is the parent's rule (`anchor` x their price) in every case.
 - A silent thread is skipped after `max_asks` (2) of our messages instead of walking away: a walk_away on
   ANY thread ends the whole case. Only `closing_move`, when nothing else can be done, may walk away.
 - Questions instead of moves count as no move, so the wrapper (questions=False) only asks for a missing quote.
@@ -136,8 +136,6 @@ class FinalAgent(ReciprocalAgent):
         mine = [x for x in sheets if x]
         if not mine:
             cur = case["buyer"].get("current_unit_price")
-            if cur and case.get("type") == "price_increase":
-                return max(ANCHOR_FLOOR * p, min(p, cur))  # labelled price increase: anchor at today's price
             return max(ANCHOR_FLOOR * p, min(self.anchor * p, cur or p))
         frac = min(FRAC_MAX, FRAC0 + FRAC_STEP * len(mine))
         step = max(frac * (p - mine[-1]), MIN_STEP * p, _tick(p))

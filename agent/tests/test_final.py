@@ -65,13 +65,12 @@ def test_silent_supplier_below_max_asks_is_asked_for_a_quote():
     assert d["message"]["body"] == "Could you please send us your quote?" and "term_sheets" not in d["message"]
 
 
-def test_price_increase_anchors_at_the_current_price():
-    """P02: the quote is above what we pay today, so the first sheet is our current price."""
-    c = case("P02")
+def test_price_increase_case_uses_the_normal_anchor():
+    """P02 (price_increase): the anchor is 0.80 x their quote, as in every other case."""
     ev = dump_thread("reciprocal_evidence_P02", "sup:70510")[:1]
-    assert ev[0]["term_sheets"][0]["terms"]["unit_price"] > c["buyer"]["current_unit_price"]
-    d = FinalAgent().decide(c, {"sup:70510": ev})
-    assert first_price(d) == pytest.approx(c["buyer"]["current_unit_price"], abs=0.01)
+    assert ev[0]["term_sheets"][0]["terms"]["unit_price"] == 370.96
+    d = FinalAgent().decide(case("P02"), {"sup:70510": ev})
+    assert first_price(d) == pytest.approx(round(0.80 * 370.96, 2), abs=0.01)
 
 
 def test_leverage_anchor_is_80_percent():
@@ -96,11 +95,12 @@ def test_p08_quote_above_current_is_not_a_price_increase():
     assert first_price(FinalAgent().decide(case("P08"), {sid: ev})) == pytest.approx(round(0.80 * 6.05, 2), abs=0.01)
 
 
-def test_p01_price_increase_anchors_at_the_current_price():
-    """P01 (price_increase): the first sheet is our current price 126.53 when the quote is above it."""
+def test_p01_price_increase_case_uses_the_normal_anchor():
+    """P01 (price_increase): the first sheet is 0.80 x the opening quote, not the current price."""
     ev = dump_thread("reciprocal_evidence_P01", "sup:70110")[:1]
-    assert ev[0]["term_sheets"][0]["terms"]["unit_price"] > 126.53
-    assert first_price(FinalAgent().decide(case("P01"), {"sup:70110": ev})) == pytest.approx(126.53, abs=0.01)
+    quote = ev[0]["term_sheets"][0]["terms"]["unit_price"]
+    d = FinalAgent().decide(case("P01"), {"sup:70110": ev})
+    assert first_price(d) == pytest.approx(round(0.80 * quote, 2), abs=0.01)
 
 
 def mirrored_thread():
