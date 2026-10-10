@@ -1,0 +1,86 @@
+{
+ "case_id": "case:GD26",
+ "set": "practice",
+ "type": "capacity",
+ "title": "Meridune cuts the allocation for Impeller HI 250",
+ "briefing": "You negotiate for Hollerau Pumpenwerke with Meridune Precision Castings Co., Ltd.. Meridune cuts the allocation for Impeller HI 250. Need: 720 pc a year. Category goal: secure supply of a bottleneck part: coverage of the full need and a supplier that stays healthy come first. Score: the lowest total cost C as defined in the rules, valued with this case's rates (need lead time 59 days). There is no fallback supplier: without a deal the demand is bought at the fallback price. Must-haves: volume_per_year >= 684. Prepare from the data package.",
+ "trigger_doc": "doc:20260701-70160-M1",
+ "parts": [
+  "part:310051"
+ ],
+ "suppliers": [
+  "sup:70160"
+ ],
+ "negotiable": [
+  "unit_price",
+  "volume_per_year",
+  "contract_months",
+  "lead_time_days"
+ ],
+ "fixed_terms": {
+  "payment_days": 30,
+  "effective_date": "2027-01-01",
+  "index_clause": null,
+  "incoterm": "DAP",
+  "tooling_eur": 0
+ },
+ "term_options": {
+  "volume_per_year": [
+   504,
+   612,
+   720
+  ],
+  "contract_months": [
+   12,
+   24,
+   36
+  ],
+  "lead_time_days": [
+   49,
+   59,
+   78
+  ]
+ },
+ "buyer": {
+  "need_per_year": 720,
+  "horizon_years": 2,
+  "current_unit_price": 79.44,
+  "fallback_unit_price": 99.31,
+  "interest_rate": 0.08,
+  "reference_payment_days": 60,
+  "need_lead_time_days": 59,
+  "category_goal": "secure_supply",
+  "fallback_risk_pct": 25,
+  "late_cost_per_day": 220,
+  "cost_per_defect": 1232,
+  "freight_eur_per_unit": {
+   "EXW": 0.03,
+   "FCA": 0.03,
+   "DAP": 0.0
+  },
+  "index_paths": {},
+  "must_haves": [
+   {
+    "field": "volume_per_year",
+    "op": ">=",
+    "value": 684
+   }
+  ],
+  "alternative": {
+   "kind": "none",
+   "ref": null,
+   "terms": {}
+  },
+  "index_risk_pct": 3,
+  "sustainable_margin_pct": 4,
+  "relationship_eur_per_point": 1140
+ },
+ "round_limit": 10,
+ "refs": [
+  "doc:20260701-70160-M1",
+  "ctr:4600070160",
+  "sc:70160@2026Q3",
+  "cost:310051"
+ ],
+ "hosted": true
+}

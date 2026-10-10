@@ -1,0 +1,93 @@
+{
+ "case_id": "case:GT28",
+ "set": "practice",
+ "type": "quality",
+ "title": "Kohlering-Technik: quality problems with Lip seal 35x52x7",
+ "briefing": "You negotiate for Hollerau Pumpenwerke with Kohlering-Technik Pirkheim GmbH. Kohlering-Technik: quality problems with Lip seal 35x52x7. Need: 16620 pc a year. Category goal: quality first: defects and late deliveries cost more than a few cents of price. Score: the lowest total cost C as defined in the rules, valued with this case's rates (need lead time 10 days). Fallback if you walk away: today's terms continue unchanged. Must-haves: none. Prepare from the data package.",
+ "trigger_doc": "doc:20260910-70440-M1",
+ "parts": [
+  "part:340040"
+ ],
+ "suppliers": [
+  "sup:70440"
+ ],
+ "negotiable": [
+  "ppm_commitment",
+  "chargeback_eur_per_complaint",
+  "unit_price",
+  "lead_time_days"
+ ],
+ "fixed_terms": {
+  "payment_days": 45,
+  "volume_per_year": 16620,
+  "contract_months": 24,
+  "effective_date": "2027-01-01",
+  "index_clause": null,
+  "incoterm": "DAP",
+  "tooling_eur": 0
+ },
+ "term_options": {
+  "ppm_commitment": [
+   300,
+   800,
+   1500,
+   2500
+  ],
+  "chargeback_eur_per_complaint": [
+   0,
+   0,
+   0,
+   10
+  ],
+  "lead_time_days": [
+   7,
+   9,
+   10,
+   15
+  ]
+ },
+ "buyer": {
+  "need_per_year": 16620,
+  "horizon_years": 2.0,
+  "current_unit_price": 1.12,
+  "fallback_unit_price": 1.19,
+  "interest_rate": 0.08,
+  "reference_payment_days": 60,
+  "need_lead_time_days": 10,
+  "category_goal": "quality_first",
+  "fallback_risk_pct": 8,
+  "late_cost_per_day": 10,
+  "cost_per_defect": 3,
+  "freight_eur_per_unit": {
+   "EXW": 0.02,
+   "FCA": 0.02,
+   "DAP": 0.0
+  },
+  "index_paths": {},
+  "must_haves": [],
+  "alternative": {
+   "kind": "current_contract",
+   "ref": "ctr:4600070440",
+   "terms": {
+    "payment_days": 30,
+    "lead_time_days": 7,
+    "volume_per_year": 16620,
+    "contract_months": 24,
+    "effective_date": "2027-01-01",
+    "index_clause": null,
+    "incoterm": "DAP",
+    "tooling_eur": 0,
+    "unit_price": 1.12,
+    "ppm_commitment": 387
+   }
+  },
+  "index_risk_pct": 2
+ },
+ "round_limit": 10,
+ "refs": [
+  "doc:20260910-70440-M1",
+  "ctr:4600070440",
+  "sc:70440@2026Q3"
+ ],
+ "hosted": true
+}

@@ -1,0 +1,94 @@
+{
+ "case_id": "case:GD14",
+ "set": "practice",
+ "type": "quality",
+ "title": "Kantteile: quality problems with Motor bracket HB",
+ "briefing": "You negotiate for Hollerau Pumpenwerke with Kantteile Strasser GmbH. Kantteile: quality problems with Motor bracket HB. Need: 11390 pc a year. Category goal: quality first: defects and late deliveries cost more than a few cents of price. Score: the lowest total cost C as defined in the rules, valued with this case's rates (need lead time 22 days). Fallback if you walk away: the second-source quote quote:7100035. Must-haves: ppm_commitment <= 1500. Prepare from the data package.",
+ "trigger_doc": "doc:20260812-70360-M3",
+ "parts": [
+  "part:330030"
+ ],
+ "suppliers": [
+  "sup:70360"
+ ],
+ "negotiable": [
+  "ppm_commitment",
+  "chargeback_eur_per_complaint",
+  "unit_price"
+ ],
+ "fixed_terms": {
+  "payment_days": 60,
+  "lead_time_days": 21,
+  "volume_per_year": 11390,
+  "contract_months": 24,
+  "effective_date": "2027-01-01",
+  "index_clause": null,
+  "incoterm": "FCA",
+  "tooling_eur": 0
+ },
+ "term_options": {
+  "ppm_commitment": [
+   300,
+   800,
+   1500,
+   2500
+  ],
+  "chargeback_eur_per_complaint": [
+   0,
+   40,
+   90,
+   170
+  ]
+ },
+ "buyer": {
+  "need_per_year": 11390,
+  "horizon_years": 2.0,
+  "current_unit_price": 16.11,
+  "fallback_unit_price": 17.08,
+  "interest_rate": 0.08,
+  "reference_payment_days": 60,
+  "need_lead_time_days": 22,
+  "category_goal": "quality_first",
+  "fallback_risk_pct": 8,
+  "late_cost_per_day": 70,
+  "cost_per_defect": 142,
+  "freight_eur_per_unit": {
+   "EXW": 0.56,
+   "FCA": 0.65,
+   "DAP": 0.0
+  },
+  "index_paths": {},
+  "must_haves": [
+   {
+    "field": "ppm_commitment",
+    "op": "<=",
+    "value": 1500
+   }
+  ],
+  "alternative": {
+   "kind": "quote",
+   "ref": "quote:7100035",
+   "terms": {
+    "payment_days": null,
+    "lead_time_days": 24,
+    "volume_per_year": 11390,
+    "contract_months": 24,
+    "effective_date": "2027-01-01",
+    "index_clause": null,
+    "incoterm": null,
+    "tooling_eur": 0,
+    "unit_price": 16.7,
+    "ppm_commitment": 489
+   }
+  },
+  "index_risk_pct": 2
+ },
+ "round_limit": 10,
+ "refs": [
+  "doc:20260812-70360-M3",
+  "ctr:4600070360",
+  "sc:70360@2026Q3",
+  "quote:7100035"
+ ],
+ "hosted": true
+}

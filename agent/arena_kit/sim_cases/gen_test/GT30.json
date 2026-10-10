@@ -1,0 +1,99 @@
+{
+ "case_id": "case:GT30",
+ "set": "practice",
+ "type": "renewal",
+ "title": "Contract renewal for Volute casing HI 80-250",
+ "briefing": "You negotiate for Hollerau Pumpenwerke with Feinguss Allgäu-Reiter GmbH. Contract renewal for Volute casing HI 80-250. Need: 1350 pc a year. Category goal: stabilise a strategic supply: a healthy supplier and stable prices count, not only the lowest price. Score: the lowest total cost C as defined in the rules, valued with this case's rates (need lead time 49 days). There is no fallback supplier: without a deal the demand is bought at the fallback price. Must-haves: none. Prepare from the data package.",
+ "trigger_doc": "doc:20260924-70180-M1",
+ "parts": [
+  "part:310050"
+ ],
+ "suppliers": [
+  "sup:70180"
+ ],
+ "negotiable": [
+  "unit_price",
+  "payment_days",
+  "contract_months",
+  "index_clause"
+ ],
+ "fixed_terms": {
+  "lead_time_days": 49,
+  "volume_per_year": 1350,
+  "effective_date": "2027-01-01",
+  "incoterm": "DAP",
+  "tooling_eur": 0
+ },
+ "term_options": {
+  "payment_days": [
+   14,
+   30,
+   45,
+   60,
+   90
+  ],
+  "contract_months": [
+   12,
+   24,
+   36
+  ],
+  "index_clause": [
+   null,
+   {
+    "series": "LCI-C",
+    "material_share": 0.26,
+    "deadband_pct": 0,
+    "base_month": "2026-08"
+   },
+   {
+    "series": "LCI-C",
+    "material_share": 0.26,
+    "deadband_pct": 3,
+    "base_month": "2026-08"
+   },
+   {
+    "series": "LCI-C",
+    "material_share": 0.26,
+    "deadband_pct": 5,
+    "base_month": "2026-08"
+   }
+  ]
+ },
+ "buyer": {
+  "need_per_year": 1350,
+  "horizon_years": 2,
+  "current_unit_price": 654.52,
+  "fallback_unit_price": 723.74,
+  "interest_rate": 0.08,
+  "reference_payment_days": 60,
+  "need_lead_time_days": 49,
+  "category_goal": "stabilise",
+  "fallback_risk_pct": 10,
+  "late_cost_per_day": 130,
+  "cost_per_defect": 95,
+  "freight_eur_per_unit": {
+   "EXW": 1.95,
+   "FCA": 1.52,
+   "DAP": 0.0
+  },
+  "index_paths": {
+   "LCI-C": 0.05
+  },
+  "must_haves": [],
+  "alternative": {
+   "kind": "none",
+   "ref": null,
+   "terms": {}
+  },
+  "index_risk_pct": 4,
+  "sustainable_margin_pct": 8,
+  "relationship_eur_per_point": 13260
+ },
+ "round_limit": 10,
+ "refs": [
+  "doc:20260924-70180-M1",
+  "ctr:4600070180",
+  "sc:70180@2026Q3"
+ ],
+ "hosted": true
+}

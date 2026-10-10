@@ -1,0 +1,101 @@
+{
+ "case_id": "case:GT26",
+ "set": "practice",
+ "type": "capacity",
+ "title": "Metallbau cuts the allocation for Coupling guard, galvanised",
+ "briefing": "You negotiate for Hollerau Pumpenwerke with Metallbau Steinfelder KG. Metallbau cuts the allocation for Coupling guard, galvanised. Need: 15320 pc a year. Category goal: secure supply of a bottleneck part: coverage of the full need and a supplier that stays healthy come first. Score: the lowest total cost C as defined in the rules, valued with this case's rates (need lead time 28 days). Fallback if you walk away: the second-source quote quote:7100033. Must-haves: lead_time_days <= 35. Prepare from the data package.",
+ "trigger_doc": "doc:20260728-70340-M1",
+ "parts": [
+  "part:330020"
+ ],
+ "suppliers": [
+  "sup:70340"
+ ],
+ "negotiable": [
+  "unit_price",
+  "lead_time_days",
+  "volume_per_year",
+  "payment_days"
+ ],
+ "fixed_terms": {
+  "contract_months": 12,
+  "effective_date": "2027-01-01",
+  "index_clause": null,
+  "incoterm": "EXW",
+  "tooling_eur": 0
+ },
+ "term_options": {
+  "lead_time_days": [
+   21,
+   28,
+   35,
+   42,
+   49
+  ],
+  "volume_per_year": [
+   10724,
+   13022,
+   15320
+  ],
+  "payment_days": [
+   14,
+   30,
+   45,
+   60,
+   90
+  ]
+ },
+ "buyer": {
+  "need_per_year": 15320,
+  "horizon_years": 1.0,
+  "current_unit_price": 18.16,
+  "fallback_unit_price": 22.7,
+  "interest_rate": 0.08,
+  "reference_payment_days": 60,
+  "need_lead_time_days": 28,
+  "category_goal": "secure_supply",
+  "fallback_risk_pct": 25,
+  "late_cost_per_day": 2070,
+  "cost_per_defect": 98,
+  "freight_eur_per_unit": {
+   "EXW": 0.19,
+   "FCA": 0.22,
+   "DAP": 0.0
+  },
+  "index_paths": {},
+  "must_haves": [
+   {
+    "field": "lead_time_days",
+    "op": "<=",
+    "value": 35
+   }
+  ],
+  "alternative": {
+   "kind": "quote",
+   "ref": "quote:7100033",
+   "terms": {
+    "payment_days": null,
+    "lead_time_days": 30,
+    "volume_per_year": 15320,
+    "contract_months": 12,
+    "effective_date": "2027-01-01",
+    "index_clause": null,
+    "incoterm": null,
+    "tooling_eur": 0,
+    "unit_price": 21.0,
+    "ppm_commitment": 762
+   }
+  },
+  "index_risk_pct": 3,
+  "sustainable_margin_pct": 4,
+  "relationship_eur_per_point": 5570
+ },
+ "round_limit": 10,
+ "refs": [
+  "doc:20260728-70340-M1",
+  "ctr:4600070340",
+  "sc:70340@2026Q3",
+  "quote:7100033"
+ ],
+ "hosted": true
+}

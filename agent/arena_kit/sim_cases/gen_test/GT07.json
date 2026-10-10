@@ -1,0 +1,97 @@
+{
+ "case_id": "case:GT07",
+ "set": "practice",
+ "type": "quality",
+ "title": "Gießerei: quality problems with Volute casing HN 100-315",
+ "briefing": "You negotiate for Hollerau Pumpenwerke with Gießerei Brandlhuber GmbH & Co. KG. Gießerei: quality problems with Volute casing HN 100-315. Need: 890 pc a year. Category goal: secure supply of a bottleneck part: coverage of the full need and a supplier that stays healthy come first. Score: the lowest total cost C as defined in the rules, valued with this case's rates (need lead time 47 days). Fallback if you walk away: the second-source quote quote:7100005. Must-haves: ppm_commitment <= 1500. Prepare from the data package.",
+ "trigger_doc": "doc:20260917-70110-M3",
+ "parts": [
+  "part:310012"
+ ],
+ "suppliers": [
+  "sup:70110"
+ ],
+ "negotiable": [
+  "ppm_commitment",
+  "chargeback_eur_per_complaint",
+  "unit_price"
+ ],
+ "fixed_terms": {
+  "payment_days": 60,
+  "lead_time_days": 45,
+  "volume_per_year": 890,
+  "contract_months": 12,
+  "effective_date": "2027-01-01",
+  "index_clause": null,
+  "incoterm": "FCA",
+  "tooling_eur": 0
+ },
+ "term_options": {
+  "ppm_commitment": [
+   300,
+   800,
+   1500,
+   2500
+  ],
+  "chargeback_eur_per_complaint": [
+   0,
+   1540,
+   2830,
+   4900
+  ]
+ },
+ "buyer": {
+  "need_per_year": 890,
+  "horizon_years": 1.0,
+  "current_unit_price": 383.06,
+  "fallback_unit_price": 478.8,
+  "interest_rate": 0.08,
+  "reference_payment_days": 60,
+  "need_lead_time_days": 47,
+  "category_goal": "secure_supply",
+  "fallback_risk_pct": 25,
+  "late_cost_per_day": 140,
+  "cost_per_defect": 3933,
+  "freight_eur_per_unit": {
+   "EXW": 17.63,
+   "FCA": 15.42,
+   "DAP": 0.0
+  },
+  "index_paths": {},
+  "must_haves": [
+   {
+    "field": "ppm_commitment",
+    "op": "<=",
+    "value": 1500
+   }
+  ],
+  "alternative": {
+   "kind": "quote",
+   "ref": "quote:7100005",
+   "terms": {
+    "payment_days": 30,
+    "lead_time_days": 45,
+    "volume_per_year": 890,
+    "contract_months": 12,
+    "effective_date": "2027-01-01",
+    "index_clause": null,
+    "incoterm": "FCA",
+    "tooling_eur": 0,
+    "unit_price": 390.2,
+    "ppm_commitment": 651
+   }
+  },
+  "index_risk_pct": 3,
+  "sustainable_margin_pct": 4,
+  "relationship_eur_per_point": 6820
+ },
+ "round_limit": 10,
+ "refs": [
+  "doc:20260917-70110-M3",
+  "ctr:4600070110",
+  "sc:70110@2026Q3",
+  "quote:7100005",
+  "cost:310012"
+ ],
+ "hosted": true
+}

@@ -1,0 +1,77 @@
+{
+ "case_id": "case:GT01",
+ "set": "practice",
+ "type": "price_increase",
+ "title": "Gießerei announces +2.2 % on Volute casing HN 100-315",
+ "briefing": "You negotiate for Hollerau Pumpenwerke with Gießerei Brandlhuber GmbH & Co. KG. Gießerei announces +2.2 % on Volute casing HN 100-315. Need: 700 pc a year. Category goal: stabilise a strategic supply: a healthy supplier and stable prices count, not only the lowest price. Score: the lowest total cost C as defined in the rules, valued with this case's rates (need lead time 45 days). There is no fallback supplier: without a deal the demand is bought at the fallback price. Must-haves: none. Prepare from the data package.",
+ "trigger_doc": "doc:20260917-70110-M3",
+ "parts": [
+  "part:310012"
+ ],
+ "suppliers": [
+  "sup:70110"
+ ],
+ "negotiable": [
+  "unit_price",
+  "payment_days",
+  "contract_months",
+  "effective_date"
+ ],
+ "fixed_terms": {
+  "lead_time_days": 45,
+  "incoterm": "FCA"
+ },
+ "term_options": {
+  "payment_days": [
+   30,
+   45,
+   60
+  ],
+  "contract_months": [
+   12,
+   24
+  ],
+  "effective_date": [
+   "2026-12-01",
+   "2027-01-01",
+   "2027-02-01",
+   "2027-04-01"
+  ]
+ },
+ "buyer": {
+  "category_goal": "stabilise",
+  "need_per_year": 700,
+  "horizon_years": 2,
+  "current_unit_price": 383.06,
+  "fallback_unit_price": 411.74,
+  "fallback_risk_pct": 10,
+  "interest_rate": 0.08,
+  "reference_payment_days": 60,
+  "need_lead_time_days": 45,
+  "late_cost_per_day": 10,
+  "cost_per_defect": 0,
+  "freight_eur_per_unit": {
+   "EXW": 14.73,
+   "FCA": 7.66,
+   "DAP": 0.0
+  },
+  "index_paths": {},
+  "must_haves": [],
+  "alternative": {
+   "kind": "none",
+   "ref": null,
+   "terms": {}
+  },
+  "index_risk_pct": 4,
+  "sustainable_margin_pct": 4,
+  "relationship_eur_per_point": 4020
+ },
+ "round_limit": 10,
+ "refs": [
+  "doc:20260917-70110-M3",
+  "ctr:4600070110",
+  "sc:70110@2026Q3",
+  "cost:310012"
+ ],
+ "hosted": true
+}

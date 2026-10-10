@@ -1,0 +1,89 @@
+{
+ "case_id": "case:GT06",
+ "set": "practice",
+ "type": "capacity",
+ "title": "Verbindungstechnik cuts the allocation for Hex bolt ISO 4017 M16x60 8.8, zinc",
+ "briefing": "You negotiate for Hollerau Pumpenwerke with Verbindungstechnik Mairhofer GmbH. Verbindungstechnik cuts the allocation for Hex bolt ISO 4017 M16x60 8.8, zinc. Need: 129920 pc a year. Category goal: secure supply of a bottleneck part: coverage of the full need and a supplier that stays healthy come first. Score: the lowest total cost C as defined in the rules, valued with this case's rates (need lead time 7 days). There is no fallback supplier: without a deal the demand is bought at the fallback price. Must-haves: lead_time_days <= 8. Prepare from the data package.",
+ "trigger_doc": "doc:20260817-70650-M1",
+ "parts": [
+  "part:360011"
+ ],
+ "suppliers": [
+  "sup:70650"
+ ],
+ "negotiable": [
+  "unit_price",
+  "lead_time_days",
+  "volume_per_year",
+  "payment_days"
+ ],
+ "fixed_terms": {
+  "contract_months": 12,
+  "effective_date": "2027-01-01",
+  "index_clause": null,
+  "incoterm": "EXW",
+  "tooling_eur": 0
+ },
+ "term_options": {
+  "lead_time_days": [
+   5,
+   7,
+   8,
+   10,
+   12
+  ],
+  "volume_per_year": [
+   90944,
+   110432,
+   129920
+  ],
+  "payment_days": [
+   14,
+   30,
+   45,
+   60,
+   90
+  ]
+ },
+ "buyer": {
+  "need_per_year": 129920,
+  "horizon_years": 1.0,
+  "current_unit_price": 0.38,
+  "fallback_unit_price": 0.47,
+  "interest_rate": 0.08,
+  "reference_payment_days": 60,
+  "need_lead_time_days": 7,
+  "category_goal": "secure_supply",
+  "fallback_risk_pct": 25,
+  "late_cost_per_day": 360,
+  "cost_per_defect": 2,
+  "freight_eur_per_unit": {
+   "EXW": 0.01,
+   "FCA": 0.0,
+   "DAP": 0.0
+  },
+  "index_paths": {},
+  "must_haves": [
+   {
+    "field": "lead_time_days",
+    "op": "<=",
+    "value": 8
+   }
+  ],
+  "alternative": {
+   "kind": "none",
+   "ref": null,
+   "terms": {}
+  },
+  "index_risk_pct": 3,
+  "sustainable_margin_pct": 10,
+  "relationship_eur_per_point": 990
+ },
+ "round_limit": 10,
+ "refs": [
+  "doc:20260817-70650-M1",
+  "ctr:4600070650",
+  "sc:70650@2026Q3"
+ ],
+ "hosted": true
+}

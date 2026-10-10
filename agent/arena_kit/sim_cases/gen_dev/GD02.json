@@ -1,0 +1,88 @@
+{
+ "case_id": "case:GD02",
+ "set": "practice",
+ "type": "renewal",
+ "title": "Contract renewal for Shaft sleeve",
+ "briefing": "You negotiate for Hollerau Pumpenwerke with Drehzentrum Ilzauer GmbH. Contract renewal for Shaft sleeve. Need: 11310 pc a year. Category goal: secure supply of a bottleneck part: coverage of the full need and a supplier that stays healthy come first. Score: the lowest total cost C as defined in the rules, valued with this case's rates (need lead time 28 days). Fallback if you walk away: the second-source quote quote:7100023. Must-haves: none. Prepare from the data package.",
+ "trigger_doc": "doc:20260909-70295-M4",
+ "parts": [
+  "part:320020"
+ ],
+ "suppliers": [
+  "sup:70295"
+ ],
+ "negotiable": [
+  "unit_price",
+  "payment_days",
+  "contract_months"
+ ],
+ "fixed_terms": {
+  "lead_time_days": 28,
+  "volume_per_year": 11310,
+  "effective_date": "2027-01-01",
+  "index_clause": null,
+  "incoterm": "DAP",
+  "tooling_eur": 0
+ },
+ "term_options": {
+  "payment_days": [
+   14,
+   30,
+   45,
+   60,
+   90
+  ],
+  "contract_months": [
+   12,
+   24,
+   36
+  ]
+ },
+ "buyer": {
+  "need_per_year": 11310,
+  "horizon_years": 2,
+  "current_unit_price": 11.66,
+  "fallback_unit_price": 14.58,
+  "interest_rate": 0.12,
+  "reference_payment_days": 60,
+  "need_lead_time_days": 28,
+  "category_goal": "secure_supply",
+  "fallback_risk_pct": 25,
+  "late_cost_per_day": 240,
+  "cost_per_defect": 242,
+  "freight_eur_per_unit": {
+   "EXW": 0.09,
+   "FCA": 0.09,
+   "DAP": 0.0
+  },
+  "index_paths": {},
+  "must_haves": [],
+  "alternative": {
+   "kind": "quote",
+   "ref": "quote:7100023",
+   "terms": {
+    "payment_days": null,
+    "lead_time_days": 33,
+    "volume_per_year": 11310,
+    "contract_months": 24,
+    "effective_date": "2027-01-01",
+    "index_clause": null,
+    "incoterm": null,
+    "tooling_eur": 0,
+    "unit_price": 12.9,
+    "ppm_commitment": 544
+   }
+  },
+  "index_risk_pct": 3,
+  "sustainable_margin_pct": 4,
+  "relationship_eur_per_point": 2640
+ },
+ "round_limit": 10,
+ "refs": [
+  "doc:20260909-70295-M4",
+  "ctr:4600070295",
+  "sc:70295@2026Q3",
+  "quote:7100023"
+ ],
+ "hosted": true
+}

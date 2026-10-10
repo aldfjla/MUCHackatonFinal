@@ -1,0 +1,91 @@
+{
+ "case_id": "case:GT03",
+ "set": "practice",
+ "type": "rfq",
+ "title": "RFQ: Volute casing HN 100-315",
+ "briefing": "You negotiate for Hollerau Pumpenwerke with Gießerei Wimbacher GmbH, Gießerei Brandlhuber GmbH & Co. KG. RFQ: Volute casing HN 100-315. Need: 1330 pc a year. Category goal: stabilise a strategic supply: a healthy supplier and stable prices count, not only the lowest price. Score: the lowest total cost C as defined in the rules, valued with this case's rates (need lead time 51 days). There is no fallback supplier: without a deal the demand is bought at the fallback price. Must-haves: lead_time_days <= 64. Prepare from the data package.",
+ "trigger_doc": "doc:20260911-70130-M3",
+ "parts": [
+  "part:310012"
+ ],
+ "suppliers": [
+  "sup:70130",
+  "sup:70110"
+ ],
+ "negotiable": [
+  "unit_price",
+  "tooling_eur",
+  "payment_days",
+  "lead_time_days"
+ ],
+ "fixed_terms": {
+  "volume_per_year": 1330,
+  "contract_months": 24,
+  "effective_date": "2027-01-01",
+  "index_clause": null,
+  "incoterm": "DAP"
+ },
+ "term_options": {
+  "tooling_eur": [
+   0,
+   3400,
+   6700
+  ],
+  "payment_days": [
+   14,
+   30,
+   45,
+   60,
+   90
+  ],
+  "lead_time_days": [
+   45,
+   51,
+   64,
+   77
+  ]
+ },
+ "buyer": {
+  "need_per_year": 1330,
+  "horizon_years": 2.0,
+  "current_unit_price": 359.17,
+  "fallback_unit_price": 359.17,
+  "interest_rate": 0.08,
+  "reference_payment_days": 60,
+  "need_lead_time_days": 51,
+  "category_goal": "stabilise",
+  "fallback_risk_pct": 10,
+  "late_cost_per_day": 180,
+  "cost_per_defect": 380,
+  "freight_eur_per_unit": {
+   "EXW": 14.12,
+   "FCA": 17.33,
+   "DAP": 0.0
+  },
+  "index_paths": {},
+  "must_haves": [
+   {
+    "field": "lead_time_days",
+    "op": "<=",
+    "value": 64
+   }
+  ],
+  "alternative": {
+   "kind": "none",
+   "ref": null,
+   "terms": {}
+  },
+  "index_risk_pct": 4,
+  "sustainable_margin_pct": 0.5,
+  "relationship_eur_per_point": 7160
+ },
+ "round_limit": 10,
+ "refs": [
+  "doc:20260911-70130-M3",
+  "ctr:4600070130",
+  "sc:70130@2026Q3",
+  "sc:70110@2026Q3",
+  "cost:310012"
+ ],
+ "hosted": true
+}

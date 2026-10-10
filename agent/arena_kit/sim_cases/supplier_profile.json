@@ -1,0 +1,1900 @@
+{
+ "meta": {
+  "source": "sim_cases/real_runs (40 dumps, 10 cases, 48 thread-runs, 12 distinct supplier threads) + sim_cases/real + data package",
+  "cases": [
+   "P01",
+   "P02",
+   "P03",
+   "P04",
+   "P05",
+   "P07",
+   "P08",
+   "P10",
+   "P11",
+   "P18"
+  ],
+  "standard_days": {
+   "P01|sup:70110": [
+    30,
+    "text"
+   ],
+   "P02|sup:70510": [
+    30,
+    "default"
+   ],
+   "P03|sup:70530": [
+    30,
+    "text"
+   ],
+   "P04|sup:70620": [
+    30,
+    "default"
+   ],
+   "P05|sup:70210": [
+    30,
+    "text"
+   ],
+   "P05|sup:70240": [
+    45,
+    "text"
+   ],
+   "P05|sup:70250": [
+    30,
+    "text"
+   ],
+   "P07|sup:70610": [
+    30,
+    "text"
+   ],
+   "P08|sup:70710": [
+    30,
+    "default"
+   ],
+   "P10|sup:70410": [
+    30,
+    "text"
+   ],
+   "P11|sup:70140": [
+    60,
+    "text"
+   ],
+   "P18|sup:70740": [
+    30,
+    "default"
+   ]
+  },
+  "c_open_check": {
+   "P01": {
+    "reported": 1153779.74,
+    "recomputed_min": 1153779.74,
+    "match_pct": 0.0
+   },
+   "P02": {
+    "reported": 2282867.49,
+    "recomputed_min": 2282867.49,
+    "match_pct": 0.0
+   },
+   "P03": {
+    "reported": 4246314.02,
+    "recomputed_min": 4246314.02,
+    "match_pct": 0.0
+   },
+   "P04": {
+    "reported": 198846.33,
+    "recomputed_min": 198846.33,
+    "match_pct": 0.0
+   },
+   "P05": {
+    "reported": 305544.96,
+    "recomputed_min": 270199.12,
+    "match_pct": -11.568
+   },
+   "P07": {
+    "reported": 391027.4,
+    "recomputed_min": 391027.4,
+    "match_pct": 0.0
+   },
+   "P08": {
+    "reported": 1135887.28,
+    "recomputed_min": 1135887.28,
+    "match_pct": 0.0
+   },
+   "P10": {
+    "reported": 1932492.18,
+    "recomputed_min": 1932492.18,
+    "match_pct": 0.0
+   },
+   "P11": {
+    "reported": 817578.0,
+    "recomputed_min": 817578.0,
+    "match_pct": 0.0
+   },
+   "P18": {
+    "reported": 295173.23,
+    "recomputed_min": 295173.23,
+    "match_pct": 0.0
+   }
+  }
+ },
+ "parameters": {
+  "supplier_interest_rate": {
+   "status": "fitted",
+   "n": 5,
+   "evidence": "price pairs in one supplier message at two payment terms (e.g. P01: 137.50 at 60 days vs 136.40 at 30)",
+   "uncertainty": "per-case values {'min': 0.06610155894857883, 'median': 0.07368421052631609, 'max': 0.09836065573770457}; the buyer rates in the cases are 0.04-0.12; per case rate not given by the arena",
+   "per_case": {
+    "P01": 0.0961,
+    "P02": 0.0661,
+    "P07": 0.0737,
+    "P08": 0.0689,
+    "P18": 0.0984
+   },
+   "min": 0.0661,
+   "median": 0.0737,
+   "max": 0.0984
+  },
+  "standard_payment_days": {
+   "status": "fitted",
+   "n": 6,
+   "evidence": "'our standard Zahlungsziel is N days net' in the supplier e-mails, per supplier thread (payment_days negotiable): {\"('P01', 'sup:70110')\": 30, \"('P03', 'sup:70530')\": 30, \"('P05', 'sup:70210')\": 30, \"('P05', 'sup:70240')\": 45, \"('P05', 'sup:70250')\": 30, \"('P07', 'sup:70610')\": 30}; P11 sup:70140 says 60 and has payment_days fixed at 60; threads that never say it default to 30 (4 of 12)",
+   "uncertainty": "not always 30: P05 sup:70240 says 45; the default 30 for silent threads is an assumption",
+   "samples": [
+    30,
+    30,
+    30,
+    30,
+    30,
+    45
+   ],
+   "default": 30
+  },
+  "opening_vs_current_price": {
+   "status": "fitted",
+   "n": 12,
+   "evidence": "first supplier quote / the case's current_unit_price, 10 hosted cases, 12 supplier threads",
+   "uncertainty": "ratio ranges 0.91 (bundling, below current) to 1.13; by case type only 1-2 samples each; P05 (rfq) has no current price",
+   "by_type": {
+    "price_increase": {
+     "n": 2,
+     "min": 1.065,
+     "median": 1.08,
+     "max": 1.095
+    },
+    "renewal": {
+     "n": 2,
+     "min": 1.0617,
+     "median": 1.09575,
+     "max": 1.1298
+    },
+    "rfq": {
+     "n": 3,
+     "min": 0.8656,
+     "median": 0.9893,
+     "max": 1.058
+    },
+    "bundling": {
+     "n": 1,
+     "min": 0.9126,
+     "median": 0.9126,
+     "max": 0.9126
+    },
+    "raw_material": {
+     "n": 2,
+     "min": 1.0445,
+     "median": 1.0773000000000001,
+     "max": 1.1101
+    },
+    "capacity": {
+     "n": 1,
+     "min": 1.0773,
+     "median": 1.0773,
+     "max": 1.0773
+    },
+    "quality": {
+     "n": 1,
+     "min": 1.041,
+     "median": 1.041,
+     "max": 1.041
+    }
+   },
+   "pooled_excl_rfq": {
+    "min": 0.9126,
+    "median": 1.065,
+    "max": 1.1298
+   },
+   "min": 0.8656,
+   "median": 1.05985,
+   "max": 1.1298,
+   "samples": [
+    0.8656,
+    0.9126,
+    0.9893,
+    1.041,
+    1.0445,
+    1.058,
+    1.0617,
+    1.065,
+    1.0773,
+    1.095,
+    1.1101,
+    1.1298
+   ]
+  },
+  "opening_equals_announced_price": {
+   "status": "fitted_n1",
+   "n": 2,
+   "evidence": "price_increase letters (documents.asked_price) vs the supplier's opening quote (2 cases)",
+   "uncertainty": "P01 and P02 open exactly at the announced price; P13/P17 letters exist but were not played; other types have no letter (fitted ratio used)",
+   "pairs": [
+    {
+     "case": "P01",
+     "asked_price": 138.55,
+     "opening": 138.55
+    },
+    {
+     "case": "P02",
+     "asked_price": 370.96,
+     "opening": 370.96
+    }
+   ]
+  },
+  "opening_omits_field": {
+   "status": "fitted",
+   "n": 12,
+   "evidence": "terms the first quote states vs leaves out (missing_fields), 12 supplier threads: payment_days omitted in 4 of 10, lead_time_days 2 of 4 (rfq P05), chargeback 1 of 1",
+   "uncertainty": "small counts per field; other fields were always stated (contract_months 6/6, index_clause 3/3, volume 2/2, ppm 1/1); fields not in the list default to 0",
+   "rates": {
+    "effective_date": {
+     "omit": 0.0,
+     "n": 1
+    },
+    "payment_days": {
+     "omit": 0.4,
+     "n": 10
+    },
+    "index_clause": {
+     "omit": 0.0,
+     "n": 3
+    },
+    "contract_months": {
+     "omit": 0.0,
+     "n": 6
+    },
+    "volume_per_year": {
+     "omit": 0.0,
+     "n": 2
+    },
+    "lead_time_days": {
+     "omit": 0.5,
+     "n": 4
+    },
+    "ppm_commitment": {
+     "omit": 0.0,
+     "n": 1
+    },
+    "chargeback_eur_per_complaint": {
+     "omit": 1.0,
+     "n": 1
+    }
+   }
+  },
+  "floor_vs_opening": {
+   "status": "fitted",
+   "n": 9,
+   "evidence": "the supplier's cheapest accepted package: V such that the cheapest lever package at V costs the arena's C_best (cost.supplier_value, cost.total_cost); ratio V / best opening quote",
+   "uncertainty": "assumes C_best = supplier_value floor with every lever (brief.md section 6); standard terms rebuilt from the deals; rate varies +-30%; the floors of P03/P07/P08/P18 lie far below anything a supplier conceded (it froze first), so they bound room, not behaviour",
+   "per_case": {
+    "P01": {
+     "c_open_matches": true,
+     "c_best": 1096815.78,
+     "c_open": 1153779.74,
+     "floor_ratio": 0.9506,
+     "floor_ratio_range": [
+      0.9544,
+      0.9518
+     ],
+     "r_used": 0.0961,
+     "rate_fitted": true
+    },
+    "P02": {
+     "c_open_matches": true,
+     "c_best": 2235514.05,
+     "c_open": 2282867.49,
+     "floor_ratio": 0.9815,
+     "floor_ratio_range": [
+      0.9847,
+      0.98
+     ],
+     "r_used": 0.0661,
+     "rate_fitted": true
+    },
+    "P03": {
+     "c_open_matches": true,
+     "c_best": 3909043.1,
+     "c_open": 4246314.02,
+     "floor_ratio": 0.9679,
+     "floor_ratio_range": [
+      0.9715,
+      0.9676
+     ],
+     "r_used": 0.0737,
+     "rate_fitted": false
+    },
+    "P04": {
+     "c_open_matches": true,
+     "c_best": 196529.32,
+     "c_open": 198846.33,
+     "floor_ratio": 0.9821,
+     "floor_ratio_range": [
+      0.9858,
+      0.9819
+     ],
+     "r_used": 0.0737,
+     "rate_fitted": false
+    },
+    "P05": {
+     "c_open_matches": false,
+     "c_best": 223424.17,
+     "c_open": 305544.96
+    },
+    "P07": {
+     "c_open_matches": true,
+     "c_best": 299241.49,
+     "c_open": 391027.4,
+     "floor_ratio": 0.8639,
+     "floor_ratio_range": [
+      0.8671,
+      0.8637
+     ],
+     "r_used": 0.0737,
+     "rate_fitted": true
+    },
+    "P08": {
+     "c_open_matches": true,
+     "c_best": 960309.33,
+     "c_open": 1135887.28,
+     "floor_ratio": 0.8331,
+     "floor_ratio_range": [
+      0.836,
+      0.8322
+     ],
+     "r_used": 0.0689,
+     "rate_fitted": true
+    },
+    "P10": {
+     "c_open_matches": true,
+     "c_best": 1328926.89,
+     "c_open": 1932492.18,
+     "floor_ratio": 0.8725,
+     "floor_ratio_range": [
+      0.8725,
+      0.8725
+     ],
+     "r_used": 0.0737,
+     "rate_fitted": false
+    },
+    "P11": {
+     "c_open_matches": true,
+     "c_best": 722500.02,
+     "c_open": 817578.0,
+     "floor_ratio": 0.9312,
+     "floor_ratio_range": [
+      0.9312,
+      0.9312
+     ],
+     "r_used": 0.0737,
+     "rate_fitted": false
+    },
+    "P18": {
+     "c_open_matches": true,
+     "c_best": 222651.27,
+     "c_open": 295173.23,
+     "floor_ratio": 0.7656,
+     "floor_ratio_range": [
+      0.7686,
+      0.7666
+     ],
+     "r_used": 0.0984,
+     "rate_fitted": true
+    }
+   },
+   "by_type": {
+    "price_increase": {
+     "n": 2,
+     "min": 0.9506,
+     "median": 0.966,
+     "max": 0.9815
+    },
+    "renewal": {
+     "n": 2,
+     "min": 0.9679,
+     "median": 0.975,
+     "max": 0.9821
+    },
+    "bundling": {
+     "n": 1,
+     "min": 0.8639,
+     "median": 0.8639,
+     "max": 0.8639
+    },
+    "raw_material": {
+     "n": 2,
+     "min": 0.7656,
+     "median": 0.7994,
+     "max": 0.8331
+    },
+    "capacity": {
+     "n": 1,
+     "min": 0.8725,
+     "median": 0.8725,
+     "max": 0.8725
+    },
+    "quality": {
+     "n": 1,
+     "min": 0.9312,
+     "median": 0.9312,
+     "max": 0.9312
+    }
+   },
+   "min": 0.7656,
+   "median": 0.9312,
+   "max": 0.9821,
+   "samples": [
+    0.7656,
+    0.8331,
+    0.8639,
+    0.8725,
+    0.9312,
+    0.9506,
+    0.9679,
+    0.9815,
+    0.9821
+   ]
+  },
+  "concession_pass_through": {
+   "status": "fitted",
+   "n": 13,
+   "evidence": "per thread: sum(supplier ask drop) / sum(our rise in the best offer's value so far), rounds 2..final, rounds where we moved >0.2% of the opening",
+   "uncertainty": "range is wide (P02 about 0.02: supplier froze while we moved 10 EUR; P01 about 0.4-0.6); case dependent, not predictable from case fields",
+   "min": 0.0,
+   "median": 0.37,
+   "max": 1.75,
+   "samples": [
+    0.0,
+    0.0,
+    0.018,
+    0.039,
+    0.273,
+    0.36,
+    0.37,
+    0.38,
+    0.391,
+    0.413,
+    0.667,
+    0.693,
+    1.75
+   ]
+  },
+  "idle_step": {
+   "status": "fitted",
+   "n": 42,
+   "evidence": "supplier ask drop per round (share of opening) in rounds where we moved <0.2% of the opening",
+   "uncertainty": "mostly 0 or tiny; sometimes a small step; samples listed",
+   "min": 0.0,
+   "median": 0.0,
+   "max": 0.0833,
+   "samples": [
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0001,
+    0.0005,
+    0.0005,
+    0.0008,
+    0.0011,
+    0.0016,
+    0.0017,
+    0.0017,
+    0.0017,
+    0.0017,
+    0.0031,
+    0.0034,
+    0.0065,
+    0.0106,
+    0.013,
+    0.0139,
+    0.039,
+    0.0833
+   ]
+  },
+  "first_reply_drop_with_verified_claims": {
+   "status": "fitted",
+   "n": 18,
+   "evidence": "first supplier reply drop (share of opening) when it verified >=1 cited fact (evidence_router runs)",
+   "uncertainty": "tiny sample; supplier text also moves the effective date after a verified notice-period claim (P01)",
+   "samples": [
+    0.0334,
+    0.0019,
+    0.0123,
+    0.0003,
+    0.0192,
+    0.0033,
+    0.0124,
+    -0.0106,
+    0.0164,
+    0.0271,
+    0.0019,
+    0.0205,
+    0.0161,
+    0.0366,
+    0.1074,
+    0.0062,
+    0.0106,
+    0.0984
+   ]
+  },
+  "first_reply_drop_plain": {
+   "status": "fitted",
+   "n": 18,
+   "evidence": "first supplier reply drop (share of opening), single-supplier cases, no verified claim",
+   "uncertainty": "negative values (supplier raised its price for 90 days) are kept as measured; the mock clips them to 0",
+   "samples": [
+    0.0,
+    0.0003,
+    0.0003,
+    0.0012,
+    0.003,
+    0.0033,
+    0.0055,
+    0.0062,
+    0.0062,
+    0.0106,
+    0.0123,
+    0.0155,
+    0.0164,
+    0.0164,
+    0.017,
+    0.0192,
+    0.0192,
+    0.0229
+   ]
+  },
+  "first_reply_drop_multi_supplier": {
+   "status": "fitted_n1",
+   "n": 1,
+   "evidence": "first reply drop in P05 (rfq, 3 suppliers compete): much larger than single-supplier (7 samples, ONE case)",
+   "uncertainty": "one case, three suppliers; assumed to generalise to every case with >1 supplier",
+   "samples": [
+    -0.0444,
+    -0.0286,
+    0.0833,
+    0.1,
+    0.1389,
+    0.1688,
+    0.2078
+   ]
+  },
+  "final_offer_round": {
+   "status": "fitted",
+   "n": 35,
+   "evidence": "reply index of the first final_offer in each supplier thread (40 dumps, 48 thread-runs)",
+   "uncertainty": "13 threads never sent one (agreed at once, or the run ended); depends little on how much we moved; round limit is 10",
+   "min": 2,
+   "median": 4,
+   "max": 7,
+   "samples": [
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    4,
+    4,
+    4,
+    4,
+    4,
+    4,
+    4,
+    4,
+    4,
+    4,
+    4,
+    4,
+    4,
+    4,
+    4,
+    4,
+    5,
+    5,
+    7
+   ],
+   "threads": [
+    {
+     "run": "confident_router_P01",
+     "supplier": "sup:70110",
+     "round": 5,
+     "idle_moves_before": 0,
+     "buyer_moves_before": 5
+    },
+    {
+     "run": "confident_router_P02",
+     "supplier": "sup:70510",
+     "round": 4,
+     "idle_moves_before": 0,
+     "buyer_moves_before": 4
+    },
+    {
+     "run": "confident_router_P03",
+     "supplier": "sup:70530",
+     "round": null,
+     "idle_moves_before": null,
+     "buyer_moves_before": 0
+    },
+    {
+     "run": "confident_router_P04",
+     "supplier": "sup:70620",
+     "round": 3,
+     "idle_moves_before": 1,
+     "buyer_moves_before": 3
+    },
+    {
+     "run": "confident_router_P05",
+     "supplier": "sup:70210",
+     "round": 5,
+     "idle_moves_before": 2,
+     "buyer_moves_before": 5
+    },
+    {
+     "run": "confident_router_P05",
+     "supplier": "sup:70240",
+     "round": 4,
+     "idle_moves_before": 1,
+     "buyer_moves_before": 4
+    },
+    {
+     "run": "confident_router_P05",
+     "supplier": "sup:70250",
+     "round": 4,
+     "idle_moves_before": 3,
+     "buyer_moves_before": 4
+    },
+    {
+     "run": "confident_router_P07",
+     "supplier": "sup:70610",
+     "round": 4,
+     "idle_moves_before": 1,
+     "buyer_moves_before": 4
+    },
+    {
+     "run": "confident_router_P08",
+     "supplier": "sup:70710",
+     "round": 3,
+     "idle_moves_before": 1,
+     "buyer_moves_before": 3
+    },
+    {
+     "run": "confident_router_P10",
+     "supplier": "sup:70410",
+     "round": 2,
+     "idle_moves_before": 0,
+     "buyer_moves_before": 2
+    },
+    {
+     "run": "confident_router_P11",
+     "supplier": "sup:70140",
+     "round": null,
+     "idle_moves_before": null,
+     "buyer_moves_before": 0
+    },
+    {
+     "run": "confident_router_P18",
+     "supplier": "sup:70740",
+     "round": 2,
+     "idle_moves_before": 1,
+     "buyer_moves_before": 2
+    },
+    {
+     "run": "evidence_router_P01",
+     "supplier": "sup:70110",
+     "round": 4,
+     "idle_moves_before": 0,
+     "buyer_moves_before": 4
+    },
+    {
+     "run": "evidence_router_P02",
+     "supplier": "sup:70510",
+     "round": 4,
+     "idle_moves_before": 0,
+     "buyer_moves_before": 4
+    },
+    {
+     "run": "evidence_router_P03",
+     "supplier": "sup:70530",
+     "round": null,
+     "idle_moves_before": null,
+     "buyer_moves_before": 0
+    },
+    {
+     "run": "evidence_router_P04",
+     "supplier": "sup:70620",
+     "round": 3,
+     "idle_moves_before": 1,
+     "buyer_moves_before": 3
+    },
+    {
+     "run": "evidence_router_P05",
+     "supplier": "sup:70210",
+     "round": 4,
+     "idle_moves_before": 3,
+     "buyer_moves_before": 4
+    },
+    {
+     "run": "evidence_router_P05",
+     "supplier": "sup:70240",
+     "round": null,
+     "idle_moves_before": null,
+     "buyer_moves_before": 0
+    },
+    {
+     "run": "evidence_router_P05",
+     "supplier": "sup:70250",
+     "round": 3,
+     "idle_moves_before": 2,
+     "buyer_moves_before": 3
+    },
+    {
+     "run": "evidence_router_P07",
+     "supplier": "sup:70610",
+     "round": 4,
+     "idle_moves_before": 1,
+     "buyer_moves_before": 4
+    },
+    {
+     "run": "evidence_router_P08",
+     "supplier": "sup:70710",
+     "round": 3,
+     "idle_moves_before": 1,
+     "buyer_moves_before": 3
+    },
+    {
+     "run": "evidence_router_P10",
+     "supplier": "sup:70410",
+     "round": 2,
+     "idle_moves_before": 0,
+     "buyer_moves_before": 2
+    },
+    {
+     "run": "evidence_router_P11",
+     "supplier": "sup:70140",
+     "round": 4,
+     "idle_moves_before": 3,
+     "buyer_moves_before": 4
+    },
+    {
+     "run": "evidence_router_P18",
+     "supplier": "sup:70740",
+     "round": 2,
+     "idle_moves_before": 1,
+     "buyer_moves_before": 2
+    },
+    {
+     "run": "guarded_rational_P01",
+     "supplier": "sup:70110",
+     "round": 4,
+     "idle_moves_before": 2,
+     "buyer_moves_before": 4
+    },
+    {
+     "run": "guarded_rational_P02",
+     "supplier": "sup:70510",
+     "round": 4,
+     "idle_moves_before": 1,
+     "buyer_moves_before": 4
+    },
+    {
+     "run": "guarded_rational_P03",
+     "supplier": "sup:70530",
+     "round": 3,
+     "idle_moves_before": 1,
+     "buyer_moves_before": 3
+    },
+    {
+     "run": "guarded_rational_P04",
+     "supplier": "sup:70620",
+     "round": 3,
+     "idle_moves_before": 1,
+     "buyer_moves_before": 3
+    },
+    {
+     "run": "guarded_rational_P05",
+     "supplier": "sup:70210",
+     "round": null,
+     "idle_moves_before": null,
+     "buyer_moves_before": 0
+    },
+    {
+     "run": "guarded_rational_P05",
+     "supplier": "sup:70240",
+     "round": 4,
+     "idle_moves_before": 2,
+     "buyer_moves_before": 4
+    },
+    {
+     "run": "guarded_rational_P05",
+     "supplier": "sup:70250",
+     "round": null,
+     "idle_moves_before": null,
+     "buyer_moves_before": 0
+    },
+    {
+     "run": "guarded_rational_P07",
+     "supplier": "sup:70610",
+     "round": 4,
+     "idle_moves_before": 1,
+     "buyer_moves_before": 4
+    },
+    {
+     "run": "guarded_rational_P08",
+     "supplier": "sup:70710",
+     "round": 3,
+     "idle_moves_before": 1,
+     "buyer_moves_before": 3
+    },
+    {
+     "run": "guarded_rational_P10",
+     "supplier": "sup:70410",
+     "round": 2,
+     "idle_moves_before": 1,
+     "buyer_moves_before": 2
+    },
+    {
+     "run": "guarded_rational_P11",
+     "supplier": "sup:70140",
+     "round": 7,
+     "idle_moves_before": 1,
+     "buyer_moves_before": 7
+    },
+    {
+     "run": "guarded_rational_P18",
+     "supplier": "sup:70740",
+     "round": 3,
+     "idle_moves_before": 1,
+     "buyer_moves_before": 3
+    },
+    {
+     "run": "reciprocal_evidence_P01",
+     "supplier": "sup:70110",
+     "round": 4,
+     "idle_moves_before": 1,
+     "buyer_moves_before": 4
+    },
+    {
+     "run": "reciprocal_evidence_P02",
+     "supplier": "sup:70510",
+     "round": 4,
+     "idle_moves_before": 3,
+     "buyer_moves_before": 4
+    },
+    {
+     "run": "reciprocal_evidence_P03",
+     "supplier": "sup:70530",
+     "round": null,
+     "idle_moves_before": null,
+     "buyer_moves_before": 0
+    },
+    {
+     "run": "reciprocal_evidence_P04",
+     "supplier": "sup:70620",
+     "round": 3,
+     "idle_moves_before": 0,
+     "buyer_moves_before": 3
+    },
+    {
+     "run": "reciprocal_evidence_P05",
+     "supplier": "sup:70210",
+     "round": null,
+     "idle_moves_before": null,
+     "buyer_moves_before": 0
+    },
+    {
+     "run": "reciprocal_evidence_P05",
+     "supplier": "sup:70240",
+     "round": null,
+     "idle_moves_before": null,
+     "buyer_moves_before": 0
+    },
+    {
+     "run": "reciprocal_evidence_P05",
+     "supplier": "sup:70250",
+     "round": null,
+     "idle_moves_before": null,
+     "buyer_moves_before": 0
+    },
+    {
+     "run": "reciprocal_evidence_P07",
+     "supplier": "sup:70610",
+     "round": 4,
+     "idle_moves_before": 2,
+     "buyer_moves_before": 4
+    },
+    {
+     "run": "reciprocal_evidence_P08",
+     "supplier": "sup:70710",
+     "round": null,
+     "idle_moves_before": null,
+     "buyer_moves_before": 0
+    },
+    {
+     "run": "reciprocal_evidence_P10",
+     "supplier": "sup:70410",
+     "round": 2,
+     "idle_moves_before": 0,
+     "buyer_moves_before": 1
+    },
+    {
+     "run": "reciprocal_evidence_P11",
+     "supplier": "sup:70140",
+     "round": null,
+     "idle_moves_before": null,
+     "buyer_moves_before": 0
+    },
+    {
+     "run": "reciprocal_evidence_P18",
+     "supplier": "sup:70740",
+     "round": null,
+     "idle_moves_before": null,
+     "buyer_moves_before": 0
+    }
+   ]
+  },
+  "walk_after_pushes_post_final": {
+   "status": "fitted",
+   "n": 7,
+   "evidence": "pushes (our term sheets that did not meet the ask) after final_offer before the supplier walked away",
+   "uncertainty": "7 walks but only 3 cases (P05 two suppliers, P10): walks: P05 70210 (4), 70250 (1 and 3), P10 (1,1,1). Not walks: P01 2 pushes then price re-quoted for 90 days, P07 1 push matched",
+   "samples": [
+    1,
+    1,
+    1,
+    1,
+    1,
+    3,
+    4
+   ],
+   "walks": [
+    {
+     "run": "confident_router_P05",
+     "supplier": "sup:70210",
+     "pushes_after_final": 4
+    },
+    {
+     "run": "confident_router_P05",
+     "supplier": "sup:70250",
+     "pushes_after_final": 1
+    },
+    {
+     "run": "confident_router_P10",
+     "supplier": "sup:70410",
+     "pushes_after_final": 1
+    },
+    {
+     "run": "evidence_router_P05",
+     "supplier": "sup:70210",
+     "pushes_after_final": 1
+    },
+    {
+     "run": "evidence_router_P05",
+     "supplier": "sup:70250",
+     "pushes_after_final": 3
+    },
+    {
+     "run": "evidence_router_P10",
+     "supplier": "sup:70410",
+     "pushes_after_final": 1
+    },
+    {
+     "run": "guarded_rational_P10",
+     "supplier": "sup:70410",
+     "pushes_after_final": 1
+    }
+   ],
+   "no_walk": [
+    {
+     "run": "confident_router_P01",
+     "supplier": "sup:70110",
+     "pushes_after_final": 2
+    },
+    {
+     "run": "confident_router_P02",
+     "supplier": "sup:70510",
+     "pushes_after_final": 0
+    },
+    {
+     "run": "confident_router_P04",
+     "supplier": "sup:70620",
+     "pushes_after_final": 0
+    },
+    {
+     "run": "confident_router_P05",
+     "supplier": "sup:70240",
+     "pushes_after_final": 0
+    },
+    {
+     "run": "confident_router_P07",
+     "supplier": "sup:70610",
+     "pushes_after_final": 1
+    },
+    {
+     "run": "confident_router_P08",
+     "supplier": "sup:70710",
+     "pushes_after_final": 0
+    },
+    {
+     "run": "confident_router_P18",
+     "supplier": "sup:70740",
+     "pushes_after_final": 0
+    },
+    {
+     "run": "evidence_router_P01",
+     "supplier": "sup:70110",
+     "pushes_after_final": 0
+    },
+    {
+     "run": "evidence_router_P02",
+     "supplier": "sup:70510",
+     "pushes_after_final": 0
+    },
+    {
+     "run": "evidence_router_P04",
+     "supplier": "sup:70620",
+     "pushes_after_final": 0
+    },
+    {
+     "run": "evidence_router_P07",
+     "supplier": "sup:70610",
+     "pushes_after_final": 1
+    },
+    {
+     "run": "evidence_router_P08",
+     "supplier": "sup:70710",
+     "pushes_after_final": 0
+    },
+    {
+     "run": "evidence_router_P11",
+     "supplier": "sup:70140",
+     "pushes_after_final": 0
+    },
+    {
+     "run": "evidence_router_P18",
+     "supplier": "sup:70740",
+     "pushes_after_final": 0
+    },
+    {
+     "run": "guarded_rational_P01",
+     "supplier": "sup:70110",
+     "pushes_after_final": 0
+    },
+    {
+     "run": "guarded_rational_P02",
+     "supplier": "sup:70510",
+     "pushes_after_final": 0
+    },
+    {
+     "run": "guarded_rational_P03",
+     "supplier": "sup:70530",
+     "pushes_after_final": 0
+    },
+    {
+     "run": "guarded_rational_P04",
+     "supplier": "sup:70620",
+     "pushes_after_final": 0
+    },
+    {
+     "run": "guarded_rational_P05",
+     "supplier": "sup:70240",
+     "pushes_after_final": 0
+    },
+    {
+     "run": "guarded_rational_P07",
+     "supplier": "sup:70610",
+     "pushes_after_final": 1
+    },
+    {
+     "run": "guarded_rational_P08",
+     "supplier": "sup:70710",
+     "pushes_after_final": 0
+    },
+    {
+     "run": "guarded_rational_P11",
+     "supplier": "sup:70140",
+     "pushes_after_final": 0
+    },
+    {
+     "run": "guarded_rational_P18",
+     "supplier": "sup:70740",
+     "pushes_after_final": 0
+    },
+    {
+     "run": "reciprocal_evidence_P01",
+     "supplier": "sup:70110",
+     "pushes_after_final": 0
+    },
+    {
+     "run": "reciprocal_evidence_P02",
+     "supplier": "sup:70510",
+     "pushes_after_final": 0
+    },
+    {
+     "run": "reciprocal_evidence_P04",
+     "supplier": "sup:70620",
+     "pushes_after_final": 0
+    },
+    {
+     "run": "reciprocal_evidence_P07",
+     "supplier": "sup:70610",
+     "pushes_after_final": 0
+    },
+    {
+     "run": "reciprocal_evidence_P10",
+     "supplier": "sup:70410",
+     "pushes_after_final": 0
+    }
+   ]
+  },
+  "final_offer_ask_vs_opening": {
+   "status": "fitted",
+   "n": 35,
+   "evidence": "value of the final_offer / opening value (at the standard payment days)",
+   "uncertainty": "the supplier's frozen position: how far it actually came down in all dumps",
+   "min": 0.7532,
+   "median": 0.9814,
+   "max": 1.0537,
+   "samples": [
+    0.7532,
+    0.7778,
+    0.8182,
+    0.8889,
+    0.9508,
+    0.9512,
+    0.9585,
+    0.9628,
+    0.9673,
+    0.9705,
+    0.9722,
+    0.9722,
+    0.9738,
+    0.9738,
+    0.9787,
+    0.9801,
+    0.9814,
+    0.9814,
+    0.9836,
+    0.9836,
+    0.9836,
+    0.9839,
+    0.9907,
+    0.9907,
+    0.9945,
+    0.9961,
+    0.9961,
+    0.9961,
+    0.9962,
+    0.9997,
+    0.9997,
+    0.9997,
+    1.0,
+    1.0065,
+    1.0537
+   ]
+  },
+  "payment_days_trade": {
+   "status": "fitted",
+   "n": 5,
+   "evidence": "= supplier_interest_rate: a longer payment term costs the buyer about r * days / 360 of the price",
+   "uncertainty": "pairs fit one rate per case with spread; whether the supplier accepts 90 days at all is the hard limit below"
+  },
+  "payment_days_hard_limit_30": {
+   "status": "fitted_n1",
+   "n": 1,
+   "evidence": "'30 days is our absolute limit / strictly tied to 30 days' said by [('P05', 'sup:70210')]",
+   "uncertainty": "1 of 12 threads (8%), ONE thread: P05 sup:70210, a small owner-run shop; the other threads traded 60 or 90 days for a higher price (the 'absolute limit' of P05 sup:70240 is about price, not days)",
+   "share": 0.083
+  },
+  "volume_cap": {
+   "status": "fitted_n1",
+   "n": 1,
+   "evidence": "P10 capacity: 'our allocation cap strictly limits the volume to 19,890 pieces per year' (middle of options 16379/19890/23400); [('P10', 'sup:70410')]. The cap was lifted for a 23,400 pcs / 24 months sheet (run of ['reciprocal_evidence']); the other agents never asked for 24 months",
+   "uncertainty": "one case; the lift by contract length is one run; the mock applies it to every capacity case (assumed) and lifts at >= 24 months",
+   "cap_option_index": 1,
+   "lift_contract_months": 24
+  },
+  "history_settle_share_of_ask": {
+   "status": "fitted",
+   "n": 150,
+   "evidence": "world.sqlite negotiation_history: settled_pct / asked_pct for past asks >= 1 % (share of a price increase the supplier kept)",
+   "uncertainty": "past real-world events of the fictional firm, not arena sessions; the arena's suppliers may differ; used as a cross-check of the floor, not in the mock",
+   "min": -1.923,
+   "median": 0.0,
+   "max": 0.788,
+   "q25": 0.0,
+   "q75": 0.19,
+   "share_settled_at_or_below_zero": 0.733
+  },
+  "accept_tolerance": {
+   "status": "assumed",
+   "n": 4,
+   "evidence": "four observations only BOUND it: agreed at an offer worth less than its ask in P03 (-1.1%: 438.21 at 90 vs at 30 days, with a 36-month contract) and P07 (-1%, payment days); refused P01 (-1.6%) and P05 70210 (30 vs 90 days)",
+   "uncertainty": "the value inside [0, 0.016) is assumed uniform; P03's acceptance may be paid for by the contract length, not by a tolerance",
+   "min": 0.0,
+   "max": 0.016
+  },
+  "answers_to_questions": {
+   "status": "fitted",
+   "n": 3,
+   "evidence": "supplier questions in the dumps: 'Which volume can you commit to?' (P03,P08,P10, when we have a volume term), 'Which figures is that based on / please send the data' (P01, after an unsupported claim of analysis); 'breakdown' requests answered by cost-breakdown.xlsx",
+   "uncertainty": "no dump shows a concession after we answer; the mock only asks and ignores the answer (assumed), cited facts that verify earn the first-reply bonus"
+  },
+  "single_sample_halfwidth": {
+   "status": "assumed",
+   "n": 0,
+   "evidence": "a case type with one sample draws its opening ratio and floor within +-0.03 of it",
+   "uncertainty": "no evidence; the width is a guess",
+   "value": 0.03
+  },
+  "pass_through_jitter": {
+   "status": "assumed",
+   "n": 0,
+   "evidence": "each supplier's pass-through is a fitted sample times U(0.85, 1.15), so seeds differ",
+   "uncertainty": "no evidence; a guess",
+   "low": 0.85,
+   "high": 1.15
+  },
+  "standard_terms_gaps": {
+   "status": "assumed",
+   "n": 0,
+   "evidence": "standard lead time = the slowest option; standard ppm = 2.5 x the loosest option (P11: 6400 vs 2500); chargeback = first option",
+   "uncertainty": "lead time: P10 54 and P05 52 days sit near the slowest options; ppm: one sample",
+   "lead": "slowest option",
+   "ppm_multiplier": 2.5
+  },
+  "floor_cap": {
+   "status": "assumed",
+   "n": 0,
+   "evidence": "the floor is at most 0.995 of the opening, so a supplier always has room to concede",
+   "uncertainty": "no evidence",
+   "value": 0.995
+  },
+  "final_at_floor_margin": {
+   "status": "assumed",
+   "n": 0,
+   "evidence": "a supplier whose ask is within 0.3% of its floor sends its final_offer",
+   "uncertainty": "no evidence",
+   "value": 1.003
+  },
+  "idle_threshold": {
+   "status": "assumed",
+   "n": 0,
+   "evidence": "we moved when our best offer's value rose by more than 0.2% of the opening",
+   "uncertainty": "a threshold of the analysis, not a measurement",
+   "value": 0.002
+  },
+  "volume_cap_applies_to": {
+   "status": "assumed",
+   "n": 0,
+   "evidence": "the volume cap (P10) is drawn for every capacity case: a capacity case has the cap at its middle volume option",
+   "uncertainty": "one case; capacity cases of the hidden final may differ",
+   "probability": 1.0
+  },
+  "overpay_agreed_at_buyer_price": {
+   "status": "assumed",
+   "n": 0,
+   "evidence": "a sheet worth more than the ask is agreed as sent (term sheets bind)",
+   "uncertainty": "no dump shows it",
+   "value": true
+  },
+  "contract_volume_levers_free": {
+   "status": "assumed",
+   "n": 0,
+   "evidence": "contract length and volume change nothing in the supplier's cash value (cost.supplier_value), so they are accepted at the same price; P03 accepted 36 months, P10 lifted its cap for 24 months",
+   "uncertainty": "2 cases of evidence, no case where it refused",
+   "value": true
+  }
+ },
+ "pass_through_rows": [
+  [
+   "P01",
+   0.0283,
+   0.0072
+  ],
+  [
+   "P01",
+   0.014,
+   0.0058
+  ],
+  [
+   "P01",
+   0.0091,
+   0.0051
+  ],
+  [
+   "P01",
+   0.0056,
+   0.0036
+  ],
+  [
+   "P02",
+   0.0148,
+   0.0009
+  ],
+  [
+   "P02",
+   0.0198,
+   0.0
+  ],
+  [
+   "P02",
+   0.0149,
+   0.0
+  ],
+  [
+   "P04",
+   0.002,
+   0.0
+  ],
+  [
+   "P04",
+   0.004,
+   0.0
+  ],
+  [
+   "P05",
+   0.0007,
+   0.0139
+  ],
+  [
+   "P05",
+   0.0041,
+   0.0
+  ],
+  [
+   "P05",
+   0.0159,
+   0.0139
+  ],
+  [
+   "P05",
+   0.0,
+   0.0
+  ],
+  [
+   "P05",
+   0.0079,
+   0.0063
+  ],
+  [
+   "P05",
+   0.0047,
+   0.0157
+  ],
+  [
+   "P05",
+   0.0,
+   0.0
+  ],
+  [
+   "P05",
+   0.0004,
+   0.013
+  ],
+  [
+   "P05",
+   0.0,
+   0.0
+  ],
+  [
+   "P05",
+   0.0,
+   0.0
+  ],
+  [
+   "P07",
+   0.0017,
+   0.0017
+  ],
+  [
+   "P07",
+   0.0034,
+   0.0034
+  ],
+  [
+   "P07",
+   0.0052,
+   0.0034
+  ],
+  [
+   "P08",
+   0.0,
+   0.0
+  ],
+  [
+   "P08",
+   0.0752,
+   0.0294
+  ],
+  [
+   "P10",
+   0.0075,
+   0.0031
+  ],
+  [
+   "P18",
+   0.0,
+   0.0
+  ],
+  [
+   "P01",
+   0.0193,
+   0.0093
+  ],
+  [
+   "P01",
+   0.0112,
+   0.0036
+  ],
+  [
+   "P01",
+   0.0076,
+   0.0029
+  ],
+  [
+   "P02",
+   0.0151,
+   0.0014
+  ],
+  [
+   "P02",
+   0.0199,
+   0.0006
+  ],
+  [
+   "P02",
+   0.0148,
+   0.0
+  ],
+  [
+   "P04",
+   0.002,
+   0.0
+  ],
+  [
+   "P04",
+   0.004,
+   0.0
+  ],
+  [
+   "P05",
+   0.0007,
+   0.0833
+  ],
+  [
+   "P05",
+   0.0,
+   0.0
+  ],
+  [
+   "P05",
+   0.0,
+   0.0
+  ],
+  [
+   "P05",
+   0.0003,
+   0.039
+  ],
+  [
+   "P05",
+   0.0018,
+   0.0
+  ],
+  [
+   "P07",
+   0.0017,
+   0.0034
+  ],
+  [
+   "P07",
+   0.0034,
+   0.0034
+  ],
+  [
+   "P07",
+   0.0052,
+   0.0034
+  ],
+  [
+   "P08",
+   0.0,
+   0.0065
+  ],
+  [
+   "P08",
+   0.0245,
+   0.0163
+  ],
+  [
+   "P10",
+   0.0168,
+   0.0062
+  ],
+  [
+   "P11",
+   0.0,
+   0.0106
+  ],
+  [
+   "P11",
+   0.0,
+   0.0
+  ],
+  [
+   "P11",
+   0.0,
+   0.0
+  ],
+  [
+   "P18",
+   0.0,
+   0.0
+  ],
+  [
+   "P01",
+   0.0,
+   0.0001
+  ],
+  [
+   "P01",
+   0.0,
+   0.0
+  ],
+  [
+   "P01",
+   0.0028,
+   0.0028
+  ],
+  [
+   "P02",
+   0.0011,
+   0.0011
+  ],
+  [
+   "P02",
+   0.0033,
+   0.0009
+  ],
+  [
+   "P02",
+   0.0055,
+   0.0006
+  ],
+  [
+   "P03",
+   0.0011,
+   0.0
+  ],
+  [
+   "P03",
+   0.0033,
+   0.0
+  ],
+  [
+   "P04",
+   0.002,
+   0.0
+  ],
+  [
+   "P04",
+   0.004,
+   0.0
+  ],
+  [
+   "P05",
+   0.0,
+   0.0
+  ],
+  [
+   "P05",
+   0.0,
+   0.0
+  ],
+  [
+   "P05",
+   0.0047,
+   -0.0093
+  ],
+  [
+   "P07",
+   0.0017,
+   0.0017
+  ],
+  [
+   "P07",
+   0.0034,
+   0.0034
+  ],
+  [
+   "P07",
+   0.0052,
+   0.0034
+  ],
+  [
+   "P08",
+   0.0016,
+   0.0016
+  ],
+  [
+   "P08",
+   0.0033,
+   0.0016
+  ],
+  [
+   "P10",
+   0.0009,
+   0.0031
+  ],
+  [
+   "P11",
+   0.0011,
+   0.0
+  ],
+  [
+   "P11",
+   0.0034,
+   0.0
+  ],
+  [
+   "P11",
+   0.0055,
+   0.0106
+  ],
+  [
+   "P11",
+   0.0079,
+   0.0
+  ],
+  [
+   "P11",
+   0.01,
+   0.0
+  ],
+  [
+   "P11",
+   0.0121,
+   0.0
+  ],
+  [
+   "P18",
+   0.0,
+   0.0
+  ],
+  [
+   "P18",
+   0.0048,
+   0.0
+  ],
+  [
+   "P01",
+   0.0068,
+   0.0115
+  ],
+  [
+   "P01",
+   0.0029,
+   0.0029
+  ],
+  [
+   "P01",
+   0.0009,
+   0.0
+  ],
+  [
+   "P02",
+   0.002,
+   0.0008
+  ],
+  [
+   "P02",
+   0.002,
+   0.0005
+  ],
+  [
+   "P02",
+   0.002,
+   0.0005
+  ],
+  [
+   "P03",
+   0.0051,
+   0.0
+  ],
+  [
+   "P03",
+   0.0254,
+   0.0
+  ],
+  [
+   "P04",
+   0.004,
+   0.0
+  ],
+  [
+   "P04",
+   0.0323,
+   0.0
+  ],
+  [
+   "P07",
+   0.0087,
+   0.0087
+  ],
+  [
+   "P07",
+   0.0017,
+   0.0017
+  ],
+  [
+   "P07",
+   0.0017,
+   0.0017
+  ],
+  [
+   "P08",
+   0.0017,
+   0.0
+  ],
+  [
+   "P11",
+   0.0268,
+   0.0
+  ],
+  [
+   "P11",
+   0.0028,
+   0.0106
+  ],
+  [
+   "P18",
+   0.0016,
+   0.0
+  ]
+ ],
+ "opening_rows": [
+  {
+   "case": "P01",
+   "type": "price_increase",
+   "supplier": "sup:70110",
+   "opening": 138.55,
+   "vs_current": 1.095,
+   "vs_fallback": 1.0139
+  },
+  {
+   "case": "P02",
+   "type": "price_increase",
+   "supplier": "sup:70510",
+   "opening": 370.96,
+   "vs_current": 1.065,
+   "vs_fallback": 0.9861
+  },
+  {
+   "case": "P03",
+   "type": "renewal",
+   "supplier": "sup:70530",
+   "opening": 438.21,
+   "vs_current": 1.0617,
+   "vs_fallback": 0.9923
+  },
+  {
+   "case": "P04",
+   "type": "renewal",
+   "supplier": "sup:70620",
+   "opening": 4.96,
+   "vs_current": 1.1298,
+   "vs_fallback": 1.0553
+  },
+  {
+   "case": "P05",
+   "type": "rfq",
+   "supplier": "sup:70210",
+   "opening": 36.0,
+   "vs_current": 0.9893,
+   "vs_fallback": 0.9893
+  },
+  {
+   "case": "P05",
+   "type": "rfq",
+   "supplier": "sup:70240",
+   "opening": 31.5,
+   "vs_current": 0.8656,
+   "vs_fallback": 0.8656
+  },
+  {
+   "case": "P05",
+   "type": "rfq",
+   "supplier": "sup:70250",
+   "opening": 38.5,
+   "vs_current": 1.058,
+   "vs_fallback": 1.058
+  },
+  {
+   "case": "P07",
+   "type": "bundling",
+   "supplier": "sup:70610",
+   "opening": 5.74,
+   "vs_current": 0.9126,
+   "vs_fallback": 0.8307
+  },
+  {
+   "case": "P08",
+   "type": "raw_material",
+   "supplier": "sup:70710",
+   "opening": 6.05,
+   "vs_current": 1.1101,
+   "vs_fallback": 1.0577
+  },
+  {
+   "case": "P10",
+   "type": "capacity",
+   "supplier": "sup:70410",
+   "opening": 32.2,
+   "vs_current": 1.0773,
+   "vs_fallback": 0.8619
+  },
+  {
+   "case": "P11",
+   "type": "quality",
+   "supplier": "sup:70140",
+   "opening": 47.0,
+   "vs_current": 1.041,
+   "vs_fallback": 0.982
+  },
+  {
+   "case": "P18",
+   "type": "raw_material",
+   "supplier": "sup:70740",
+   "opening": 6.1,
+   "vs_current": 1.0445,
+   "vs_fallback": 0.9951
+  }
+ ]
+}

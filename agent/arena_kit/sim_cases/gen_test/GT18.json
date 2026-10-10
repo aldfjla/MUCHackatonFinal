@@ -1,0 +1,98 @@
+{
+ "case_id": "case:GT18",
+ "set": "practice",
+ "type": "raw_material",
+ "title": "Base price and surcharge for Round bar C45 dia 50 mm, cold drawn",
+ "briefing": "You negotiate for Hollerau Pumpenwerke with Blankstahl Werdenfels GmbH. Base price and surcharge for Round bar C45 dia 50 mm, cold drawn. Need: 49150 kg a year. Category goal: stabilise a strategic supply: a healthy supplier and stable prices count, not only the lowest price. Score: the lowest total cost C as defined in the rules, valued with this case's rates (need lead time 14 days). There is no fallback supplier: without a deal the demand is bought at the fallback price. Must-haves: none. Prepare from the data package.",
+ "trigger_doc": "doc:20260922-70740-P18",
+ "parts": [
+  "part:370012"
+ ],
+ "suppliers": [
+  "sup:70740"
+ ],
+ "negotiable": [
+  "unit_price",
+  "index_clause",
+  "payment_days",
+  "contract_months"
+ ],
+ "fixed_terms": {
+  "lead_time_days": 14,
+  "volume_per_year": 49150,
+  "effective_date": "2027-01-01",
+  "incoterm": "DAP",
+  "tooling_eur": 0
+ },
+ "term_options": {
+  "index_clause": [
+   null,
+   {
+    "series": "PPI-C2431",
+    "material_share": 0.82,
+    "deadband_pct": 0,
+    "base_month": "2026-08"
+   },
+   {
+    "series": "PPI-C2431",
+    "material_share": 0.82,
+    "deadband_pct": 3,
+    "base_month": "2026-08"
+   },
+   {
+    "series": "PPI-C2431",
+    "material_share": 0.82,
+    "deadband_pct": 5,
+    "base_month": "2026-08"
+   }
+  ],
+  "payment_days": [
+   14,
+   30,
+   45,
+   60,
+   90
+  ],
+  "contract_months": [
+   12,
+   24,
+   36
+  ]
+ },
+ "buyer": {
+  "need_per_year": 49150,
+  "horizon_years": 1,
+  "current_unit_price": 1.43,
+  "fallback_unit_price": 1.61,
+  "interest_rate": 0.06,
+  "reference_payment_days": 60,
+  "need_lead_time_days": 14,
+  "category_goal": "stabilise",
+  "fallback_risk_pct": 5,
+  "late_cost_per_day": 20,
+  "cost_per_defect": 0,
+  "freight_eur_per_unit": {
+   "EXW": 0.1,
+   "FCA": 0.07,
+   "DAP": 0.0
+  },
+  "index_paths": {
+   "PPI-C2431": 0.08
+  },
+  "must_haves": [],
+  "alternative": {
+   "kind": "none",
+   "ref": null,
+   "terms": {}
+  },
+  "sustainable_margin_pct": 4,
+  "relationship_eur_per_point": 1810
+ },
+ "round_limit": 10,
+ "refs": [
+  "doc:20260922-70740-P18",
+  "ctr:4600070740",
+  "sc:70740@2026Q3"
+ ],
+ "hosted": true
+}

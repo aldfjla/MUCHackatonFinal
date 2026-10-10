@@ -1,0 +1,74 @@
+{
+ "case_id": "case:GT02",
+ "set": "practice",
+ "type": "renewal",
+ "title": "Contract renewal for Hex bolt ISO 4017 M16x60 8.8, zinc",
+ "briefing": "You negotiate for Hollerau Pumpenwerke with Verbindungstechnik Mairhofer GmbH. Contract renewal for Hex bolt ISO 4017 M16x60 8.8, zinc. Need: 155000 pc a year. Category goal: routine: fewer suppliers and less process cost. Score: the lowest total cost C as defined in the rules, valued with this case's rates (need lead time 5 days). There is no fallback supplier: without a deal the demand is bought at the fallback price. Must-haves: none. Prepare from the data package.",
+ "trigger_doc": "doc:20260817-70650-M1",
+ "parts": [
+  "part:360011"
+ ],
+ "suppliers": [
+  "sup:70650"
+ ],
+ "negotiable": [
+  "unit_price",
+  "payment_days",
+  "contract_months"
+ ],
+ "fixed_terms": {
+  "lead_time_days": 5,
+  "volume_per_year": 155000,
+  "effective_date": "2027-01-01",
+  "index_clause": null,
+  "incoterm": "DAP",
+  "tooling_eur": 0
+ },
+ "term_options": {
+  "payment_days": [
+   14,
+   30,
+   45,
+   60,
+   90
+  ],
+  "contract_months": [
+   12,
+   24,
+   36
+  ]
+ },
+ "buyer": {
+  "need_per_year": 155000,
+  "horizon_years": 2,
+  "current_unit_price": 0.38,
+  "fallback_unit_price": 0.41,
+  "interest_rate": 0.04,
+  "reference_payment_days": 60,
+  "need_lead_time_days": 5,
+  "category_goal": "routine",
+  "fallback_risk_pct": 5,
+  "late_cost_per_day": 130,
+  "cost_per_defect": 7,
+  "freight_eur_per_unit": {
+   "EXW": 0.0,
+   "FCA": 0.0,
+   "DAP": 0.0
+  },
+  "index_paths": {},
+  "must_haves": [],
+  "alternative": {
+   "kind": "none",
+   "ref": null,
+   "terms": {}
+  },
+  "index_risk_pct": 2
+ },
+ "round_limit": 10,
+ "refs": [
+  "doc:20260817-70650-M1",
+  "ctr:4600070650",
+  "sc:70650@2026Q3"
+ ],
+ "hosted": true
+}

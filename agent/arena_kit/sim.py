@@ -8,6 +8,7 @@ final offer from round 5 and walks away if you push after that. It checks cited 
 whether the ID exists. The simulator teaches the contract; the real suppliers think for themselves.
 
     arena-sim serve [--port 8000] [--data <data package>] [--event-code sim] [--no-clock]
+                    [--supplier real --seed N] [--cases <folder>]
 
 --no-clock switches the 60-second rule off (threads wait forever) to try the API by hand.
 """
@@ -22,6 +23,7 @@ import json
 import re
 import threading
 import time
+import warnings
 from pathlib import Path
 
 from .cost import closing_terms, cost_breakdown, must_haves_ok, score, total_cost
@@ -144,7 +146,8 @@ class Sim:
         th["messages"].append(msg)
         return msg
 
-    def _answer(self, s, th, msg, sheets):
+    def _claims(self, s, th, msg):
+        """Check the cited data: one result per ref (at most 3), and the files the message asks for."""
         results = []
         for i, ref in enumerate(list(dict.fromkeys(msg.get("refs", []) + ID_RE.findall(msg.get("body", ""))))[:3]):
             known = ref in self.facts or ref in s["case"].get("facts", {}) or ref in s["offers"]
@@ -155,6 +158,10 @@ class Sim:
             if known:
                 s["used"].add(seen)
         files = ["cost-breakdown.xlsx"] if "breakdown" in msg.get("body", "").lower() else []
+        return results, files
+
+    def _answer(self, s, th, msg, sheets):
+        results, files = self._claims(s, th, msg)
         price = round(max(th["opening"] * FLOOR, th["stated"]["unit_price"] - th["opening"] * STEP), 2)
         best = max(sheets, key=lambda t: t["unit_price"]) if sheets else None
         if best is None:
@@ -178,6 +185,33 @@ class Sim:
             }  # the practice shape: the move and the supplier's reasons in words
         )
         return reply
+
+    def _opening(self, case, i, sup, current):
+        return round((current or case["buyer"]["fallback_unit_price"]) * (1 + OPEN_UP + 0.02 * i), 2)
+
+    def _standard(self, case, sup):
+        return {f: (case["term_options"].get(f) or [None])[0] for f in case["negotiable"][1:]}
+
+    def _init_thread(self, s, th, i):
+        """Hook: a subclass gives each supplier thread its own behaviour (here: one fixed script)."""
+
+    def _bounds(self, case, ths):
+        """C_open (the cheapest opening quote) and C_best (the cheapest package this script accepts)."""
+        c_open = min(total_cost(case, {"unit_price": th["opening"]}, th["standard"]) for th in ths.values())
+        # the best this script would ever accept: its floor price, any allowed values of the other terms
+        options = [case["term_options"].get(f) or [None] for f in case["negotiable"][1:]]
+        c_best = min(
+            total_cost(
+                case,
+                {
+                    **dict(zip(case["negotiable"][1:], combo, strict=True)),
+                    "unit_price": round(th["opening"] * FLOOR, 2),
+                },
+            )
+            for th in ths.values()
+            for combo in itertools.product(*options)
+        )
+        return c_open, c_best
 
     def _check(self, case, terms, th):
         if set(terms) != set(case["negotiable"]) or not (terms.get("unit_price") or 0) > 0:
@@ -216,8 +250,8 @@ class Sim:
             "late": set(),
         }
         for i, sup in enumerate(case["suppliers"]):
-            opening = round((current or case["buyer"]["fallback_unit_price"]) * (1 + OPEN_UP + 0.02 * i), 2)
-            standard = {f: (case["term_options"].get(f) or [None])[0] for f in case["negotiable"][1:]}
+            opening = self._opening(case, i, sup, current)
+            standard = self._standard(case, sup)
             th = s["threads"][sup] = {
                 "key": sup.split(":", 1)[1],
                 "round": 0,
@@ -230,7 +264,8 @@ class Sim:
                 "standard": standard,
                 "opening": opening,
             }
-            self._mail(s, th, "open", {"unit_price": opening}, "Our quote is attached.", ["quote.pdf"])
+            self._init_thread(s, th, i)
+            self._mail(s, th, "open", th.pop("first", {"unit_price": opening}), "Our quote is attached.", ["quote.pdf"])
         self.sessions[sid] = s
         return {
             "session_id": sid,
@@ -284,20 +319,7 @@ class Sim:
 
     def _end(self, s, reason, sup):
         case, ths = s["case"], s["threads"]
-        c_open = min(total_cost(case, {"unit_price": th["opening"]}, th["standard"]) for th in ths.values())
-        # the best this script would ever accept: its floor price, any allowed values of the other terms
-        options = [case["term_options"].get(f) or [None] for f in case["negotiable"][1:]]
-        c_best = min(
-            total_cost(
-                case,
-                {
-                    **dict(zip(case["negotiable"][1:], combo, strict=True)),
-                    "unit_price": round(th["opening"] * FLOOR, 2),
-                },
-            )
-            for th in ths.values()
-            for combo in itertools.product(*options)
-        )
+        c_open, c_best = self._bounds(case, ths)
         alt = case["buyer"].get("alternative") or {}
         c_alt = total_cost(case, alt["terms"]) if alt.get("terms", {}).get("unit_price") else None
         r = {
@@ -529,7 +551,7 @@ def create_app(sim):
         if post:
             now, calls = time.monotonic(), sim.calls.setdefault(key, [])
             calls[:] = [t for t in calls if now - t < 1]
-            if len(calls) >= MAX_CALLS:
+            if len(calls) >= getattr(sim, "max_calls", MAX_CALLS):  # evaluate.py lifts it: it plays thousands of games
                 raise Fail(429, f"more than {MAX_CALLS} calls per second", {"Retry-After": "1"})  # as the arena
             calls.append(now)
         return key
@@ -697,8 +719,11 @@ def create_app(sim):
 
 
 def load_cases(folder=CASES):
-    found = (json.loads(p.read_text(encoding="utf-8")) for p in sorted(Path(folder).glob("*.json")))
-    return {c["case_id"]: c for c in found}
+    found = {p.name: json.loads(p.read_text(encoding="utf-8")) for p in sorted(Path(folder).glob("*.json"))}
+    for name, c in found.items():
+        if "case_id" not in c and name != "supplier_profile.json":  # sim_cases/ also holds the fitted profile
+            warnings.warn(f"{name} has no case_id: not loaded", stacklevel=2)
+    return {c["case_id"]: c for c in found.values() if "case_id" in c}
 
 
 def main(argv=None):
@@ -708,6 +733,14 @@ def main(argv=None):
     ap.add_argument("--port", type=int, default=8000)
     ap.add_argument("--data", help="data package folder: cited IDs are checked against it")
     ap.add_argument("--event-code", default="sim")
+    ap.add_argument(
+        "--supplier",
+        choices=["script", "real"],
+        default="script",
+        help="script: the fixed script (default); real: suppliers fitted from real practice runs (sim_real.py)",
+    )
+    ap.add_argument("--seed", type=int, default=0, help="--supplier real: the seed of the supplier draws")
+    ap.add_argument("--cases", default=str(CASES), help="folder of case files (default: sim_cases/)")
     ap.add_argument("--no-clock", action="store_true", help="no 60-second rule: threads wait forever (by hand)")
     a = ap.parse_args(argv)
     facts = {}
@@ -721,5 +754,11 @@ def main(argv=None):
         print("arena-sim: --no-clock - no 60-second rule, threads wait forever (the arena keeps the rule)", flush=True)
     else:
         print("arena-sim: the 60-second rule is on, as on the arena (--no-clock switches it off)", flush=True)
-    app = create_app(Sim(load_cases(), facts, a.event_code, no_clock=a.no_clock))
+    if a.supplier == "real":
+        from .sim_real import SimReal
+
+        sim = SimReal(load_cases(a.cases), facts, a.event_code, no_clock=a.no_clock, seed=a.seed)
+    else:
+        sim = Sim(load_cases(a.cases), facts, a.event_code, no_clock=a.no_clock)
+    app = create_app(sim)
     uvicorn.run(app, host=a.host, port=a.port)

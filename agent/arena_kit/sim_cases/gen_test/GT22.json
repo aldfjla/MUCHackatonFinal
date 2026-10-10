@@ -1,0 +1,82 @@
+{
+ "case_id": "case:GT22",
+ "set": "practice",
+ "type": "price_increase",
+ "title": "Feinguss announces +4.7 % on Volute casing HI 80-250",
+ "briefing": "You negotiate for Hollerau Pumpenwerke with Feinguss Allgäu-Reiter GmbH. Feinguss announces +4.7 % on Volute casing HI 80-250. Need: 920 pc a year. Category goal: stabilise a strategic supply: a healthy supplier and stable prices count, not only the lowest price. Score: the lowest total cost C as defined in the rules, valued with this case's rates (need lead time 52 days). There is no fallback supplier: without a deal the demand is bought at the fallback price. Must-haves: volume_per_year >= 874. Prepare from the data package.",
+ "trigger_doc": "doc:20260924-70180-M1",
+ "parts": [
+  "part:310050"
+ ],
+ "suppliers": [
+  "sup:70180"
+ ],
+ "negotiable": [
+  "unit_price",
+  "payment_days",
+  "volume_per_year"
+ ],
+ "fixed_terms": {
+  "lead_time_days": 49,
+  "contract_months": 12,
+  "effective_date": "2027-01-01",
+  "index_clause": null,
+  "incoterm": "DAP",
+  "tooling_eur": 0
+ },
+ "term_options": {
+  "payment_days": [
+   14,
+   30,
+   45,
+   60,
+   90
+  ],
+  "volume_per_year": [
+   736,
+   920,
+   1104
+  ]
+ },
+ "buyer": {
+  "need_per_year": 920,
+  "horizon_years": 1.0,
+  "current_unit_price": 654.52,
+  "fallback_unit_price": 722.88,
+  "interest_rate": 0.08,
+  "reference_payment_days": 60,
+  "need_lead_time_days": 52,
+  "category_goal": "stabilise",
+  "fallback_risk_pct": 10,
+  "late_cost_per_day": 610,
+  "cost_per_defect": 3059,
+  "freight_eur_per_unit": {
+   "EXW": 0.2,
+   "FCA": 0.17,
+   "DAP": 0.0
+  },
+  "index_paths": {},
+  "must_haves": [
+   {
+    "field": "volume_per_year",
+    "op": ">=",
+    "value": 874
+   }
+  ],
+  "alternative": {
+   "kind": "none",
+   "ref": null,
+   "terms": {}
+  },
+  "index_risk_pct": 4,
+  "sustainable_margin_pct": 3,
+  "relationship_eur_per_point": 9030
+ },
+ "round_limit": 10,
+ "refs": [
+  "doc:20260924-70180-M1",
+  "ctr:4600070180",
+  "sc:70180@2026Q3"
+ ],
+ "hosted": true
+}

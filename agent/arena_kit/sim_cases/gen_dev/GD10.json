@@ -1,0 +1,90 @@
+{
+ "case_id": "case:GD10",
+ "set": "practice",
+ "type": "rfq",
+ "title": "RFQ: Motor IE3 4 kW, 4-pole",
+ "briefing": "You negotiate for Hollerau Pumpenwerke with Antriebstechnik Nordmark AG, Vesmo Elektromotory a.s.. RFQ: Motor IE3 4 kW, 4-pole. Need: 6190 pc a year. Category goal: stabilise a strategic supply: a healthy supplier and stable prices count, not only the lowest price. Score: the lowest total cost C as defined in the rules, valued with this case's rates (need lead time 40 days). There is no fallback supplier: without a deal the demand is bought at the fallback price. Must-haves: lead_time_days <= 50. Prepare from the data package.",
+ "trigger_doc": "doc:20260914-70510-P02",
+ "parts": [
+  "part:350010"
+ ],
+ "suppliers": [
+  "sup:70510",
+  "sup:70520"
+ ],
+ "negotiable": [
+  "unit_price",
+  "tooling_eur",
+  "payment_days",
+  "lead_time_days"
+ ],
+ "fixed_terms": {
+  "volume_per_year": 6190,
+  "contract_months": 36,
+  "effective_date": "2027-01-01",
+  "index_clause": null,
+  "incoterm": "DAP"
+ },
+ "term_options": {
+  "tooling_eur": [
+   0,
+   10400,
+   20900
+  ],
+  "payment_days": [
+   14,
+   30,
+   45,
+   60,
+   90
+  ],
+  "lead_time_days": [
+   35,
+   40,
+   50,
+   60
+  ]
+ },
+ "buyer": {
+  "need_per_year": 6190,
+  "horizon_years": 3.0,
+  "current_unit_price": 239.21,
+  "fallback_unit_price": 239.21,
+  "interest_rate": 0.08,
+  "reference_payment_days": 60,
+  "need_lead_time_days": 40,
+  "category_goal": "stabilise",
+  "fallback_risk_pct": 5,
+  "late_cost_per_day": 800,
+  "cost_per_defect": 191,
+  "freight_eur_per_unit": {
+   "EXW": 14.33,
+   "FCA": 11.14,
+   "DAP": 0.0
+  },
+  "index_paths": {},
+  "must_haves": [
+   {
+    "field": "lead_time_days",
+    "op": "<=",
+    "value": 50
+   }
+  ],
+  "alternative": {
+   "kind": "none",
+   "ref": null,
+   "terms": {}
+  },
+  "sustainable_margin_pct": 4,
+  "relationship_eur_per_point": 38080
+ },
+ "round_limit": 10,
+ "refs": [
+  "doc:20260914-70510-P02",
+  "ctr:4600070510",
+  "sc:70510@2026Q3",
+  "sc:70520@2026Q3",
+  "cost:350010"
+ ],
+ "hosted": true
+}

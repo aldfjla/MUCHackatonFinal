@@ -1,0 +1,88 @@
+{
+ "case_id": "case:GD17",
+ "set": "practice",
+ "type": "rfq",
+ "title": "RFQ: Spacer sleeve",
+ "briefing": "You negotiate for Hollerau Pumpenwerke with Drehzentrum Ilzauer GmbH, Drehteile Fuchsreiter GmbH. RFQ: Spacer sleeve. Need: 11260 pc a year. Category goal: quality first: defects and late deliveries cost more than a few cents of price. Score: the lowest total cost C as defined in the rules, valued with this case's rates (need lead time 24 days). There is no fallback supplier: without a deal the demand is bought at the fallback price. Must-haves: lead_time_days <= 30. Prepare from the data package.",
+ "trigger_doc": "doc:20260909-70295-M4",
+ "parts": [
+  "part:320090"
+ ],
+ "suppliers": [
+  "sup:70295",
+  "sup:70250"
+ ],
+ "negotiable": [
+  "unit_price",
+  "tooling_eur",
+  "payment_days",
+  "lead_time_days"
+ ],
+ "fixed_terms": {
+  "volume_per_year": 11260,
+  "contract_months": 12,
+  "effective_date": "2027-01-01",
+  "index_clause": null,
+  "incoterm": "DAP"
+ },
+ "term_options": {
+  "tooling_eur": [
+   0,
+   400,
+   700
+  ],
+  "payment_days": [
+   14,
+   30,
+   45,
+   60,
+   90
+  ],
+  "lead_time_days": [
+   21,
+   24,
+   30,
+   36
+  ]
+ },
+ "buyer": {
+  "need_per_year": 11260,
+  "horizon_years": 1.0,
+  "current_unit_price": 4.6,
+  "fallback_unit_price": 4.6,
+  "interest_rate": 0.08,
+  "reference_payment_days": 60,
+  "need_lead_time_days": 24,
+  "category_goal": "quality_first",
+  "fallback_risk_pct": 8,
+  "late_cost_per_day": 20,
+  "cost_per_defect": 5,
+  "freight_eur_per_unit": {
+   "EXW": 0.26,
+   "FCA": 0.23,
+   "DAP": 0.0
+  },
+  "index_paths": {},
+  "must_haves": [
+   {
+    "field": "lead_time_days",
+    "op": "<=",
+    "value": 30
+   }
+  ],
+  "alternative": {
+   "kind": "none",
+   "ref": null,
+   "terms": {}
+  },
+  "index_risk_pct": 2
+ },
+ "round_limit": 10,
+ "refs": [
+  "doc:20260909-70295-M4",
+  "ctr:4600070295",
+  "sc:70295@2026Q3",
+  "sc:70250@2026Q3"
+ ],
+ "hosted": true
+}

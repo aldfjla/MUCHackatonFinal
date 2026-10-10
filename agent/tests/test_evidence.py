@@ -186,3 +186,34 @@ def test_multi_part_claims_name_their_part():
         for c in build_claims(case, pkg):
             if c["kind"] in ("quote", "po", "cost", "fc"):
                 assert c["part"] in c["sentence"] and c["part"] in case["parts"]
+
+
+@needs_data
+def test_each_thread_has_its_own_connection_and_stays_read_only():
+    # IndexError root cause: one shared sqlite connection gave empty/odd results when threads queried at once
+    from concurrent.futures import ThreadPoolExecutor
+
+    def conn(_):
+        return pkg.db, len(pkg.query("select max(last_month) m from index_series"))
+
+    with ThreadPoolExecutor(4) as ex:
+        res = list(ex.map(conn, range(40)))
+    assert all(n == 1 for _, n in res) and len({id(d) for d, _ in res}) > 1 and pkg.db is pkg.db
+    with pytest.raises(ValueError):
+        pkg.query("delete from news")
+
+
+@needs_data
+def test_concurrent_decisions_match_sequential(caplog):
+    from concurrent.futures import ThreadPoolExecutor
+
+    def run(path):
+        case = json.loads(path.read_text())
+        m = EvidenceAgent(Stub()).decide(case, threads(case))["message"]
+        return m["body"], m["refs"]
+
+    seq = [run(p) for p in REAL]
+    with caplog.at_level("ERROR", logger="arena"), ThreadPoolExecutor(8) as ex:
+        par = list(ex.map(run, REAL * 4))
+    assert not [r for r in caplog.records if "evidence: failed" in r.getMessage()]
+    assert par == seq * 4

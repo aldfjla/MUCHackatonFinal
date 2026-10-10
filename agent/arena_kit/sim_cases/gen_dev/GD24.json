@@ -1,0 +1,84 @@
+{
+ "case_id": "case:GD24",
+ "set": "practice",
+ "type": "rfq",
+ "title": "RFQ: Impeller HN 200",
+ "briefing": "You negotiate for Hollerau Pumpenwerke with Eisengießerei Velkenreith GmbH, Odlewnia Kalwisz Sp. z o.o.. RFQ: Impeller HN 200. Need: 6030 pc a year. Category goal: leverage: competition and data should bring the price down. Score: the lowest total cost C as defined in the rules, valued with this case's rates (need lead time 61 days). There is no fallback supplier: without a deal the demand is bought at the fallback price. Must-haves: lead_time_days <= 74. Prepare from the data package.",
+ "trigger_doc": "doc:20260926-70120-P06",
+ "parts": [
+  "part:310030"
+ ],
+ "suppliers": [
+  "sup:70120",
+  "sup:70140"
+ ],
+ "negotiable": [
+  "unit_price",
+  "payment_days",
+  "lead_time_days"
+ ],
+ "fixed_terms": {
+  "volume_per_year": 6030,
+  "contract_months": 24,
+  "effective_date": "2027-01-01",
+  "index_clause": null,
+  "incoterm": "DAP",
+  "tooling_eur": 0
+ },
+ "term_options": {
+  "payment_days": [
+   14,
+   30,
+   45,
+   60,
+   90
+  ],
+  "lead_time_days": [
+   49,
+   61,
+   74,
+   98
+  ]
+ },
+ "buyer": {
+  "need_per_year": 6030,
+  "horizon_years": 2.0,
+  "current_unit_price": 34.26,
+  "fallback_unit_price": 34.26,
+  "interest_rate": 0.08,
+  "reference_payment_days": 60,
+  "need_lead_time_days": 61,
+  "category_goal": "leverage",
+  "fallback_risk_pct": 3,
+  "late_cost_per_day": 290,
+  "cost_per_defect": 130,
+  "freight_eur_per_unit": {
+   "EXW": 0.27,
+   "FCA": 0.29,
+   "DAP": 0.0
+  },
+  "index_paths": {},
+  "must_haves": [
+   {
+    "field": "lead_time_days",
+    "op": "<=",
+    "value": 74
+   }
+  ],
+  "alternative": {
+   "kind": "none",
+   "ref": null,
+   "terms": {}
+  },
+  "index_risk_pct": 1
+ },
+ "round_limit": 10,
+ "refs": [
+  "doc:20260926-70120-P06",
+  "ctr:4600070120",
+  "sc:70120@2026Q3",
+  "sc:70140@2026Q3",
+  "cost:310030"
+ ],
+ "hosted": true
+}

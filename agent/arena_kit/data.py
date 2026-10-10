@@ -5,6 +5,7 @@ import csv
 import json
 import os
 import sqlite3
+import threading
 from functools import cached_property
 from pathlib import Path
 
@@ -29,11 +30,18 @@ class DataPackage:
         dbs = sorted(self.root.rglob("*.sqlite")) + sorted(self.root.rglob("*.db"))
         if not dbs and not facts:
             raise FileNotFoundError(f"no facts.json or .sqlite under {self.root}")
-        self.db = None
-        if dbs:
-            self.db = sqlite3.connect(f"file:{dbs[0]}?mode=ro", uri=True, check_same_thread=False)
-            self.db.row_factory = sqlite3.Row
-            self.db.execute("PRAGMA query_only = ON")
+        self._dbfile, self._local = dbs[0] if dbs else None, threading.local()
+
+    @property
+    def db(self):
+        """A read-only connection of the calling thread (a shared sqlite3 connection breaks under threads), or None."""
+        if self._dbfile is None:
+            return None
+        if getattr(self._local, "db", None) is None:
+            db = self._local.db = sqlite3.connect(f"file:{self._dbfile}?mode=ro", uri=True)
+            db.row_factory = sqlite3.Row
+            db.execute("PRAGMA query_only = ON")
+        return self._local.db
 
     def tables(self):
         """{table: {"columns": [...], "rows": n}}"""

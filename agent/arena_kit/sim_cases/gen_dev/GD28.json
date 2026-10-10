@@ -1,0 +1,102 @@
+{
+ "case_id": "case:GD28",
+ "set": "practice",
+ "type": "quality",
+ "title": "Feinmechanik: quality problems with Pump shaft HN 24 mm",
+ "briefing": "You negotiate for Hollerau Pumpenwerke with Feinmechanik Rottaler GmbH. Feinmechanik: quality problems with Pump shaft HN 24 mm. Need: 6380 pc a year. Category goal: secure supply of a bottleneck part: coverage of the full need and a supplier that stays healthy come first. Score: the lowest total cost C as defined in the rules, valued with this case's rates (need lead time 50 days). Fallback if you walk away: today's terms continue unchanged. Must-haves: ppm_commitment <= 1500. Prepare from the data package.",
+ "trigger_doc": "doc:20260619-70290-M3",
+ "parts": [
+  "part:320010"
+ ],
+ "suppliers": [
+  "sup:70290"
+ ],
+ "negotiable": [
+  "ppm_commitment",
+  "chargeback_eur_per_complaint",
+  "unit_price",
+  "lead_time_days"
+ ],
+ "fixed_terms": {
+  "payment_days": 45,
+  "volume_per_year": 6380,
+  "contract_months": 12,
+  "effective_date": "2027-01-01",
+  "index_clause": null,
+  "incoterm": "DAP",
+  "tooling_eur": 0
+ },
+ "term_options": {
+  "ppm_commitment": [
+   300,
+   800,
+   1500,
+   2500
+  ],
+  "chargeback_eur_per_complaint": [
+   0,
+   40,
+   90,
+   130
+  ],
+  "lead_time_days": [
+   35,
+   46,
+   50,
+   77
+  ]
+ },
+ "buyer": {
+  "need_per_year": 6380,
+  "horizon_years": 1.0,
+  "current_unit_price": 24.92,
+  "fallback_unit_price": 31.15,
+  "interest_rate": 0.1,
+  "reference_payment_days": 60,
+  "need_lead_time_days": 50,
+  "category_goal": "secure_supply",
+  "fallback_risk_pct": 25,
+  "late_cost_per_day": 100,
+  "cost_per_defect": 75,
+  "freight_eur_per_unit": {
+   "EXW": 0.42,
+   "FCA": 0.34,
+   "DAP": 0.0
+  },
+  "index_paths": {},
+  "must_haves": [
+   {
+    "field": "ppm_commitment",
+    "op": "<=",
+    "value": 1500
+   }
+  ],
+  "alternative": {
+   "kind": "current_contract",
+   "ref": "ctr:4600070290",
+   "terms": {
+    "payment_days": 30,
+    "lead_time_days": 35,
+    "volume_per_year": 6380,
+    "contract_months": 12,
+    "effective_date": "2027-01-01",
+    "index_clause": null,
+    "incoterm": "EXW",
+    "tooling_eur": 0,
+    "unit_price": 24.92,
+    "ppm_commitment": 921
+   }
+  },
+  "index_risk_pct": 3,
+  "sustainable_margin_pct": 10,
+  "relationship_eur_per_point": 3180
+ },
+ "round_limit": 10,
+ "refs": [
+  "doc:20260619-70290-M3",
+  "ctr:4600070290",
+  "sc:70290@2026Q3",
+  "cost:320010"
+ ],
+ "hosted": true
+}

@@ -1,0 +1,107 @@
+{
+ "case_id": "case:GD15",
+ "set": "practice",
+ "type": "price_increase",
+ "title": "Kohlering-Technik announces +1.2 % on Mechanical seal 32 mm, SiC/carbon, EPDM",
+ "briefing": "You negotiate for Hollerau Pumpenwerke with Kohlering-Technik Pirkheim GmbH. Kohlering-Technik announces +1.2 % on Mechanical seal 32 mm, SiC/carbon, EPDM. Need: 5190 pc a year. Category goal: stabilise a strategic supply: a healthy supplier and stable prices count, not only the lowest price. Score: the lowest total cost C as defined in the rules, valued with this case's rates (need lead time 36 days). Fallback if you walk away: the second-source quote quote:7100037. Must-haves: none. Prepare from the data package.",
+ "trigger_doc": "doc:20260910-70440-M1",
+ "parts": [
+  "part:340011"
+ ],
+ "suppliers": [
+  "sup:70440"
+ ],
+ "negotiable": [
+  "unit_price",
+  "payment_days",
+  "index_clause"
+ ],
+ "fixed_terms": {
+  "lead_time_days": 35,
+  "volume_per_year": 5190,
+  "contract_months": 24,
+  "effective_date": "2027-01-01",
+  "incoterm": "DAP",
+  "tooling_eur": 0
+ },
+ "term_options": {
+  "payment_days": [
+   14,
+   30,
+   45,
+   60,
+   90
+  ],
+  "index_clause": [
+   null,
+   {
+    "series": "LCI-C",
+    "material_share": 0.33,
+    "deadband_pct": 0,
+    "base_month": "2026-08"
+   },
+   {
+    "series": "LCI-C",
+    "material_share": 0.33,
+    "deadband_pct": 3,
+    "base_month": "2026-08"
+   },
+   {
+    "series": "LCI-C",
+    "material_share": 0.33,
+    "deadband_pct": 5,
+    "base_month": "2026-08"
+   }
+  ]
+ },
+ "buyer": {
+  "need_per_year": 5190,
+  "horizon_years": 2.0,
+  "current_unit_price": 37.55,
+  "fallback_unit_price": 41.97,
+  "interest_rate": 0.12,
+  "reference_payment_days": 60,
+  "need_lead_time_days": 36,
+  "category_goal": "stabilise",
+  "fallback_risk_pct": 10,
+  "late_cost_per_day": 70,
+  "cost_per_defect": 80,
+  "freight_eur_per_unit": {
+   "EXW": 0.3,
+   "FCA": 0.25,
+   "DAP": 0.0
+  },
+  "index_paths": {
+   "LCI-C": 0.04
+  },
+  "must_haves": [],
+  "alternative": {
+   "kind": "quote",
+   "ref": "quote:7100037",
+   "terms": {
+    "payment_days": 30,
+    "lead_time_days": 45,
+    "volume_per_year": 5190,
+    "contract_months": 24,
+    "effective_date": "2027-01-01",
+    "index_clause": null,
+    "incoterm": "DAP",
+    "tooling_eur": 0,
+    "unit_price": 41.55,
+    "ppm_commitment": 270
+   }
+  },
+  "index_risk_pct": 4,
+  "sustainable_margin_pct": 0.5,
+  "relationship_eur_per_point": 2920
+ },
+ "round_limit": 10,
+ "refs": [
+  "doc:20260910-70440-M1",
+  "ctr:4600070440",
+  "sc:70440@2026Q3",
+  "quote:7100037",
+  "cost:340011"
+ ],
+ "hosted": true
+}

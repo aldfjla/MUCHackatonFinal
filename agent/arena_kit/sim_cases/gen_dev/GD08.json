@@ -1,0 +1,106 @@
+{
+ "case_id": "case:GD08",
+ "set": "practice",
+ "type": "price_increase",
+ "title": "Drehzentrum announces +5.7 % on Shaft sleeve",
+ "briefing": "You negotiate for Hollerau Pumpenwerke with Drehzentrum Ilzauer GmbH. Drehzentrum announces +5.7 % on Shaft sleeve. Need: 9370 pc a year. Category goal: stabilise a strategic supply: a healthy supplier and stable prices count, not only the lowest price. Score: the lowest total cost C as defined in the rules, valued with this case's rates (need lead time 29 days). Fallback if you walk away: the second-source quote quote:7100023. Must-haves: none. Prepare from the data package.",
+ "trigger_doc": "doc:20260909-70295-M4",
+ "parts": [
+  "part:320020"
+ ],
+ "suppliers": [
+  "sup:70295"
+ ],
+ "negotiable": [
+  "unit_price",
+  "payment_days",
+  "index_clause"
+ ],
+ "fixed_terms": {
+  "lead_time_days": 28,
+  "volume_per_year": 9370,
+  "contract_months": 24,
+  "effective_date": "2027-01-01",
+  "incoterm": "DAP",
+  "tooling_eur": 0
+ },
+ "term_options": {
+  "payment_days": [
+   14,
+   30,
+   45,
+   60,
+   90
+  ],
+  "index_clause": [
+   null,
+   {
+    "series": "LCI-C",
+    "material_share": 0.34,
+    "deadband_pct": 0,
+    "base_month": "2026-08"
+   },
+   {
+    "series": "LCI-C",
+    "material_share": 0.34,
+    "deadband_pct": 3,
+    "base_month": "2026-08"
+   },
+   {
+    "series": "LCI-C",
+    "material_share": 0.34,
+    "deadband_pct": 5,
+    "base_month": "2026-08"
+   }
+  ]
+ },
+ "buyer": {
+  "need_per_year": 9370,
+  "horizon_years": 2.0,
+  "current_unit_price": 11.66,
+  "fallback_unit_price": 12.7,
+  "interest_rate": 0.04,
+  "reference_payment_days": 60,
+  "need_lead_time_days": 29,
+  "category_goal": "stabilise",
+  "fallback_risk_pct": 10,
+  "late_cost_per_day": 30,
+  "cost_per_defect": 28,
+  "freight_eur_per_unit": {
+   "EXW": 0.1,
+   "FCA": 0.09,
+   "DAP": 0.0
+  },
+  "index_paths": {
+   "LCI-C": 0.02
+  },
+  "must_haves": [],
+  "alternative": {
+   "kind": "quote",
+   "ref": "quote:7100023",
+   "terms": {
+    "payment_days": null,
+    "lead_time_days": 33,
+    "volume_per_year": 9370,
+    "contract_months": 24,
+    "effective_date": "2027-01-01",
+    "index_clause": null,
+    "incoterm": null,
+    "tooling_eur": 0,
+    "unit_price": 12.9,
+    "ppm_commitment": 544
+   }
+  },
+  "index_risk_pct": 4,
+  "sustainable_margin_pct": 3,
+  "relationship_eur_per_point": 1640
+ },
+ "round_limit": 10,
+ "refs": [
+  "doc:20260909-70295-M4",
+  "ctr:4600070295",
+  "sc:70295@2026Q3",
+  "quote:7100023"
+ ],
+ "hosted": true
+}
