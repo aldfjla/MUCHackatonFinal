@@ -1,0 +1,36 @@
+{
+  "cli_version": "0.11.4",
+  "checkpoint_id": "01M4M3HW5F43TYCMAHXXC28Z8X",
+  "strategy": "manual-commit",
+  "branch": "local-alex-niko",
+  "checkpoints_count": 15,
+  "files_touched": [
+    "agent/arena_kit/agents/__init__.py",
+    "agent/arena_kit/agents/better_agent.py",
+    "agent/arena_kit/cli.py",
+    "agent/arena_kit/cost.py"
+  ],
+  "sessions": [
+    {
+      "metadata": "/0/metadata.json",
+      "transcript": "/0/full.jsonl",
+      "compact_transcript": "/0/transcript.jsonl",
+      "content_hash": "/0/content_hash.txt",
+      "prompt": "/0/prompt.txt"
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 1597,
+    "cache_creation_tokens": 1534786,
+    "cache_read_tokens": 144151539,
+    "output_tokens": 390912,
+    "api_call_count": 615,
+    "subagent_tokens": {
+      "input_tokens": 702,
+      "cache_creation_tokens": 390333,
+      "cache_read_tokens": 4991314,
+      "output_tokens": 33112,
+      "api_call_count": 80
+    }
+  }
+}

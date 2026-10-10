@@ -1,0 +1,15 @@
+{
+  "tool_use_id": "toolu_01SvAkkwGMEAUCRdqad7WCg1",
+  "agent_id": "ade466ccdde2848ee",
+  "subagent_type": "coder",
+  "task_description": "Health estimate + hold for final_offer in better",
+  "token_usage": {
+    "input_tokens": 50,
+    "cache_creation_tokens": 84386,
+    "cache_read_tokens": 1538912,
+    "output_tokens": 9826,
+    "api_call_count": 25
+  },
+  "started_at": "2026-10-11T01:38:22.570153+02:00",
+  "completed_at": "2026-10-11T01:44:57.3226+02:00"
+}

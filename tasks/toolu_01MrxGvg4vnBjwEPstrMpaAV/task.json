@@ -1,0 +1,15 @@
+{
+  "tool_use_id": "toolu_01MrxGvg4vnBjwEPstrMpaAV",
+  "agent_id": "a911247abc7ac70f4",
+  "subagent_type": "coder",
+  "task_description": "Create simple \"50\" agent",
+  "token_usage": {
+    "input_tokens": 10,
+    "cache_creation_tokens": 28013,
+    "cache_read_tokens": 70976,
+    "output_tokens": 3416,
+    "api_call_count": 5
+  },
+  "started_at": "2026-10-11T00:51:35.128367+02:00",
+  "completed_at": "2026-10-11T00:52:18.921233+02:00"
+}

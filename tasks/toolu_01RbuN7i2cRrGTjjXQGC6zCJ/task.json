@@ -1,0 +1,15 @@
+{
+  "tool_use_id": "toolu_01RbuN7i2cRrGTjjXQGC6zCJ",
+  "agent_id": "a90bca0fd03d57491",
+  "subagent_type": "general-purpose",
+  "task_description": "Compute C_best target deals per case",
+  "token_usage": {
+    "input_tokens": 578,
+    "cache_creation_tokens": 157730,
+    "cache_read_tokens": 1906648,
+    "output_tokens": 9705,
+    "api_call_count": 19
+  },
+  "started_at": "2026-10-11T01:28:53.716692+02:00",
+  "completed_at": "2026-10-11T01:37:39.546591+02:00"
+}
