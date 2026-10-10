@@ -9,14 +9,14 @@ from arena_kit.agents.rational import RationalAgent
 def test_leverage_routes_to_confident_boulware():
     r = ConfidentRouterAgent()
     r.decide(_case("leverage"), _threads([44.0]))
-    assert r.chosen == "confident_boulware" and isinstance(r.delegate, ConfidentBoulwareAgent)
+    assert r.chosen == "confident_boulware" and isinstance(r.delegate.delegate, ConfidentBoulwareAgent)
 
 
 def test_routine_and_unknown_route_to_rational():
     for goal in ("routine", "weird", None):
         r = ConfidentRouterAgent()
         r.decide(_case(goal), _threads([44.0]))
-        assert r.chosen == "rational" and isinstance(r.delegate, RationalAgent)
+        assert r.chosen == "rational" and isinstance(r.delegate.delegate, RationalAgent)
 
 
 def test_user_overrides_merge():

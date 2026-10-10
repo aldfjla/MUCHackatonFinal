@@ -3,7 +3,8 @@ Confident Turtle: hold firm like Boulware, with the confidence index as the safe
 goal keeps the parent mapping, and an unknown or missing goal still falls back to `rational`.
 """
 
-from .router import RouterAgent, _lazy
+from ..guard import GuardedAgent
+from .router import FACTORIES, RouterAgent, _lazy
 
 MAPPING = {
     "leverage": "confident_boulware",
@@ -13,10 +14,19 @@ MAPPING = {
     "secure_supply": "switcher",
 }
 
+# every routed archetype runs inside the guard layer (must-haves asked for, no premature walk-away)
+GUARDED = {
+    name: (lambda f=f: GuardedAgent(f()))
+    for name, f in {
+        **FACTORIES,
+        "confident_boulware": _lazy("confident_boulware", "ConfidentBoulwareAgent"),
+    }.items()
+}
+
 
 class ConfidentRouterAgent(RouterAgent):
     def __init__(self, mapping=None, agents=None):
         super().__init__(
             mapping={**MAPPING, **(mapping or {})},
-            agents={"confident_boulware": _lazy("confident_boulware", "ConfidentBoulwareAgent"), **(agents or {})},
+            agents={**GUARDED, **(agents or {})},
         )
