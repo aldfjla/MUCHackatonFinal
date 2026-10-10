@@ -1,0 +1,41 @@
+just push a trial run. I want to see that we are able to make changes, we are yet to make a project for the hackathon
+
+---
+
+can you explain ponytail github project to me rn
+
+---
+
+is it working and is it a security risk. this is a hackathon so it doesn't matter a lot but still
+
+---
+
+ok, set it up on my machine I want to use it for the project
+
+---
+
+wdym you set up 6 agents. who are they and why do you have them
+
+---
+
+I saw this thing where one person made a github project that puts adds when the agent things and you pocket part of the ad money. can you factcheck it and see actually if its good and how much money can I make per hour with it
+
+---
+
+can you dig a bit in, use github reviews and stars. Its coffe money yes, but I'm a student and a couple of bucks at the end of the month are a bigger deal for me than the average joe, but  Idon't want to jeoperdise my online safety even more
+
+---
+
+ok, thats fine. Don't install it then. now explain how I can run multiple agents (sub-agents) bc this time I want to be able to deligate tasks more efficiently and have a specific tools ofr each agent, like a manager, coder, reviewer, critic, optimist and a teacher that explains it. how can I DO ALL of this
+
+---
+
+how would a preoffessional set those agents up? bring citations
+
+---
+
+ok, with what subagents should I start and how should I set up my main agent. also what models of claude should they run?
+
+---
+
+ok, implement the base version of this plan, keep in mind that my team should also have access to these subagents so that we keep working productively
