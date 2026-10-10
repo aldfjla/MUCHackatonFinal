@@ -213,3 +213,7 @@ where to find the practice run information
   - I changed the existing wording-cap test, because "not possible" and "withdraw" are no longer phrases. It now uses "final offer, no further, no room, last word".
   - The two-thread test is loose by design, since either an accept of A's safe sheet or a message to B passes.
 </agent-message>
+
+---
+
+ok create a new branch in the project called version - alex. then commit the project there
