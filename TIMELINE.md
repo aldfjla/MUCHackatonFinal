@@ -1,0 +1,52 @@
+# Timeline: Tacto Negotiation Arena (Sat 10 Oct 2026)
+
+Use: presentation material and handover if we switch AI agents. Times are commit times. Scores are mean score on real practice cases (0..1) unless noted.
+
+## Goal and rules (short)
+- Buyer agent e-mails supplier bots. Score = (C_open - C_deal) / (C_open - C_best), clipped 0..1. Deal worse than opening quote or broken must-have = 0.
+- Code freeze and live final: Sunday 12:00. Submit repo + commit hash on ehl.gg. Sunday 08:00 data release: rerun `arena data`.
+- Practice quota 450 sessions (about 40 used on probes today). Every run is logged in `backlog.csv` as `v<N> - niko`.
+
+## Timeline
+| Time | Step | Result |
+|---|---|---|
+| 11:42-12:39 | Team setup: Entire tracking, README, shared subagents (`coder`, `reviewer`, `teacher`), manager rules | Workflow: plan, coder, reviewer |
+| 14:31-14:56 | Challenge notes (CHALLENGE.md), SETUP.md | Rules and run commands documented |
+| 15:26-16:18 | `backlog.csv` created; v0 naive baseline on simulator S01-S03 and real P01, P03, P07 | Baseline: naive closes near opening cost, about 0 |
+| 16:07-17:16 | RESOURCES.md tips, Petra's `v1-petra` (SmartAgent), merge | "Always make a deal" rule; research-based tips |
+| 17:44-18:00 | Research: 9 more sources, one RESEARCH.md | Evidence base for rules |
+| 18:10-18:37 | Agents: Alex's ConfidentAgent; Niko's Patient Hawk (`rational`), SCHOOLS.md, five strategy agents; `Players/Originals/` frozen snapshots | 8+ player agents |
+| 19:01-20:08 | Alex merges v1-niko, adds Confident Turtle/Owl and a must-have guard; first 20 real runs logged | `GuardedAgent` around every agent |
+| 20:17-20:18 | Niko merges into local `local-alex-niko` (Alex's code as base), SIM_PLAN.md | Combined branch |
+| 20:45 | Fetch 19 real practice case files; 20 probe runs (guarded_rational, confident_router) | Real means 0.18 / 0.29 (v11, v12) |
+| 21:48 | Diagnosis from replays, then evidence layer (cites only verified data-package facts) | 46+ claims verified, 0 contradicted; mean 0.27 (v13) |
+| 22:11 | `reciprocal` agent: steady concessions, closing rule, RFQ rule, index-clause variant, anchor 0.80 | Mean 0.57 (v14); best case 0.67 (P07, P10) |
+| 22:23 | Mock arena (fitted to real runs), case generator (30 dev + 30 test), evaluator; 274 tests pass | Free tests, no credits |
+
+## Findings (what the replays showed)
+- Suppliers ask for the data behind our claims; cited, checked data helps.
+- They match our visible concessions, send `final_offer` after 2-7 rounds (median 4), and walk if pushed past it.
+- A soft first anchor (0.90x) is accepted at once: open lower.
+- Horizon-2 cases need contract_months >= 12 x horizon; RFQ cases need every supplier worked.
+- Longer contract plus an index clause moved some suppliers 6.10 to 5.50.
+
+## Score progression (real practice, 10 cases)
+guarded_rational 0.18 -> confident_router 0.29 -> evidence_router 0.27 -> reciprocal_evidence 0.57
+
+Weak cases: P02 (0.18), P18 (0.34), P05 (0.37), P08 (0.42). Mock weak types: raw_material about 0.20, rfq about 0.24.
+
+## Mock arena (honest limits)
+- Supplier profile fitted on 40 real runs. Matches our means (0.57 real vs 0.56 mock) but in-sample only: not proof of final performance.
+- Anchor 0.80 vs 0.90 in mock: 0.584 vs 0.568 (real set), 0.485 vs 0.466 (dev). Small gap, may be noise.
+- Never tune on `gen_test`; use `gen_dev`.
+
+## State and next steps
+- Pushed to `v1-niko`: up to e153b9e (evidence layer, v13).
+- Local only on `local-alex-niko`: b5537c0 (reciprocal, v14) and a504e3b (mock arena). Not yet pushed.
+- Unverified on the real arena: anchor 0.80, RFQ rule, index variant.
+- Next: push for Alex; tune raw_material/RFQ on `gen_dev`; 10 more real sessions to confirm; final agent into submission repo.
+
+## Reproduce
+- `uv` with `UV_PROJECT_ENVIRONMENT=$HOME/.venvs/arena-agent`; data via `ARENA_DATA`.
+- Mock: `python -m arena_kit.evaluate --agents reciprocal_evidence --set dev --seeds 4`.
+- Real keys only in `negotiation-arena-kit/starter-kit/.env` (never commit).
