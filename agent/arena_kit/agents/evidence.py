@@ -52,10 +52,16 @@ class EvidenceAgent:
         price = terms.get("unit_price")
         used = set().union(*(_cited(e) for e in threads.values()))
         used = {i for i in used if not i.startswith("offer:")} | {i for i in _cited(events) if i.startswith("offer:")}
-        claims = [c for c in build_claims(case, self._pkg, sid, price) if not used & set(c["ids"])]
+        focus = getattr(self.delegate, "focus", None) or {}  # the Listener's supplier model, if the delegate has one
+        if focus.get("supplier_id", sid) != sid:
+            focus = {}  # the guard redirected to another supplier: that model is not this supplier's
+        claims = [c for c in build_claims(case, self._pkg, sid, price)
+                  if not used & set(c["ids"]) and c["kind"] not in focus.get("dismissed", ())]
         asks = []
         for m in case["buyer"].get("must_haves", []):
             cur = terms.get(m["field"])
+            if m["field"] in focus.get("frozen", ()):
+                continue  # a declared hard constraint: asking again only repeats a refusal
             if cur is not None and not OPS[m["op"]](cur, m["value"]):
                 what = FIELDS.get(m["field"]) or f"confirm {m['field'].replace('_', ' ')} {'of at least' if '>' in m['op'] else 'of at most'} {{v}}"
                 asks.append(f"Could you {what.format(v=m['value'])}?")
@@ -81,6 +87,8 @@ class EvidenceAgent:
             asks.append("Could you please send us your quote?")
         elif not self.questions:
             pass
+        elif focus.get("question"):
+            asks.append(focus["question"])  # aim the one question at the supplier's currency
         elif sum(m.get("from") == "buyer" for m in events) == 0:
             asks.append("Could you send us a breakdown of the costs behind your price?")
         elif last.get("status") == "final_offer" or re.search(r"\b(limit|cap|allocation)", last.get("body") or "", re.I):

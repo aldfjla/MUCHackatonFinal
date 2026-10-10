@@ -8,6 +8,7 @@ import json
 import logging
 import os
 import statistics
+import sys
 import zipfile
 from pathlib import Path
 
@@ -28,7 +29,7 @@ def load_env(path=".env"):
 
 AGENTS = [
     "naive", "smart", "confident", "rational", "explorer", "anchor", "switcher", "boulware", "router",
-    "confident_boulware", "confident_router", "guarded_boulware", "guarded_rational", "evidence_router", "evidence_rational", "reciprocal", "reciprocal_evidence", "simplify", "final", "final_match", "llm",
+    "confident_boulware", "confident_router", "guarded_boulware", "guarded_rational", "evidence_router", "evidence_rational", "reciprocal", "reciprocal_evidence", "simplify", "final", "final_match", "listener", "combined", "llm",
 ]  # fmt: skip
 
 
@@ -43,6 +44,7 @@ def agent_factory(name, data):
         ExplorerAgent,
         FinalAgent,
         GuardedAgent,
+        ListenerAgent,
         LLMAgent,
         NaiveAgent,
         RationalAgent,
@@ -81,6 +83,11 @@ def agent_factory(name, data):
     if name == "guarded_rational":
         return lambda: GuardedAgent(RationalAgent())
     # the evidence wrapper replaces the delegate's body and refs by design (it cites verified data)
+    if name in ("evidence_router", "evidence_rational", "listener"):
+        from .evidence import package_problem
+
+        if why := package_problem(data):  # say it before any session opens, not once per message
+            print(f"WARNING: {why} - messages will cite NO data. Pass --data <folder with world.sqlite>.", file=sys.stderr)
     if name == "evidence_router":
         return lambda: EvidenceAgent(ConfidentRouterAgent(), data)
     if name == "evidence_rational":
@@ -95,6 +102,8 @@ def agent_factory(name, data):
         return lambda: EvidenceAgent(GuardedAgent(FinalAgent()), data, questions=False)
     if name == "final_match":
         return lambda: EvidenceAgent(GuardedAgent(FinalAgent(match=1.0)), data, questions=False)
+    if name == "listener":  # v4-petra: supplier model + packages, inside the guard and the evidence layer
+        return lambda: EvidenceAgent(GuardedAgent(ListenerAgent()), data)
     package = None
     if data:
         from .data import DataPackage

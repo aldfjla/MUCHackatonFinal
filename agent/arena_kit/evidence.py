@@ -35,6 +35,17 @@ def load_package(path=None):
         _missing(f"{path}: {e}")
 
 
+def package_problem(path=None):
+    """Why the evidence layer cannot cite data from this package, or None when it can. Checked at startup:
+    a package without its SQLite file silently drops every citation (all 10 v4-petra runs, 2026-10-10)."""
+    pkg = load_package(path)
+    if pkg is None:
+        return f"no data package at {Path(path or os.environ.get('ARENA_DATA') or DEFAULT_DATA).expanduser()}"
+    if pkg.db is None:
+        return f"data package at {pkg.root} has no world.sqlite"
+    return None
+
+
 @lru_cache(maxsize=None)
 def _missing(why):  # lru_cache: logs once per reason
     log.warning("evidence: no data package (%s) - messages stay as the delegate wrote them", why)
