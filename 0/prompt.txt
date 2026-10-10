@@ -996,3 +996,7 @@ ok run this again and this time find at least 3 new quality (harvard, princton e
   
   **Skipped or unchecked:** The Baarslag survey is a sound CC BY source, but its models are mostly tested in simulations. I read its structure, section 5.1 and the conclusion in full, and the rest only as the TOC and a model-generated summary. The evidence labels in the notes are my own judgement.
 </agent-message>
+
+---
+
+if it found 9 use the 9 to make a list of important information that would then be used to make multiple negotiation strategies
