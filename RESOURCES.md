@@ -1,6 +1,6 @@
 # Negotiation tips and tricks for our buyer agent
 
-Analysis of the sources we could read, tied to the Tacto Negotiation Arena rules ([CHALLENGE.md](CHALLENGE.md)). Per-source notes are in [raw-files/](raw-files/) (own-words summaries, with links and how much was read). How to run and edit the agent: [SETUP.md](SETUP.md). Log every experiment in [runs.csv](runs.csv).
+Analysis of the sources we could read, tied to the Tacto Negotiation Arena rules ([CHALLENGE.md](CHALLENGE.md)). Per-source notes are in [raw-files/](raw-files/) (own-words summaries, with links and how much was read). How to run and edit the agent: [SETUP.md](SETUP.md). Log every experiment in [backlog.csv](backlog.csv).
 
 **How much to trust this:** the sources are popular Harvard write-ups, one AI-vs-human experiment, one literature review and one teaching study. None tests an agent against Tacto's bots. Treat every tip as a **hypothesis to test in practice runs**, not a fact. Three sources could not be read (see [raw-files/05-not-read.md](raw-files/05-not-read.md)).
 
@@ -57,7 +57,7 @@ Analysis of the sources we could read, tied to the Tacto Negotiation Arena rules
 - **Remove unknown or wrong data IDs** before sending (the kit's `guard()` does this).
 - **Stay inside 60 seconds** per message; fall back to the naive move if the model fails.
 - **Never bluff about alternatives**: citing a competing quote that does not exist is both unethical and risky if checked.
-- **Log everything** in `runs.csv`, one row per run, with the version and what changed.
+- **Log everything** in `backlog.csv`, one row per run, with the version and what changed.
 
 ## Where the sources seem to disagree, and how we use it
 
@@ -65,7 +65,7 @@ Analysis of the sources we could read, tied to the Tacto Negotiation Arena rules
 - **Students vs professionals:** professional suppliers resisted much harder (savings about 1-5.5% vs near 10%). Assume Tacto's bots are closer to the professionals.
 - **Single shot vs relationship:** the experiment had no repeat relationship. Tacto bots remember only within a case, so the relationship value is within-case: tone, appreciation and trades.
 
-## Experiments to run (use `runs.csv`)
+## Experiments to run (use `backlog.csv`)
 
 Change one thing per version, run the same cases, compare scores. Start with practice cases where the house agent is beatable (P05, P10, P11, P18) and one solved case (P01) as control.
 
