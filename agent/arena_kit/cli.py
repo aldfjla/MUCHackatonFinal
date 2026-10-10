@@ -26,11 +26,22 @@ def load_env(path=".env"):
                 os.environ.setdefault(key.strip(), value)
 
 
+AGENTS = [
+    "naive", "smart", "confident", "rational", "explorer", "anchor", "switcher", "boulware", "router",
+    "confident_boulware", "confident_router", "guarded_boulware", "guarded_rational", "evidence_router", "evidence_rational", "llm",
+]  # fmt: skip
+
+
 def agent_factory(name, data):
     from .agents import (
         AnchorAgent,
         BoulwareAgent,
+        ConfidentAgent,
+        ConfidentBoulwareAgent,
+        ConfidentRouterAgent,
+        EvidenceAgent,
         ExplorerAgent,
+        GuardedAgent,
         LLMAgent,
         NaiveAgent,
         RationalAgent,
@@ -56,6 +67,21 @@ def agent_factory(name, data):
         return RouterAgent
     if name == "smart":
         return SmartAgent
+    if name == "confident":
+        return ConfidentAgent
+    if name == "confident_boulware":
+        return ConfidentBoulwareAgent
+    if name == "confident_router":
+        return ConfidentRouterAgent
+    if name == "guarded_boulware":
+        return lambda: GuardedAgent(ConfidentBoulwareAgent())
+    if name == "guarded_rational":
+        return lambda: GuardedAgent(RationalAgent())
+    # the evidence wrapper replaces the delegate's body and refs by design (it cites verified data)
+    if name == "evidence_router":
+        return lambda: EvidenceAgent(ConfidentRouterAgent(), data)
+    if name == "evidence_rational":
+        return lambda: EvidenceAgent(GuardedAgent(RationalAgent()), data)
     package = None
     if data:
         from .data import DataPackage
@@ -90,11 +116,11 @@ def main(argv=None):
     c.add_argument("--set", **sets)
     p = sub.add_parser("play", help="play one case")
     p.add_argument("case_id")
-    p.add_argument("--agent", default="naive", choices=["naive", "smart", "rational", "explorer", "anchor", "switcher", "boulware", "router", "llm"])
+    p.add_argument("--agent", default="naive", choices=AGENTS)
     p.add_argument("--data", **data)
     a = sub.add_parser("run", help="play every case of a set in parallel")
     a.add_argument("--set", **sets)
-    a.add_argument("--agent", default="naive", choices=["naive", "smart", "rational", "explorer", "anchor", "switcher", "boulware", "router", "llm"])
+    a.add_argument("--agent", default="naive", choices=AGENTS)
     a.add_argument("--data", **data)
     a.add_argument("--parallel", type=int, default=8, help="cases at once (at most 10)")
     a.add_argument("--waves", type=int, default=5, help="final: stop after this many waves have closed")
