@@ -4,6 +4,12 @@ Analysis of the sources we could read, tied to the Tacto Negotiation Arena rules
 
 **How much to trust this:** the sources are popular Harvard write-ups, one AI-vs-human experiment, one literature review and one teaching study. None tests an agent against Tacto's bots. Treat every tip as a **hypothesis to test in practice runs**, not a fact. Three sources could not be read (see [raw-files/05-not-read.md](raw-files/05-not-read.md)).
 
+## The most important fact
+
+**We always want to make a deal.** Our default is to close, and an abandoned or timed-out case scores only our alternative (0 if there is none). The exception is built into the scoring: a deal worse than the opening quote scores 0, a deal that breaks a must-have scores 0, and some cases are best left without a deal. So the rule is: **close the best deal that beats our alternative and keeps the must-haves; walk away only when no offer does.** (Source: brief scoring rules in [CHALLENGE.md](CHALLENGE.md) section 5.)
+
+Real example: on P03 our naive agent closed at exactly the opening cost and saved nothing (score 0.00). A deal alone is not enough; it must close part of the gap.
+
 ## The short version
 
 1. Know your walk-away and never go below it. 2. Be informed before the first message. 3. Be firm on numbers, warm in tone, no threats. 4. Ask why, then trade across issues. 5. Let code hold the limits, not the model.
