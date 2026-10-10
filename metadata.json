@@ -1,0 +1,26 @@
+{
+  "cli_version": "0.11.4",
+  "checkpoint_id": "01M4KNQXYJSQV1S1H02D1SR8F1",
+  "strategy": "manual-commit",
+  "branch": "v1-niko",
+  "checkpoints_count": 9,
+  "files_touched": [
+    "README.md"
+  ],
+  "sessions": [
+    {
+      "metadata": "/0/metadata.json",
+      "transcript": "/0/full.jsonl",
+      "compact_transcript": "/0/transcript.jsonl",
+      "content_hash": "/0/content_hash.txt",
+      "prompt": ""
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 1059,
+    "cache_creation_tokens": 1116119,
+    "cache_read_tokens": 118585700,
+    "output_tokens": 289219,
+    "api_call_count": 428
+  }
+}
