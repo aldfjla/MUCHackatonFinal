@@ -1,0 +1,15 @@
+{
+  "tool_use_id": "toolu_01LhQEG8x82XsBN8Q3u5L2SN",
+  "agent_id": "a716e33791d6d20fd",
+  "subagent_type": "teacher",
+  "task_description": "Teacher style test",
+  "token_usage": {
+    "input_tokens": 8,
+    "cache_creation_tokens": 20805,
+    "cache_read_tokens": 43972,
+    "output_tokens": 3223,
+    "api_call_count": 4
+  },
+  "started_at": "2026-10-10T16:46:40.927175+02:00",
+  "completed_at": "2026-10-10T16:47:04.956068+02:00"
+}
