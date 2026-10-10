@@ -1,8 +1,8 @@
 # Negotiation tips and tricks for our buyer agent
 
-Analysis of the sources we could read, tied to the Tacto Negotiation Arena rules ([CHALLENGE.md](CHALLENGE.md)). Per-source notes are in [raw-files/](raw-files/) (own-words summaries, with links and how much was read). How to run and edit the agent: [SETUP.md](SETUP.md). Log every experiment in [backlog.csv](backlog.csv).
+Analysis of the sources we could read, tied to the Tacto Negotiation Arena rules ([CHALLENGE.md](CHALLENGE.md)). Per-source notes are in [RESEARCH.md](RESEARCH.md) (Part B) (own-words summaries, with links and how much was read). How to run and edit the agent: [SETUP.md](SETUP.md). Log every experiment in [backlog.csv](backlog.csv).
 
-**How much to trust this:** the sources are popular Harvard write-ups, one AI-vs-human experiment, one literature review and one teaching study. None tests an agent against Tacto's bots. Treat every tip as a **hypothesis to test in practice runs**, not a fact. Two sources could not be read (see [raw-files/05-not-read.md](raw-files/05-not-read.md)).
+**How much to trust this:** the sources are popular Harvard write-ups, one AI-vs-human experiment, one literature review and one teaching study. None tests an agent against Tacto's bots. Treat every tip as a **hypothesis to test in practice runs**, not a fact. Two sources could not be read (see [RESEARCH.md](RESEARCH.md), Part B, "Sources we could not read").
 
 ## The most important fact
 
@@ -73,7 +73,7 @@ Real example: on P03 our naive agent closed at exactly the opening cost and save
 
 ## Update: Princeton Handbook chapter (read in full)
 
-Source: Schweitzer, Krueger, Boothby and Cooney (2025), "Negotiation", Handbook of Social Psychology, 6th ed. Notes: [raw-files/06-princeton-handbook-negotiation-chapter.md](raw-files/06-princeton-handbook-negotiation-chapter.md). Findings are as reported in the chapter (lab-heavy; we did not check the primary studies). It has **nothing on AI agents negotiating**.
+Source: Schweitzer, Krueger, Boothby and Cooney (2025), "Negotiation", Handbook of Social Psychology, 6th ed. Notes: [RESEARCH.md](RESEARCH.md), Part B, Princeton Handbook chapter notes. Findings are as reported in the chapter (lab-heavy; we did not check the primary studies). It has **nothing on AI agents negotiating**.
 
 What it adds or changes for our rules:
 
@@ -100,5 +100,5 @@ Change one thing per version, run the same cases, compare scores. Start with pra
 
 ## What would make this better
 
-- Read the three missing sources (Kraljic, Malhotra and Bazerman, the Princeton chapter) and the books through your own library access; add short notes under `raw-files/`.
+- Read the three missing sources (Kraljic, Malhotra and Bazerman, the Princeton chapter) and the books through your own library access; add short notes to `RESEARCH.md` (Part B).
 - Read the full replays of practice cases: they show how the real bots respond, which no paper does.
