@@ -115,3 +115,60 @@ def test_sheets_are_compliant_and_never_worse_than_the_opening():
 def test_registered_with_guard_and_evidence():
     a = agent_factory("combined", None)()
     assert type(a.delegate.delegate).__name__ == "CombinedAgent" and a.questions is False
+
+
+def _until_final(run, extra=()):
+    """The saved real thread up to the supplier's first final offer (plus `extra` events)."""
+    th = json.loads((ROOT / "real_runs" / f"{run}.json").read_text())["threads"]
+    out = {}
+    for sid, t in th.items():
+        ms = t["messages"]
+        i = next((i for i, m in enumerate(ms) if m.get("from") != "buyer" and m.get("status") == "final_offer"), None)
+        out[sid] = (ms[: i + 1] if i is not None else ms) + list(extra)
+    return out
+
+
+def test_p07_final_worse_than_alternative_tries_24_months():
+    c, threads = case("P07"), _until_final("evidence_router_P07")
+    d = CombinedAgent().decide(c, threads)
+    out = sheets(d)
+    assert out, d  # no walk-away: the same price at 24 months beats the alternative
+    t, std = out[0], {}
+    assert t["contract_months"] == 24 and t["unit_price"] == pytest.approx(5.64)
+    alt = total_cost(c, c["buyer"]["alternative"]["terms"])
+    assert total_cost(c, t, std) < alt
+
+
+def test_p10_no_alternative_must_have_met_at_24_months_keeps_tied_lead_time():
+    c, threads = case("P10"), _until_final("evidence_router_P10")
+    d = GuardedAgent(CombinedAgent()).decide(c, threads)
+    out = sheets(d)
+    assert out, d
+    t = out[0]
+    assert must_haves_ok(c, t, {}) and t["contract_months"] == 24
+    assert t["lead_time_days"] == 56  # the supplier moved 54 -> 56 with its price: kept
+
+
+def test_refused_try_is_not_resent():
+    c, threads = case("P07"), _until_final("evidence_router_P07")
+    sid = next(iter(threads))
+    first = CombinedAgent().decide(c, threads)
+    tried = first["message"]["term_sheets"]
+    final = next(m for m in threads[sid] if m.get("status") == "final_offer")
+    refused = {**final, "body": "We must maintain our final offer."}
+    threads[sid] = threads[sid] + [{"from": "buyer", "body": "", "term_sheets": tried}, refused]
+    d = GuardedAgent(CombinedAgent()).decide(c, threads)
+    assert all(t != tried[0]["terms"] for t in sheets(d))
+
+
+def test_guard_does_not_resend_a_refused_counter():
+    c = case("P05")
+    t = dict(unit_price=40.0, payment_days=30, lead_time_days=35)
+    ev = [sup("Offer.", n=0, **t), buyer(**{**c["fixed_terms"], **t}), sup("No.", n=1, **t)]
+    g = GuardedAgent(CombinedAgent())
+    g._case_id, g._tried = c["case_id"], {}
+    from arena_kit.cost import complete_offer
+    from arena_kit.guard import satisfy_must_haves
+    sheet = complete_offer(c, satisfy_must_haves(c, dict(t), {}))
+    ev[1] = {"from": "buyer", "body": "", "term_sheets": [{"terms": sheet}]}
+    assert not g._eligible(c, {"sup:A": ev}, "sup:A")

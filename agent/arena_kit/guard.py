@@ -220,7 +220,15 @@ class GuardedAgent:
         events = threads[sid]
         status, left = latest(events).get("status"), moves_left(case, events)
         cap = 1 if status == "final_offer" else MAX_COUNTERS
-        return status not in ENDED | {"agreed"} and left >= 1 and self._tried.get((self._case_id, sid), 0) < cap
+        if status in ENDED | {"agreed"} or left < 1 or self._tried.get((self._case_id, sid), 0) >= cap:
+            return False
+        _, terms = standing(events)  # a counter we already sent was refused: sending it again only burns a move
+        if terms.get("unit_price") is not None:
+            sheet = satisfy_must_haves(case, dict(terms), standard_terms(events))
+            sent = [x["terms"] for m in events if m.get("from") == "buyer" for x in m.get("term_sheets") or []]
+            if sheet in sent or complete_offer(case, sheet) in sent:
+                return False
+        return True
 
     def _supplier_moved(self, case, threads, sid):
         """The standing sheet costs at most EARLY_ACCEPT x the thread's opening sheet."""

@@ -10,11 +10,13 @@ Compose as EvidenceAgent(GuardedAgent(CombinedAgent()), data, questions=False), 
 - Listener rules on every sheet: frozen fields stay at the supplier's value, no payment faster than the
   supplier offered (unless it asked and it saves >= 0.3 %), never a sheet sent before, never worse than the
   opening or the alternative.
-- Closing: FinalAgent's closing_accept (cheapest valid sheet over all live threads); after a final offer, one
-  try at their price with cheaper non-price terms (tied terms and their effective date kept) if it saves
-  >= 0.5 % and was not tried. Never walks away while a supplier is alive (FinalAgent).
+- Closing: FinalAgent's closing_accept (cheapest valid sheet over all live threads); after a final offer, a
+  try at their price with cheaper non-price terms (tied terms and their effective date kept), also when their
+  own sheet misses a must-have or loses to the alternative (P07: 5.64 at 24 months). Refused: accept the best
+  acceptable sheet, else the next untried package. Never walks away while a supplier is alive (FinalAgent).
 """
 
+import json
 import math
 
 from ..cost import complete_offer, must_haves_ok, total_cost
@@ -24,7 +26,7 @@ from ..listener import focus, supplier_model
 from ..play import latest, live_threads, moves_left
 from .final import FinalAgent
 from .listener import BODY_THEIR_PRICE, ListenerAgent, _tried_after_final
-from .reciprocal import _c_alt, _mine, _sup, _valid, case_c_open
+from .reciprocal import _c_alt, _mine, _sup, _valid, case_c_open, closing_accept
 
 TRY_SAVING = 0.005  # the one try after a final offer must save at least this share of their sheet's cost
 
@@ -64,35 +66,50 @@ class CombinedAgent(FinalAgent):
         return decision
 
     def _after_final(self, case, threads):
-        """One non-price try per thread at the supplier's final price, if it is clearly cheaper for us."""
+        """A try per thread at the supplier's final price with cheaper non-price terms (P07: 5.64 at 24 months
+        instead of 12). Built even when their own final sheet misses a must-have or loses to the alternative.
+        After our first try, only when no acceptable sheet exists (else FinalAgent accepts): the next untried one."""
         c_alt, c_open = _c_alt(case), case_c_open(case, threads)
+        quoted = {s: ev for s, ev in threads.items() if _sup(ev)}
         for sid in live_threads(threads):
             ev = threads[sid]
-            if latest(ev).get("status") != "final_offer" or moves_left(case, ev) < 2 or _tried_after_final(ev):
+            if latest(ev).get("status") != "final_offer" or moves_left(case, ev) < 2:
                 continue  # keep the last message for the accept
+            if _tried_after_final(ev) and closing_accept(case, quoted):
+                return None  # they refused our try but a sheet is acceptable: FinalAgent accepts it
             std, model = standard_terms(ev), self._models.get(sid)
-            valid = _valid(case, ev, std, c_alt)
-            if not valid or model is None:
+            priced = _valid(case, ev, std, math.inf, musts=False)
+            if not priced or model is None:
                 continue
-            c_best, best = min(valid, key=lambda v: v[0])
+            c_best, best = min(priced, key=lambda v: v[0])
             terms = best["terms"]
+            # the saving rule only applies when their own sheet is acceptable as it stands
+            ok_as_is = must_haves_ok(case, terms, std) and c_best < c_alt
+            bar = c_best * (1 - TRY_SAVING) if ok_as_is else math.inf
 
             def cost(t, std=std):
                 return total_cost(case, t, std)
 
-            hold = self.ears._held(model, terms)
-            at = self.ears._best_terms(case, model, dict(terms), cost, strict=True, hold=hold)
-            at = complete_offer(case, satisfy_must_haves(case, at, std))
+            # a field the supplier itself changed between its sheets is part of its price (P10: 54 -> 56 days)
+            theirs = [s["terms"] for m in _sup(ev) for s in m.get("term_sheets") or []]
+            moved = {f for f in terms if f != "unit_price" and len({json.dumps(t.get(f)) for t in theirs}) > 1}
+            hold = self.ears._held(model, terms) | moved
+            first = self.ears._best_terms(case, model, dict(terms), cost, strict=True, hold=hold)
+            upper = min(c_alt, c_open)
+            cands = [first] + self.ears._packages(case, model, dict(terms), terms["unit_price"], cost, upper)
             sent = [x["terms"] for m in _mine(ev) for x in m.get("term_sheets") or []]
-            if (
-                at not in sent
-                and must_haves_ok(case, at, std)
-                and self.ears._pay_filter(model, [at], cost, ref=terms)
-                and cost(at) < min(c_alt, c_open)
-                and cost(at) < c_best * (1 - TRY_SAVING)
-            ):
-                return {"supplier_id": sid, "message": {"subject": case.get("title", "Our proposal"),
-                                                        "body": BODY_THEIR_PRICE, "term_sheets": [{"terms": at}]}}
+            for at in cands:
+                at = {**at, **{f: terms[f] for f in hold}, "unit_price": terms["unit_price"]}
+                at = complete_offer(case, satisfy_must_haves(case, at, std))
+                if (
+                    at not in sent
+                    and must_haves_ok(case, at, std)
+                    and self.ears._pay_filter(model, [at], cost, ref=terms)
+                    and cost(at) < upper
+                    and cost(at) < bar
+                ):
+                    return {"supplier_id": sid, "message": {"subject": case.get("title", "Our proposal"),
+                                                            "body": BODY_THEIR_PRICE, "term_sheets": [{"terms": at}]}}
         return None
 
     def _sheets(self, case, events, std, theirs):
