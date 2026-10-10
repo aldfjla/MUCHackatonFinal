@@ -27,12 +27,14 @@ def load_env(path=".env"):
 
 
 def agent_factory(name, data):
-    from .agents import LLMAgent, NaiveAgent, SmartAgent, llm_from_env
+    from .agents import ConfidentAgent, LLMAgent, NaiveAgent, SmartAgent, llm_from_env
 
     if name == "naive":
         return NaiveAgent
     if name == "smart":
         return SmartAgent
+    if name == "confident":
+        return ConfidentAgent
     package = None
     if data:
         from .data import DataPackage
@@ -67,11 +69,11 @@ def main(argv=None):
     c.add_argument("--set", **sets)
     p = sub.add_parser("play", help="play one case")
     p.add_argument("case_id")
-    p.add_argument("--agent", default="naive", choices=["naive", "smart", "llm"])
+    p.add_argument("--agent", default="naive", choices=["naive", "smart", "confident", "llm"])
     p.add_argument("--data", **data)
     a = sub.add_parser("run", help="play every case of a set in parallel")
     a.add_argument("--set", **sets)
-    a.add_argument("--agent", default="naive", choices=["naive", "smart", "llm"])
+    a.add_argument("--agent", default="naive", choices=["naive", "smart", "confident", "llm"])
     a.add_argument("--data", **data)
     a.add_argument("--parallel", type=int, default=8, help="cases at once (at most 10)")
     a.add_argument("--waves", type=int, default=5, help="final: stop after this many waves have closed")
