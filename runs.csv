@@ -1,0 +1,2 @@
+date,version,agent,environment,case_id,deal,c_open,c_deal,c_best,score,replay,notes
+2026-10-10,v0,naive (kit baseline),simulator,case:S01,yes,119491.07,112451.50,105969.08,0.52,http://127.0.0.1:8000/replay/sim1,"unit_price 16.59, payment 60 days; unmodified kit"
