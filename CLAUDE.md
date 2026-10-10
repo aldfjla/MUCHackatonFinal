@@ -9,3 +9,7 @@ The main session is the manager. Subagents live in `.claude/agents/` and are sha
 - Subagents cannot spawn other subagents; give each one the full context it needs.
 
 To add or change an agent, edit its file in `.claude/agents/` and commit it so the team gets it.
+
+# Backlog rule
+
+In `backlog.csv`, the `version` column is `v<N> - <name of the person who ran it>`, for example `v0 - niko`.
