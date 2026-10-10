@@ -117,3 +117,5 @@ date,version,agent,environment,case_id,deal,c_open,c_deal,c_best,score,replay,no
 2026-10-10,v16 - niko,reciprocal_evidence (concurrent replies),practice arena,case:P08,yes,1135887.28,1039531.93,960309.33,0.55,https://arena.tacto.ai/replay/b24c6690cf7d51b1,timeouts 0; unanswered open threads none
 2026-10-10,v16 - niko,reciprocal_evidence (concurrent replies),practice arena,case:P11,yes,817578.0,766618.5,722500.02,0.54,https://arena.tacto.ai/replay/aaed454deb2ab235,timeouts 0; unanswered open threads none
 2026-10-10,v16 - niko,reciprocal_evidence (concurrent replies),practice arena,case:P18,yes,295173.23,264784.3,222651.27,0.42,https://arena.tacto.ai/replay/19cbce3f057071d1,timeouts 0; unanswered open threads none
+2026-10-11,v17 - niko,simplify (five parts + stall gap-closing 5%),mock arena,set:real x20 seeds,99% deals,,,,0.590,,"mean over 20 seeds, 0 API; worst case P18 0.22; before stall rule 0.567; mock only, not a real score"
+2026-10-11,v17 - niko,simplify (five parts + stall gap-closing 5%),mock arena,set:dev x20 seeds,90% deals,,,,0.526,,"mean over 20 seeds, 0 API; worst case GD13 0.00; before stall rule 0.502; mock only, not a real score"
