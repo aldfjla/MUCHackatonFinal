@@ -34,7 +34,8 @@ cd MUCHackatonFinal
 ### Running
 
 ```bash
-# command to run the project (TBD)
+cd agent && uv sync --all-extras
+uv run arena play case:P01 --agent confident -v   # needs ARENA_API_KEY in agent/.env
 ```
 
 ## Project Structure
