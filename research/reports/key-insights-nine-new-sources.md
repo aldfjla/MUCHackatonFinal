@@ -1,6 +1,6 @@
 # Key insights from nine new sources (input for building negotiation strategies)
 
-Facts distilled from the second research round, in our own words. Each fact is tagged with its source (S1-S9), an evidence strength (strong / moderate / weak, our judgement) and the **knob** it gives us, meaning a parameter that different strategies can set differently. Full notes per source: `research_notes/Negotiation research reading list/` (`new_sources_harvard.md`, `new_sources_princeton_mit_etc.md`, `new_sources_textbooks_open.md`). Companion report: [Negotiation research reading list](Negotiation%20research%20reading%20list.md).
+Facts distilled from the second research round, in our own words. Each fact is tagged with its source (S1-S9), an evidence strength (strong / moderate / weak, our judgement) and the **knob** it gives us, meaning a parameter that different strategies can set differently. Full notes per source: `research/notes/` (`07-new-sources-harvard.md`, `08-new-sources-princeton-mit-etc.md`, `09-new-sources-open-textbooks.md`). Companion report: [negotiation-research-reading-list.md](negotiation-research-reading-list.md).
 
 **Caveats first.** Several sources are lab studies with people, simulations or toy games on 2023-era models, and none tested an agent against Tacto's bots. Every item is a hypothesis for `backlog.csv` runs. The agents read S1, S2, S3, S4 (IEEE version), S5 (pp. 1-8) and S8 in full or nearly; S6 about half; S7 and S9 partly.
 
