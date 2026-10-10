@@ -5,6 +5,18 @@ Single source of truth for the challenge. Compiled 2026-10-10 from the official 
 `starter-kit/README.md`, `data/README.md`) and the organiser's Discord post.
 **Not yet read:** `brief/api.md` (full API) and the contents of `data/`. Check the originals before relying on any detail here.
 
+## Sources
+
+| Tag | Source | Used for |
+|---|---|---|
+| [A] | <https://arena.tacto.ai/> | Overview, one rule, weekend schedule |
+| [K] | <https://github.com/tacto-ai/negotiation-arena-kit> | Brief, rules, scoring, data, starter kit, submission (sections 1-11) |
+| [P] | <https://arena.tacto.ai/apply> | Key flow: match code, key shown once, `.env`, keep out of git (section 3) |
+| [L] | <https://arena.tacto.ai/live> | Practice board, house-agent scores, team standings (section 14) |
+| [F] | <https://arena.tacto.ai/faq> | Scoring FAQ, deployment, token costs, P01 replay (section 14) |
+
+Sections 1-11 come mainly from [K] with [A] and [P]; section 14 comes from [L] and [F]. The Discord post is the organiser's announcement.
+
 > **Status: candidate project, not yet chosen.** Never put the arena key, `.env` or any LLM key in this repo (the repo is public).
 
 ## 1. The task in one paragraph
