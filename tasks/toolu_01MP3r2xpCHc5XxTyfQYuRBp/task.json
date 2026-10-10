@@ -1,0 +1,15 @@
+{
+  "tool_use_id": "toolu_01MP3r2xpCHc5XxTyfQYuRBp",
+  "agent_id": "a584a304d34abcf74",
+  "subagent_type": "coder",
+  "task_description": "Must-have guard wrapper for agents",
+  "token_usage": {
+    "input_tokens": 16,
+    "cache_creation_tokens": 44822,
+    "cache_read_tokens": 211334,
+    "output_tokens": 103,
+    "api_call_count": 8
+  },
+  "started_at": "2026-10-10T19:57:32.224548705+02:00",
+  "completed_at": "2026-10-10T19:59:47.926141566+02:00"
+}

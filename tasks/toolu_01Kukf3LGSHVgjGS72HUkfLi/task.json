@@ -1,0 +1,15 @@
+{
+  "tool_use_id": "toolu_01Kukf3LGSHVgjGS72HUkfLi",
+  "agent_id": "a9af36c2248cbede7",
+  "subagent_type": "reviewer",
+  "task_description": "Review must-have guard layer",
+  "token_usage": {
+    "input_tokens": 12,
+    "cache_creation_tokens": 32934,
+    "cache_read_tokens": 108827,
+    "output_tokens": 110,
+    "api_call_count": 6
+  },
+  "started_at": "2026-10-10T20:00:34.38510853+02:00",
+  "completed_at": "2026-10-10T20:01:50.118974573+02:00"
+}
