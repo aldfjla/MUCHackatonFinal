@@ -151,3 +151,33 @@ uv run arena board                # practice leaderboard (humans only)
 | `teacher` | explain | explain data and code to teammates |
 | Data analyst (human) | mine the data | which index/clause/note moves which supplier |
 | Pitch (human) | slides and replay walkthrough | |
+
+## 14. From the arena website (arena.tacto.ai, snapshot Sat 10 Oct, build phase)
+
+Pages: `/` overview, `/apply` key flow, `/live` practice board, `/results` final standings (empty until wave 1), `/faq`.
+
+**Practice board (22 teams, 12 active in the last hour at snapshot).** Best team mean was 0.68; most teams had met 1 of 10 suppliers. Nobody had beaten Tacto's **house agent** on any of the 10 bots.
+
+| Case | Type | Supplier | House agent | Best team |
+|---|---|---|---|---|
+| P01 | Price increase | Brandlhuber (family foundry, +9.5% volute casings) | 0.97 | 0.93 |
+| P02 | Price increase | Nordmark (copper pass-through, 7.5 kW motor) | 0.74 | none |
+| P03 | Renewal | Selvbrunn Drive Systems (frequency converter) | 0.92 | 0.90 |
+| P04 | Renewal | Wälzlager-Zentrum Süd (ball bearing 6306) | 0.86 | none |
+| P05 | RFQ (3 bidders) | Dralveck / Hrvelec / Fuchsreiter (pump shaft) | 0.56 | 0.36 |
+| P07 | Bundling | Schraubenhandel Leitner (fastener kit) | 0.78 | 0.74 |
+| P08 | Raw material | Edelstahl-Service Donautal (1.4404 bar) | 0.75 | none |
+| P10 | Capacity | Ravensteiner (seal allocation cut) | 0.69 | 0.45 |
+| P11 | Quality | Kalwisz (bearing brackets in red) | 0.31 | none |
+| P18 | Raw material | Blankstahl Werdenfels (1.4404 bar) | 0.39 | none |
+
+Takeaways: the house agent scores 0.31-0.97, so quality and capacity cases (P11, P18, P10) are hardest. Beating the house agent is a visible goal. Sandbox cases `case:D01`, `case:D02` do **not** count against the 200/day quota.
+
+**FAQ highlights**
+- **Ranking is by points, not euros.** Every case weighs the same; "EUR saved" is a side number (mention it in the pitch). Ties: more deals, then fewer rounds.
+- **Nothing to deploy.** The agent is an API client; no server or public URL. Real suppliers exist only on arena.tacto.ai. For the final, **a cloud VM is safer than a laptop on venue Wi-Fi.** Tacto does not run our code; we run the submitted commit ourselves.
+- **Tokens are cheap.** Math in code (`total_cost`), prepare a cached dossier per supplier, use a strong model for the plan and a small one for writing, any OpenAI-compatible endpoint (even local Ollama) works. Max 10 of our messages per supplier by default.
+- **Worked replay (P01, Brandlhuber):** the agent cited a real index (`idx:PPI-D351@2026-08`, electricity -3.7%) and a should-cost (`cost:310010`), offered faster payment as a trade, and closed at EUR 134.50, 30 days, from 1 Jan 2027, **score 0.76**, about EUR 43,500 saved. The same index argument sent as an ultimatum got EUR 136.50 from November: roughly EUR 13,700 a year worse. **Tone and trades beat threats.**
+- A deal that covers only part of the need (for example 12 months instead of 24) can score 0 even at a lower unit price.
+
+**Privacy:** contact e-mail on `/apply` is visible only to organisers and deleted after the event.
