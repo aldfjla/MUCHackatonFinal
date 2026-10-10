@@ -1,0 +1,18 @@
+{
+  "tool_use_id": "toolu_01HhZDhDxnTuqSwuUCPvDbWm",
+  "agent_id": "a12c94f6460060aee",
+  "subagent_type": "general-purpose",
+  "task_description": "Read Princeton negotiation chapter",
+  "files": [
+    "raw-files/06-princeton-handbook-negotiation-chapter.md"
+  ],
+  "token_usage": {
+    "input_tokens": 22,
+    "cache_creation_tokens": 133544,
+    "cache_read_tokens": 916822,
+    "output_tokens": 5416,
+    "api_call_count": 11
+  },
+  "started_at": "2026-10-10T17:14:32.861524+02:00",
+  "completed_at": "2026-10-10T17:16:40.912646+02:00"
+}
