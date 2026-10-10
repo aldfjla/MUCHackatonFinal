@@ -1,0 +1,9 @@
+.env
+.env.*
+!.env.example
+*.key
+.claude/settings.local.json
+.venv/
+__pycache__/
+data/package/
+data/release-sunday/
