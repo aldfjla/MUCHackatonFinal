@@ -1782,3 +1782,7 @@ nice. but would it get better if I give you 20 runs? and if so would it scale li
 ---
 
 ok, remember this maybe write a text file on my computer that would outline how to create this api mock runs (the simulation environment with variation that would not use any of our credits). now me and my team will merge
+
+---
+
+push my version on my branch and then take alex's branch and if compatible put my code with it (alex's should be the main and my is for adding on top of it) and save this version to my local version
