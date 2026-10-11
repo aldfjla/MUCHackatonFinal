@@ -1,0 +1,36 @@
+<section id="cliff" data-transition="fade" style="background:#14213D;color:#FBFBF8;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:24px">
+<h2 style="font-family:Domine, Georgia, serif;font-size:72px;font-weight:700;line-height:1.1">The supplier-health cliff, measured on the arena</h2>
+<p style="font-size:28px;color:#BFD0E6">What the arena charged us for the supplier's health at each price we closed at. Strategic categories only.</p>
+<x-embed style="position:absolute;left:128px;top:330px;width:1040px;height:560px"><!doctype html><html><head><meta charset="utf-8"><style>
+html,body{margin:0;background:transparent;font-family:-apple-system,"Segoe UI",Helvetica,Arial,sans-serif}
+svg{width:1040px;height:560px;display:block}.lbl{font-size:24px;fill:#BFD0E6}.val{font-size:26px;font-weight:600;fill:#FBFBF8}.ttl{font-size:28px;font-weight:600;fill:#E8A860}
+</style></head><body><svg id="s" viewBox="0 0 1040 560"></svg><script>
+var ns="http://www.w3.org/2000/svg",s=document.getElementById("s");
+function el(t,a,txt){var e=document.createElementNS(ns,t);for(var k in a)e.setAttribute(k,a[k]);if(txt)e.textContent=txt;s.appendChild(e);return e}
+function spline(p){var d="M"+p[0][0]+","+p[0][1];for(var i=0;p.length-1-i>0;i++){var p0=p[i-1]||p[i],p1=p[i],p2=p[i+1],p3=p[i+2]||p2;d+=" C"+(p1[0]+(p2[0]-p0[0])/6)+","+(p1[1]+(p2[1]-p0[1])/6)+" "+(p2[0]-(p3[0]-p1[0])/6)+","+(p2[1]-(p3[1]-p1[1])/6)+" "+p2[0]+","+p2[1]}return d}
+function panel(ox,title,pts,xmin,xmax,ymax,unit){var L=ox+90,R=ox+480,T=70,B=470;
+el("text",{x:ox+90,y:40,"class":"ttl"},title);
+el("line",{x1:L,x2:R,y1:B,y2:B,stroke:"#3A4A6B","stroke-width":"2"});el("line",{x1:L,x2:L,y1:T,y2:B,stroke:"#3A4A6B","stroke-width":"2"});
+function X(v){return L+(R-L)*(v-xmin)/(xmax-xmin)}function Y(v){return B-(B-T)*v/ymax}
+var P=pts.map(function(p){return[X(p[0]),Y(p[1])]});
+var path=el("path",{d:spline(P),fill:"none",stroke:"#E8A860","stroke-width":"5","stroke-linecap":"round"});var len=path.getTotalLength();path.style.strokeDasharray=len;path.style.strokeDashoffset=len;path.style.transition="stroke-dashoffset 2.2s cubic-bezier(.4,0,.2,1) .3s";setTimeout(function(){path.style.strokeDashoffset=0},60);
+pts.forEach(function(p,i){var c=el("circle",{cx:P[i][0],cy:P[i][1],r:0,fill:"#FBFBF8"});c.style.transition="r .3s "+(0.5+1.8*i/pts.length)+"s";setTimeout(function(){c.setAttribute("r",9)},60);
+var t=el("text",{x:P[i][0]+(i==pts.length-1?-12:12),y:P[i][1]-16,"text-anchor":i==pts.length-1?"end":"start","class":"val",opacity:0},Math.round(p[1]/1000)+"k");t.style.transition="opacity .4s "+(0.7+1.8*i/pts.length)+"s";setTimeout(function(){t.setAttribute("opacity",1)},60);
+el("text",{x:P[i][0],y:B+32,"text-anchor":"middle","class":"lbl"},p[0]);});
+el("text",{x:R,y:B+62,"text-anchor":"end","class":"lbl"},"unit price, EUR");el("text",{x:L-6,y:T-14,"text-anchor":"end","class":"lbl"},"charge, EUR");}
+panel(0,"P02: motor, copper exposed",[[370.96,0],[364.65,18852],[351.5,119494]],349,372,130000);
+panel(520,"P01: casting, regional foundry",[[135.8,3675],[134.5,21469],[133.6,2242]],133,136.5,25000);
+</script></body></html></x-embed>
+<div style="position:absolute;left:1232px;top:330px;width:560px;display:flex;flex-direction:column;gap:20px" data-build-in="rise">
+<div style="display:flex;flex-direction:column;gap:6px;background:#1E2D52;padding:28px;border-radius:16px">
+<p style="font-size:26px;color:#E8A860;letter-spacing:2px;text-transform:uppercase">P02</p>
+<p style="font-size:27px;line-height:1.4;color:#FBFBF8">3.6 % lower price, <b>six times</b> the health charge. The deal at 351.5 cost more in total than the deal at 364.65 and scored 0.25 instead of 0.67.</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:6px;background:#1E2D52;padding:28px;border-radius:16px">
+<p style="font-size:26px;color:#E8A860;letter-spacing:2px;text-transform:uppercase">What the agent does with it</p>
+<p style="font-size:27px;line-height:1.4;color:#FBFBF8">Estimates each supplier's full cost from the should-cost table, prices offers inside an uncertainty band, and accepts only packages that pass in the pessimistic world. The lower edge of that band is the cliff.</p>
+</div>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;font-size:24px;color:#8FA3C4">Measured points only (arena cost breakdowns, sessions v30, v36, v37). P01's 2,242 is a January-start deal at 30 days; the other two are April starts.</p>
+<aside>This is the slide for "what did it learn about suppliers". Nobody told us the shape; we measured it by closing at different prices and reading the arena's own breakdown. The band in the agent exists because of it.</aside>
+</section>

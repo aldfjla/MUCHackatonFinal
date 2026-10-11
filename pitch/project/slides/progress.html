@@ -1,28 +1,40 @@
-<section id="progress" data-transition="fade" style="background:#EEF1F6;color:#14213D;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:48px">
-<h2 style="font-family:Domine, Georgia, serif;font-size:72px;font-weight:700;line-height:1.1">What moved the score, on the real arena</h2>
-<div style="display:flex;gap:20px;align-items:end">
-<div style="flex:1;display:flex;flex-direction:column;gap:8px;background:#FFFFFF;padding:28px;border:1px solid #D8DEE9;border-radius:16px">
-<p style="font-size:72px;font-weight:600;line-height:1">0.18</p>
-<p style="font-size:26px;line-height:1.35;color:#4A5568">First rational agent: accepted too late, walked too often</p>
+<section id="progress" data-transition="push" style="background:#14213D;color:#FBFBF8;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:24px">
+<h2 style="font-family:Domine, Georgia, serif;font-size:72px;font-weight:700;line-height:1.1">24 hours, 403 logged sessions: 0.10 to 0.72</h2>
+<p style="font-size:28px;color:#BFD0E6">Mean score over the ten hosted practice cases, every agent revision the team ran, in order</p>
+<x-embed style="position:absolute;left:128px;top:330px;width:1180px;height:560px"><!doctype html><html><head><meta charset="utf-8"><style>
+html,body{margin:0;background:transparent;font-family:-apple-system,"Segoe UI",Helvetica,Arial,sans-serif;color:#FBFBF8}
+svg{width:1180px;height:560px;display:block}
+.lbl{font-size:24px;fill:#BFD0E6}.val{font-size:26px;font-weight:600;fill:#FBFBF8}.ax{stroke:#3A4A6B;stroke-width:2}
+</style></head><body><svg id="s" viewBox="0 0 1180 560"></svg><script>
+var P=[["v2 alex",0.10],["v11",0.18],["v12",0.29],["v13",0.27],["v14",0.57],["v17 alex",0.58],["v5 petra",0.61],["v8 petra",0.66],["v21",0.70],["v30",0.72],["v35",0.72]];
+var L=90,R=1150,T=40,B=480,n=P.length,ns="http://www.w3.org/2000/svg",s=document.getElementById("s");
+function X(i){return L+(R-L)*i/(n-1)}function Y(v){return B-(B-T)*v/0.8}
+function el(t,a,txt){var e=document.createElementNS(ns,t);for(var k in a)e.setAttribute(k,a[k]);if(txt)e.textContent=txt;s.appendChild(e);return e}
+[0,0.2,0.4,0.6,0.8].forEach(function(v){el("line",{x1:L,x2:R,y1:Y(v),y2:Y(v),"class":"ax",style:"stroke-dasharray:6 8"});el("text",{x:L-14,y:Y(v)+9,"text-anchor":"end","class":"lbl"},v.toFixed(1))});
+var pts=P.map(function(p,i){return[X(i),Y(p[1])]});
+function spline(p){var d="M"+p[0][0]+","+p[0][1];for(var i=0;p.length-1-i>0;i++){var p0=p[i-1]||p[i],p1=p[i],p2=p[i+1],p3=p[i+2]||p2;var c1x=p1[0]+(p2[0]-p0[0])/6,c1y=p1[1]+(p2[1]-p0[1])/6,c2x=p2[0]-(p3[0]-p1[0])/6,c2y=p2[1]-(p3[1]-p1[1])/6;d+=" C"+c1x+","+c1y+" "+c2x+","+c2y+" "+p2[0]+","+p2[1]}return d}
+var g=el("linearGradient",{id:"gr",x1:"0",y1:"0",x2:"0",y2:"1"});g.innerHTML='<stop offset="0" stop-color="#E8A860" stop-opacity="0.45"/><stop offset="1" stop-color="#E8A860" stop-opacity="0"/>';
+var area=el("path",{d:spline(pts)+" L"+R+","+B+" L"+L+","+B+" Z",fill:"url(#gr)",opacity:"0"});
+var path=el("path",{d:spline(pts),fill:"none",stroke:"#E8A860","stroke-width":"6","stroke-linecap":"round"});
+var len=path.getTotalLength();path.style.strokeDasharray=len;path.style.strokeDashoffset=len;
+path.style.transition="stroke-dashoffset 2.6s cubic-bezier(.4,0,.2,1)";
+setTimeout(function(){path.style.strokeDashoffset=0;area.style.transition="opacity 1.2s 1.6s";area.style.opacity=1},200);
+P.forEach(function(p,i){var c=el("circle",{cx:pts[i][0],cy:pts[i][1],r:0,fill:i>=8?"#E8A860":"#FBFBF8",stroke:"#14213D","stroke-width":"3"});c.style.transition="r .35s "+(0.3+2.3*i/(n-1))+"s";setTimeout(function(){c.setAttribute("r",i>=8?12:9)},50);
+var t=el("text",{x:pts[i][0],y:pts[i][1]-22,"text-anchor":"middle","class":"val",opacity:0},p[1].toFixed(2));t.style.transition="opacity .4s "+(0.5+2.3*i/(n-1))+"s";setTimeout(function(){t.setAttribute("opacity",1)},50);
+el("text",{x:pts[i][0],y:B+36,"text-anchor":"middle","class":"lbl"},p[0]);});
+el("text",{x:R,y:T-8,"text-anchor":"end","class":"lbl"},"score 0..1");
+</script></body></html></x-embed>
+<div style="position:absolute;left:1340px;top:330px;width:452px;display:flex;flex-direction:column;gap:20px" data-build-in="rise">
+<div style="display:flex;flex-direction:column;gap:6px;background:#1E2D52;padding:28px;border-radius:16px">
+<p style="font-size:26px;color:#E8A860;letter-spacing:2px;text-transform:uppercase">The two big jumps</p>
+<p style="font-size:27px;line-height:1.4;color:#FBFBF8"><b>0.29 to 0.57</b>: match the supplier's visible concession, accept the final offer, 24-month contracts, cited evidence.</p>
+<p style="font-size:27px;line-height:1.4;color:#FBFBF8"><b>0.58 to 0.70</b>: price every package with the supplier-health term and an uncertainty band.</p>
 </div>
-<div style="flex:1;display:flex;flex-direction:column;gap:8px;background:#FFFFFF;padding:28px;border:1px solid #D8DEE9;border-radius:16px">
-<p style="font-size:72px;font-weight:600;line-height:1">0.29</p>
-<p style="font-size:26px;line-height:1.35;color:#4A5568">Must-have guard, never walk while a supplier is alive</p>
-</div>
-<div style="flex:1;display:flex;flex-direction:column;gap:8px;background:#FFFFFF;padding:28px;border:1px solid #D8DEE9;border-radius:16px">
-<p style="font-size:72px;font-weight:600;line-height:1">0.57</p>
-<p style="font-size:26px;line-height:1.35;color:#4A5568">Matched concessions, accept the final offer, 24-month contracts, cited evidence</p>
-</div>
-<div style="flex:1;display:flex;flex-direction:column;gap:8px;background:#FFFFFF;padding:28px;border:1px solid #D8DEE9;border-radius:16px">
-<p style="font-size:72px;font-weight:600;line-height:1">0.70</p>
-<p style="font-size:26px;line-height:1.35;color:#4A5568">Supplier-health pricing with an uncertainty band; package-level accepts</p>
-</div>
-<div style="flex:1;display:flex;flex-direction:column;gap:8px;background:#14213D;color:#FBFBF8;padding:28px;border-radius:16px">
-<p style="font-size:72px;font-weight:600;line-height:1;color:#E8A860">0.72</p>
-<p style="font-size:26px;line-height:1.35;color:#BFD0E6">Latest effective date in every sheet; no index sheet in the first message</p>
+<div style="display:flex;flex-direction:column;gap:6px;background:#1E2D52;padding:28px;border-radius:16px">
+<p style="font-size:26px;color:#E8A860;letter-spacing:2px;text-transform:uppercase">Last two levers</p>
+<p style="font-size:27px;line-height:1.4;color:#FBFBF8">Latest effective date in every sheet: P01 0.69 to 0.88. No index sheet in the first message: P08 0.53 to 0.56.</p>
 </div>
 </div>
-<p style="font-size:30px;line-height:1.45;color:#4A5568">Seven more ideas were tested the same way and rejected: payment-term mirroring, one sheet per message, a supplier-belief layer, dropping the clause sheet, a lead-time lever, scaling the health term. Each stays in the code as a default-off flag with its result in the comment.</p>
-<p style="position:absolute;left:128px;bottom:64px;font-size:24px;color:#6A7179">Mean over the ten hosted practice cases. Every run is a row in backlog.csv with its replay link.</p>
-<aside>The mock simulator predicted none of these. Each step was tested one change at a time on identical real cases against the unchanged baseline, and promoted only when it repeated.</aside>
+<p style="position:absolute;left:128px;bottom:64px;font-size:24px;color:#8FA3C4">Source: backlog.csv, first row per version and case; Alex's and Petra's revisions included where they ran all ten cases</p>
+<aside>Let the curve draw. Three teammates' agents are on it. The two big jumps were concession matching and the supplier-health pricing; the last two levers were found on Sunday morning by reading the arena's own cost breakdowns.</aside>
 </section>
