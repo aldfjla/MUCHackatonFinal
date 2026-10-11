@@ -267,6 +267,9 @@ class BetterAgent(SimplifyAgent):
     GUARD_C_OPEN = THIRD_SHEET = ANCHOR_BY_SHARE = CASH_SHORT_OFFER = LATE_ACCEPT = HEALTH_ESTIMATE = True
     HOLD_FOR_FINAL = False  # dead on the real bots: final_offer comes at a fixed message whatever we do
     LATE_MESSAGES, LATE_TOLERANCE, HOLD_MESSAGES = 2, 0.01, 3
+    # PAY_MIRROR (opt-in, `better_pay`): real runs show suppliers lift their whole price ladder 1-3% when we ask for 90 days (P08: 5.40 at 30d
+    # unasked vs 5.63/5.69 after asking; P07: 5.35 at 30d vs 5.48 at 60d) while C values 30 extra days at only 0.3-0.6%: without health at stake, mirror their opening term
+    PAY_MIRROR = False
     MATCH_FACTOR = 1.0  # our step answers their last move in full (simplify: 0.25): the bot's last concession scales with our last step
 
     def decide(self, case, threads):
@@ -492,6 +495,13 @@ class BetterAgent(SimplifyAgent):
         text = " ".join([*(m.get("body") or "" for m in _sup(events)), str(case.get("suppliers", ""))])
         return bool(CASH_SHORT.search(text))
 
+    def _mirror(self, case, events):
+        """The supplier's opening payment_days when PAY_MIRROR applies to this case, else None."""
+        if not self.PAY_MIRROR or _health_at_stake(case) or "payment_days" not in case["negotiable"]:
+            return None
+        first = next((m["term_sheets"][0] for m in _sup(events) if m.get("term_sheets")), None)  # their FIRST sheet only
+        return ((first or {}).get("terms") or {}).get("payment_days")
+
     def _trade_sheet(self, case, events, std, main, p, pins, seen):
         """Same C as main with another lever: shorter payment days (or another contract length) for a lower price."""
         short = self.CASH_SHORT_OFFER and self._cash_short(case, events)
@@ -499,7 +509,7 @@ class BetterAgent(SimplifyAgent):
         opts, best = case.get("term_options") or {}, None
         cost = lambda t: total_cost(case, t, std)  # noqa: E731
         for f in levers:
-            if f not in case["negotiable"] or f in pins or (_health_at_stake(case) and f not in FREE_LEVERS):
+            if f not in case["negotiable"] or f in pins or (f == "payment_days" and self._mirror(case, events) is not None) or (_health_at_stake(case) and f not in FREE_LEVERS):
                 continue
             for o in (o for o in opts.get(f, []) if o and o != main.get(f) and (f != "payment_days" or o < main[f])):
                 t = satisfy_must_haves(case, {**main, f: o}, std)
@@ -541,4 +551,12 @@ class BetterAgent(SimplifyAgent):
             if extra := self._trade_sheet(case, events, std, out[0], theirs["unit_price"], _pinned(events), seen):
                 if (extra := complete_offer(case, extra)) not in out:
                     out.append(extra)
+        if out and (days := self._mirror(case, events)) is not None:  # never longer than their opening term; keep a shorter one of ours
+            seen = [s["terms"] for m in _mine(events) for s in m.get("term_sheets") or []]
+            fixed = []
+            for t in out:
+                t = {**t, "payment_days": min(days, t["payment_days"]) if t.get("payment_days") is not None else days}
+                if (t := complete_offer(case, satisfy_must_haves(case, t, std))) not in fixed and t not in seen:
+                    fixed.append(t)
+            out = fixed
         return out

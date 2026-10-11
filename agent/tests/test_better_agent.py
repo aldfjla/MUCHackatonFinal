@@ -409,3 +409,22 @@ def test_concession_log_fields():
     assert why["round"] == 2 and why["ours"]["prev"] == 24.0 and why["ours"]["step"] == round(why["ours"]["new"] - 24.0, 2)
     assert why["supplier"] == {"prev": 30.0, "new": 29.0, "step": -1.0}
     assert isinstance(why["levers_changed"], list) and why["c_after"] is not None and why["c_before"] is not None
+
+
+def _mirror_sheets(flag, **case_kw):
+    case = _case(payment_days=[14, 30, 60, 90])
+    case["buyer"].update(case_kw)
+    std = {"unit_price": 30.0, "payment_days": 30}
+    agent = BetterAgent()
+    agent.PAY_MIRROR = flag
+    return agent._sheets(case, [_sup(30.0, 0)], std, std)
+
+
+def test_pay_mirror_keeps_the_suppliers_opening_payment_days():
+    assert {s["payment_days"] for s in _mirror_sheets(True)} == {30}
+    assert any(s["payment_days"] > 30 for s in _mirror_sheets(False))  # default: unchanged, asks for longer
+
+
+def test_pay_mirror_is_off_when_health_is_at_stake():
+    health = {"category_goal": "stabilise", "relationship_eur_per_point": 100.0}
+    assert _mirror_sheets(True, **health) == _mirror_sheets(False, **health)

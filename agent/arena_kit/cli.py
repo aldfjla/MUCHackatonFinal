@@ -29,7 +29,7 @@ def load_env(path=".env"):
 
 AGENTS = [
     "naive", "smart", "confident", "rational", "explorer", "anchor", "switcher", "boulware", "router",
-    "confident_boulware", "confident_router", "guarded_boulware", "guarded_rational", "evidence_router", "evidence_rational", "reciprocal", "reciprocal_evidence", "simplify", "final", "final_match", "listener", "combined", "combined2", "playbook", "better", "50", "llm",
+    "confident_boulware", "confident_router", "guarded_boulware", "guarded_rational", "evidence_router", "evidence_rational", "reciprocal", "reciprocal_evidence", "simplify", "final", "final_match", "listener", "combined", "combined2", "playbook", "better", "better_pay", "50", "llm",
 ]  # fmt: skip
 
 
@@ -94,7 +94,7 @@ def agent_factory(name, data):
     if name == "guarded_rational":
         return lambda: GuardedAgent(RationalAgent())
     # the evidence wrapper replaces the delegate's body and refs by design (it cites verified data)
-    if name in ("evidence_router", "evidence_rational", "listener", "combined", "combined2", "better"):
+    if name in ("evidence_router", "evidence_rational", "listener", "combined", "combined2", "better", "better_pay"):
         from .evidence import package_problem
 
         if why := package_problem(data):  # say it before any session opens, not once per message
@@ -123,6 +123,12 @@ def agent_factory(name, data):
         return lambda: EvidenceAgent(GuardedAgent(PlaybookAgent(SimplifyAgent())), data)
     if name == "better":
         return lambda: EvidenceAgent(HealthScope(GuardedAgent(BetterAgent())), data)
+    if name == "better_pay":  # better with PAY_MIRROR on (A/B)
+        def make():
+            b = BetterAgent()
+            b.PAY_MIRROR = True
+            return EvidenceAgent(HealthScope(GuardedAgent(b)), data)
+        return make
     if name == "50":
         return lambda: EvidenceAgent(GuardedAgent(FiftyAgent()), data)
     package = None
