@@ -1,0 +1,15 @@
+{
+  "tool_use_id": "toolu_01PXW2vFoGnNCK5U4Rr1tFHw",
+  "agent_id": "a48e395755d38fce0",
+  "subagent_type": "coder",
+  "task_description": "Add PAY_MIRROR flag to better",
+  "token_usage": {
+    "input_tokens": 16,
+    "cache_creation_tokens": 36122,
+    "cache_read_tokens": 206818,
+    "output_tokens": 86,
+    "api_call_count": 8
+  },
+  "started_at": "2026-10-11T09:35:33.27464+02:00",
+  "completed_at": "2026-10-11T09:38:14.24802+02:00"
+}

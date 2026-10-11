@@ -1,0 +1,174 @@
+{
+  "cli_version": "0.11.4",
+  "checkpoint_id": "01M4MYN2JY7P5AJ7E874HMPTAP",
+  "session_id": "c839f125-523b-4765-9e0d-736b62052aff",
+  "strategy": "manual-commit",
+  "created_at": "2026-10-11T07:43:22.615106Z",
+  "branch": "local-alex-niko",
+  "checkpoints_count": 4,
+  "save_step_count": 5,
+  "files_touched": [
+    "COMPARISON_better_vs_merged.md",
+    "agent/arena_kit/agents/better_agent.py",
+    "agent/arena_kit/cli.py",
+    "agent/arena_kit/sim_cases/real_runs_v24/better_pay_P01.json",
+    "agent/arena_kit/sim_cases/real_runs_v24/better_pay_P02.json",
+    "agent/arena_kit/sim_cases/real_runs_v24/better_pay_P03.json",
+    "agent/arena_kit/sim_cases/real_runs_v24/better_pay_P05.json",
+    "agent/arena_kit/sim_cases/real_runs_v24/better_pay_P10.json",
+    "agent/arena_kit/sim_cases/real_runs_v24/better_pay_P11.json",
+    "agent/tests/test_better_agent.py"
+  ],
+  "agent": "Claude Code",
+  "model": "claude-fable-5-1",
+  "turn_id": "5434ba0661ba",
+  "compact_transcript_start": 0,
+  "token_usage": {
+    "input_tokens": 3763,
+    "cache_creation_tokens": 1805876,
+    "cache_read_tokens": 168177695,
+    "output_tokens": 494719,
+    "api_call_count": 750,
+    "subagent_tokens": {
+      "input_tokens": 28,
+      "cache_creation_tokens": 48049,
+      "cache_read_tokens": 347270,
+      "output_tokens": 139,
+      "api_call_count": 13
+    }
+  },
+  "skill_events_version": 1,
+  "skill_events": [
+    {
+      "id": "claude-skill-toolu_01XisbE3fpoi7cwAoVYW8zSo",
+      "event_type": "tool_invocation",
+      "skill": {
+        "name": "claude-in-chrome"
+      },
+      "source": {
+        "agent": "claude-code",
+        "signal": "skill_tool_use",
+        "confidence": "explicit"
+      },
+      "turn_id": "280cb5401056",
+      "transcript_anchor": {
+        "unit": "line",
+        "start": 1647,
+        "end": 1648,
+        "entry_ids": [
+          "736b346a-30d5-4103-b836-0257d9b08dcf"
+        ],
+        "tool_use_id": "toolu_01XisbE3fpoi7cwAoVYW8zSo"
+      },
+      "native": {
+        "tool_name": "Skill",
+        "tool_use_id": "toolu_01XisbE3fpoi7cwAoVYW8zSo"
+      },
+      "collapse": {
+        "target": "tool_pair",
+        "label": "Skill: claude-in-chrome",
+        "default_collapsed": true
+      }
+    },
+    {
+      "id": "claude-skill-toolu_01NwTCQtA8aY9qR4HQFGsa8J",
+      "event_type": "tool_invocation",
+      "skill": {
+        "name": "anthropic-skills:deep-research"
+      },
+      "source": {
+        "agent": "claude-code",
+        "signal": "skill_tool_use",
+        "confidence": "explicit"
+      },
+      "turn_id": "adb3318188ae",
+      "transcript_anchor": {
+        "unit": "line",
+        "start": 1804,
+        "end": 1805,
+        "entry_ids": [
+          "5d32208c-4a11-4e41-9368-95090245be74"
+        ],
+        "tool_use_id": "toolu_01NwTCQtA8aY9qR4HQFGsa8J"
+      },
+      "native": {
+        "tool_name": "Skill",
+        "tool_use_id": "toolu_01NwTCQtA8aY9qR4HQFGsa8J"
+      },
+      "collapse": {
+        "target": "tool_pair",
+        "label": "Skill: anthropic-skills:deep-research",
+        "default_collapsed": true
+      }
+    }
+  ],
+  "session_metrics": {
+    "turn_count": 295
+  },
+  "initial_attribution": {
+    "calculated_at": "2026-10-11T07:43:21.433254Z",
+    "agent_lines": 7889,
+    "agent_removed": 2,
+    "human_added": 4095,
+    "human_modified": 1,
+    "human_removed": 0,
+    "total_committed": 11985,
+    "total_lines_changed": 11987,
+    "agent_percentage": 65.82964878618503,
+    "metric_version": 2
+  },
+  "prompt_attributions": [
+    {
+      "checkpoint_number": 2,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 0,
+      "agent_lines_removed": 0
+    },
+    {
+      "checkpoint_number": 3,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 0,
+      "agent_lines_removed": 0
+    },
+    {
+      "checkpoint_number": 4,
+      "user_lines_added": 1,
+      "user_lines_removed": 1,
+      "agent_lines_added": 99,
+      "agent_lines_removed": 3,
+      "user_added_per_file": {
+        "agent/tests/test_better_agent.py": 1
+      },
+      "user_removed_per_file": {
+        "agent/tests/test_better_agent.py": 1
+      }
+    },
+    {
+      "checkpoint_number": 5,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 100,
+      "agent_lines_removed": 3
+    },
+    {
+      "checkpoint_number": 6,
+      "user_lines_added": 4071,
+      "user_lines_removed": 0,
+      "agent_lines_added": 7898,
+      "agent_lines_removed": 3,
+      "user_added_per_file": {
+        "agent/arena_kit/sim_cases/real_runs_v24/better_pay_P04.json": 935,
+        "agent/arena_kit/sim_cases/real_runs_v24/better_pay_P07.json": 728,
+        "agent/arena_kit/sim_cases/real_runs_v24/better_pay_P08.json": 1289,
+        "agent/arena_kit/sim_cases/real_runs_v24/better_pay_P18.json": 1104,
+        "agent/arena_kit/sim_cases/real_runs_v24/log.txt": 11,
+        "agent/arena_kit/sim_cases/real_runs_v24/log_P04.txt": 1,
+        "agent/arena_kit/sim_cases/real_runs_v24/log_P07.txt": 1,
+        "agent/arena_kit/sim_cases/real_runs_v24/log_P08.txt": 1,
+        "agent/arena_kit/sim_cases/real_runs_v24/log_P18.txt": 1
+      }
+    }
+  ]
+}
