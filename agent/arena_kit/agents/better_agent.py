@@ -270,6 +270,9 @@ class BetterAgent(SimplifyAgent):
     # PAY_MIRROR (opt-in, `better_pay`): real runs show suppliers lift their whole price ladder 1-3% when we ask for 90 days (P08: 5.40 at 30d
     # unasked vs 5.63/5.69 after asking; P07: 5.35 at 30d vs 5.48 at 60d) while C values 30 extra days at only 0.3-0.6%: without health at stake, mirror their opening term
     PAY_MIRROR = False
+    # DATE_LEVER (default on; real P01 3/3 runs 0.88 vs 0.69 with the lever off, v29 - niko; off: `better_nodate`): in price-increase cases effective_date is negotiable and C charges the old price until it, so a later date lowers C
+    # directly (P01/P13); `better` only adopts a later date when the supplier volunteers one (P01: 1 of 6 runs, 0.84 vs 0.69)
+    DATE_LEVER = True
     MATCH_FACTOR = 1.0  # our step answers their last move in full (simplify: 0.25): the bot's last concession scales with our last step
 
     def decide(self, case, threads):
@@ -559,4 +562,19 @@ class BetterAgent(SimplifyAgent):
                 if (t := complete_offer(case, satisfy_must_haves(case, t, std))) not in fixed and t not in seen:
                     fixed.append(t)
             out = fixed
+        opts = case.get("term_options") or {}
+        if out and self.DATE_LEVER and "effective_date" in case["negotiable"] and "effective_date" not in _pinned(events) and any(opts.get("effective_date") or []):
+            seen = [s["terms"] for m in _mine(events) for s in m.get("term_sheets") or []]
+            fixed = []
+            for t in out:  # the C-minimising date (ties: later), never earlier than the sheet's own
+                dates = [o for o in opts["effective_date"] if o and o >= (t.get("effective_date") or "")]
+                if dates:
+                    tok = HEALTH.set(None)  # our health estimate overstates the later-date charge (~24k vs ~2.2k real, P01): choose by price cost only
+                    try:
+                        t = {**t, "effective_date": min(sorted(dates, reverse=True), key=lambda o: total_cost(case, {**t, "effective_date": o}, std))}
+                    finally:
+                        HEALTH.reset(tok)
+                if (t := complete_offer(case, satisfy_must_haves(case, t, std))) not in fixed and t not in seen:
+                    fixed.append(t)
+            out = fixed or out
         return out

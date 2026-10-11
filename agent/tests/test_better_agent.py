@@ -428,3 +428,24 @@ def test_pay_mirror_keeps_the_suppliers_opening_payment_days():
 def test_pay_mirror_is_off_when_health_is_at_stake():
     health = {"category_goal": "stabilise", "relationship_eur_per_point": 100.0}
     assert _mirror_sheets(True, **health) == _mirror_sheets(False, **health)
+
+
+def _date_sheets(flag):
+    case = _case(effective_date=["2026-11-01", "2027-01-01", "2027-04-01"])
+    case["buyer"]["current_unit_price"] = 28.0  # price increase: the old price runs until the effective date
+    std = {"unit_price": 30.0, "payment_days": 30}
+    agent = BetterAgent()
+    if flag is not None:
+        agent.DATE_LEVER = flag
+    return case, std, agent._sheets(case, [_sup(30.0, 0)], std, std)
+
+
+def test_date_lever_picks_the_c_minimising_effective_date():
+    case, std, sheets = _date_sheets(None)  # default on
+    best = min(case["term_options"]["effective_date"], key=lambda o: total_cost(case, {**sheets[0], "effective_date": o}, std))
+    assert sheets and all(s["effective_date"] == best for s in sheets)
+
+
+def test_date_lever_off_keeps_the_default_effective_date():
+    _, _, sheets = _date_sheets(False)
+    assert sheets and {s["effective_date"] for s in sheets} == {"2026-11-01"}  # complete_offer default, not a lever
