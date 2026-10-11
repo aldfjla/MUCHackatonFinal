@@ -349,7 +349,8 @@ def test_index_clause_variant_when_negotiable(name):
         assert x["terms"]["index_clause"] in c["term_options"]["index_clause"]
         assert total_cost(c, x["terms"]) < main_c < _c_alt(c)  # offered at a price that lowers C
         assert x["terms"]["unit_price"] >= 0.75 * p - 0.01  # no lowball
-    assert clauses or name != "P02"  # P02: the clause really is proposed (the real run never did)
+        # v6-petra: a clause only where it is cheaper than none at the same price (P02/P08/P18: it was not)
+        assert total_cost(c, x["terms"]) < total_cost(c, {**x["terms"], "index_clause": None})
 
 
 def test_no_index_clause_when_not_negotiable():

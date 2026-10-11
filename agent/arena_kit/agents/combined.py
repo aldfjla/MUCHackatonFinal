@@ -26,7 +26,7 @@ from ..listener import focus, supplier_model
 from ..play import latest, live_threads, moves_left
 from .final import FinalAgent
 from .listener import BODY_THEIR_PRICE, ListenerAgent
-from .reciprocal import _c_alt, _mine, _sup, _valid, case_c_open, closing_accept
+from .reciprocal import _c_alt, _mine, _sup, _valid, case_c_open, cheapest_index, closing_accept
 
 def _limit(model):
     """The supplier says its price will not move ("no further concessions", same price twice, a final offer):
@@ -96,6 +96,8 @@ class CombinedAgent(FinalAgent):
             sent = [x["terms"] for m in _mine(ev) for x in m.get("term_sheets") or []]
             for at in cands:
                 at = {**at, **{f: terms[f] for f in hold}, "unit_price": terms["unit_price"]}
+                if "index_clause" not in hold:
+                    at = cheapest_index(case, at, std)
                 at = complete_offer(case, satisfy_must_haves(case, at, std))
                 if (
                     at not in sent
@@ -138,6 +140,8 @@ class CombinedAgent(FinalAgent):
             for f in model["frozen"]:
                 if f in model["preferred"] and f in t:
                     t[f] = model["preferred"][f]
+            if "index_clause" not in model["frozen"]:
+                t = cheapest_index(case, t, std)
             t = complete_offer(case, satisfy_must_haves(case, t, std))
             if t in keep or t in sent or not must_haves_ok(case, t, std) or cost(t) > upper:
                 continue

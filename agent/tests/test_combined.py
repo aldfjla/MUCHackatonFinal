@@ -199,3 +199,31 @@ def test_guard_last_move_does_not_resend_an_old_counter():
     g = GuardedAgent(CombinedAgent())
     d = g.decide(c, {"sup:A": ev})
     assert all(x != old for x in sheets(d))
+
+
+def _first_sheets(pid):
+    th = json.loads((ROOT / "real_runs" / f"reciprocal_evidence_{pid}.json").read_text())["threads"]
+    sid, t = next(iter(th.items()))
+    ms = t["messages"]
+    i = next(i for i, m in enumerate(ms) if m.get("from") != "buyer")
+    return sheets(CombinedAgent().decide(case(pid), {sid: ms[: i + 1]}))
+
+
+@pytest.mark.parametrize("pid", ["P08", "P18"])
+def test_no_index_clause_when_it_costs_us_more(pid):
+    """P08/P18: a 5 % deadband clause cost 2-9k more than none at the same price; our sheets leave it out."""
+    out = _first_sheets(pid)
+    assert out and all(not s.get("index_clause") for s in out)
+
+
+def test_index_clause_offered_when_it_is_cheaper(monkeypatch):
+    """If total_cost says an index option is cheaper than none, cheapest_index keeps the cheapest one."""
+    from arena_kit.agents import reciprocal
+
+    c = case("P08")
+    opts = [o for o in c["term_options"]["index_clause"] if o]
+    monkeypatch.setattr(reciprocal, "total_cost", lambda case, t, std=None: -t["index_clause"]["deadband_pct"] if t.get("index_clause") else 0)
+    best = reciprocal.cheapest_index(c, {"unit_price": 5.0, "index_clause": opts[0]}, {})
+    assert best["index_clause"] == max(opts, key=lambda o: o["deadband_pct"])
+    monkeypatch.undo()
+    assert reciprocal.cheapest_index(c, {"unit_price": 5.0, "index_clause": opts[0]}, {})["index_clause"] is None
