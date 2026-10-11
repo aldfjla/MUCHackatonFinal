@@ -3,6 +3,7 @@ from .anchor import AnchorAgent
 from .better_agent import BetterAgent
 from .boulware import BoulwareAgent
 from .combined import CombinedAgent
+from .combined2 import Combined2Agent
 from .confident import ConfidentAgent
 from .confident_boulware import ConfidentBoulwareAgent
 from .confident_router import ConfidentRouterAgent
@@ -27,6 +28,7 @@ __all__ = [
     "BoulwareAgent",
     "ClosingAgent",
     "CombinedAgent",
+    "Combined2Agent",
     "ConfidentAgent",
     "ConfidentBoulwareAgent",
     "ConfidentRouterAgent",
