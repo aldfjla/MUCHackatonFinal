@@ -1,0 +1,139 @@
+{
+  "cli_version": "0.11.4",
+  "checkpoint_id": "01M4M7H6GBZDM62NR53TFE04TV",
+  "session_id": "a8a923ef-f5a7-45c6-9846-733930fb99a7",
+  "strategy": "manual-commit",
+  "created_at": "2026-10-11T00:59:22.560702964Z",
+  "branch": "version-alex",
+  "checkpoints_count": 7,
+  "save_step_count": 4,
+  "files_touched": [
+    "agent/arena_kit/agents/final.py",
+    "agent/arena_kit/agents/reciprocal.py",
+    "agent/arena_kit/cli.py",
+    "agent/tests/test_final.py"
+  ],
+  "agent": "Claude Code",
+  "model": "claude-fable-5-1",
+  "turn_id": "20f9aad06e29",
+  "compact_transcript_start": 0,
+  "token_usage": {
+    "input_tokens": 5334,
+    "cache_creation_tokens": 1074703,
+    "cache_read_tokens": 62868907,
+    "output_tokens": 296487,
+    "api_call_count": 289,
+    "subagent_tokens": {
+      "input_tokens": 82,
+      "cache_creation_tokens": 174622,
+      "cache_read_tokens": 2140959,
+      "output_tokens": 1029,
+      "api_call_count": 41
+    }
+  },
+  "skill_events_version": 1,
+  "skill_events": [
+    {
+      "id": "claude-skill-toolu_01VKT6ecS5ZGuu379pAVKtMS",
+      "event_type": "tool_invocation",
+      "skill": {
+        "name": "update-config"
+      },
+      "source": {
+        "agent": "claude-code",
+        "signal": "skill_tool_use",
+        "confidence": "explicit"
+      },
+      "turn_id": "622021e24bc0",
+      "transcript_anchor": {
+        "unit": "line",
+        "start": 600,
+        "end": 601,
+        "entry_ids": [
+          "2af88d2c-b72b-41aa-aa05-5adb75b8c088"
+        ],
+        "tool_use_id": "toolu_01VKT6ecS5ZGuu379pAVKtMS"
+      },
+      "native": {
+        "tool_name": "Skill",
+        "tool_use_id": "toolu_01VKT6ecS5ZGuu379pAVKtMS"
+      },
+      "collapse": {
+        "target": "tool_pair",
+        "label": "Skill: update-config",
+        "default_collapsed": true
+      }
+    }
+  ],
+  "session_metrics": {
+    "turn_count": 84
+  },
+  "initial_attribution": {
+    "calculated_at": "2026-10-11T00:59:21.662205872Z",
+    "agent_lines": 0,
+    "agent_removed": 0,
+    "human_added": 359,
+    "human_modified": 208,
+    "human_removed": 0,
+    "total_committed": 359,
+    "total_lines_changed": 567,
+    "agent_percentage": 0,
+    "metric_version": 2
+  },
+  "prompt_attributions": [
+    {
+      "checkpoint_number": 2,
+      "user_lines_added": 310,
+      "user_lines_removed": 91,
+      "agent_lines_added": 0,
+      "agent_lines_removed": 0,
+      "user_added_per_file": {
+        "agent/arena_kit/agents/final.py": 160,
+        "agent/arena_kit/agents/reciprocal.py": 12,
+        "agent/arena_kit/cli.py": 1,
+        "agent/tests/test_final.py": 137
+      },
+      "user_removed_per_file": {
+        "agent/arena_kit/agents/final.py": 35,
+        "agent/arena_kit/agents/reciprocal.py": 6,
+        "agent/arena_kit/cli.py": 3,
+        "agent/tests/test_final.py": 47
+      }
+    },
+    {
+      "checkpoint_number": 3,
+      "user_lines_added": 1,
+      "user_lines_removed": 1,
+      "agent_lines_added": 310,
+      "agent_lines_removed": 91,
+      "user_added_per_file": {
+        "agent/tests/test_final.py": 1
+      },
+      "user_removed_per_file": {
+        "agent/tests/test_final.py": 1
+      }
+    },
+    {
+      "checkpoint_number": 4,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 310,
+      "agent_lines_removed": 91
+    },
+    {
+      "checkpoint_number": 5,
+      "user_lines_added": 128,
+      "user_lines_removed": 58,
+      "agent_lines_added": 310,
+      "agent_lines_removed": 91,
+      "user_added_per_file": {
+        "agent/arena_kit/agents/final.py": 98,
+        "agent/tests/test_final.py": 30
+      },
+      "user_removed_per_file": {
+        "agent/arena_kit/agents/final.py": 56,
+        "agent/tests/test_final.py": 2
+      }
+    }
+  ]
+}
