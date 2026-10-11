@@ -29,7 +29,7 @@ def load_env(path=".env"):
 
 AGENTS = [
     "naive", "smart", "confident", "rational", "explorer", "anchor", "switcher", "boulware", "router",
-    "confident_boulware", "confident_router", "guarded_boulware", "guarded_rational", "evidence_router", "evidence_rational", "reciprocal", "reciprocal_evidence", "simplify", "final", "final_match", "listener", "combined", "combined2", "playbook", "better", "50", "llm",
+    "confident_boulware", "confident_router", "guarded_boulware", "guarded_rational", "evidence_router", "evidence_rational", "reciprocal", "reciprocal_evidence", "simplify", "final", "final_match", "listener", "combined", "combined2", "combined3", "playbook", "better", "50", "llm",
 ]  # fmt: skip
 
 
@@ -92,12 +92,12 @@ def agent_factory(name, data):
     if name == "guarded_rational":
         return lambda: GuardedAgent(RationalAgent())
     # the evidence wrapper replaces the delegate's body and refs by design (it cites verified data)
-    if name in ("evidence_router", "evidence_rational", "listener", "combined", "combined2", "better"):
+    if name in ("evidence_router", "evidence_rational", "listener", "combined", "combined2", "combined3", "better"):
         from .evidence import package_problem
 
         if why := package_problem(data):  # say it before any session opens, not once per message
             print(f"WARNING: {why} - messages will cite NO data. Pass --data <folder with world.sqlite>.", file=sys.stderr)
-        elif name in ("combined2", "better"):
+        elif name in ("combined2", "combined3", "better"):
             print(f"health estimate data: {os.environ.get('ARENA_DATA')}", file=sys.stderr)
     if name == "evidence_router":
         return lambda: EvidenceAgent(ConfidentRouterAgent(), data)
@@ -117,6 +117,10 @@ def agent_factory(name, data):
         return lambda: EvidenceAgent(GuardedAgent(CombinedAgent()), data, questions=False)
     if name == "combined2":  # v8-petra: router - index-clause cases without health at stake -> combined, else better
         return lambda: Combined2Agent(data)  # each route builds its own evidence / guard chain
+    if name == "combined3":  # v11-petra experiment: combined2 + supplier-floor estimate (first offer, target)
+        from .agents.combined3 import Combined3Agent
+
+        return lambda: Combined3Agent(data)
     if name == "listener":  # v4-petra: supplier model + packages, inside the guard and the evidence layer
         return lambda: EvidenceAgent(GuardedAgent(ListenerAgent()), data)
     if name == "playbook":

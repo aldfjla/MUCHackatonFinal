@@ -4,6 +4,7 @@ from .better_agent import BetterAgent
 from .boulware import BoulwareAgent
 from .combined import CombinedAgent
 from .combined2 import Combined2Agent
+from .combined3 import Combined3Agent
 from .confident import ConfidentAgent
 from .confident_boulware import ConfidentBoulwareAgent
 from .confident_router import ConfidentRouterAgent
@@ -29,6 +30,7 @@ __all__ = [
     "ClosingAgent",
     "CombinedAgent",
     "Combined2Agent",
+    "Combined3Agent",
     "ConfidentAgent",
     "ConfidentBoulwareAgent",
     "ConfidentRouterAgent",
