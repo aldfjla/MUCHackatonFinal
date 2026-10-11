@@ -1,0 +1,141 @@
+{
+  "cli_version": "0.11.4",
+  "checkpoint_id": "01M4M5EM4DXBV8M2DHA9DA711D",
+  "session_id": "c839f125-523b-4765-9e0d-736b62052aff",
+  "strategy": "manual-commit",
+  "created_at": "2026-10-11T00:22:56.803691Z",
+  "branch": "local-alex-niko",
+  "checkpoints_count": 1,
+  "save_step_count": 2,
+  "files_touched": [
+    "agent/arena_kit/sim.py",
+    "agent/arena_kit/sim_real.py"
+  ],
+  "agent": "Claude Code",
+  "model": "claude-sonnet-5-5",
+  "turn_id": "13cf79cc4edf",
+  "compact_transcript_start": 0,
+  "token_usage": {
+    "input_tokens": 1831,
+    "cache_creation_tokens": 1561907,
+    "cache_read_tokens": 147372364,
+    "output_tokens": 406526,
+    "api_call_count": 635,
+    "subagent_tokens": {
+      "input_tokens": 8,
+      "cache_creation_tokens": 8769,
+      "cache_read_tokens": 416218,
+      "output_tokens": 628,
+      "api_call_count": 4
+    }
+  },
+  "skill_events_version": 1,
+  "skill_events": [
+    {
+      "id": "claude-skill-toolu_01XisbE3fpoi7cwAoVYW8zSo",
+      "event_type": "tool_invocation",
+      "skill": {
+        "name": "claude-in-chrome"
+      },
+      "source": {
+        "agent": "claude-code",
+        "signal": "skill_tool_use",
+        "confidence": "explicit"
+      },
+      "turn_id": "280cb5401056",
+      "transcript_anchor": {
+        "unit": "line",
+        "start": 1647,
+        "end": 1648,
+        "entry_ids": [
+          "736b346a-30d5-4103-b836-0257d9b08dcf"
+        ],
+        "tool_use_id": "toolu_01XisbE3fpoi7cwAoVYW8zSo"
+      },
+      "native": {
+        "tool_name": "Skill",
+        "tool_use_id": "toolu_01XisbE3fpoi7cwAoVYW8zSo"
+      },
+      "collapse": {
+        "target": "tool_pair",
+        "label": "Skill: claude-in-chrome",
+        "default_collapsed": true
+      }
+    },
+    {
+      "id": "claude-skill-toolu_01NwTCQtA8aY9qR4HQFGsa8J",
+      "event_type": "tool_invocation",
+      "skill": {
+        "name": "anthropic-skills:deep-research"
+      },
+      "source": {
+        "agent": "claude-code",
+        "signal": "skill_tool_use",
+        "confidence": "explicit"
+      },
+      "turn_id": "adb3318188ae",
+      "transcript_anchor": {
+        "unit": "line",
+        "start": 1804,
+        "end": 1805,
+        "entry_ids": [
+          "5d32208c-4a11-4e41-9368-95090245be74"
+        ],
+        "tool_use_id": "toolu_01NwTCQtA8aY9qR4HQFGsa8J"
+      },
+      "native": {
+        "tool_name": "Skill",
+        "tool_use_id": "toolu_01NwTCQtA8aY9qR4HQFGsa8J"
+      },
+      "collapse": {
+        "target": "tool_pair",
+        "label": "Skill: anthropic-skills:deep-research",
+        "default_collapsed": true
+      }
+    }
+  ],
+  "session_metrics": {
+    "turn_count": 254
+  },
+  "initial_attribution": {
+    "calculated_at": "2026-10-11T00:22:55.701655Z",
+    "agent_lines": 15,
+    "agent_removed": 9,
+    "human_added": 651,
+    "human_modified": 37,
+    "human_removed": 0,
+    "total_committed": 694,
+    "total_lines_changed": 731,
+    "agent_percentage": 3.283173734610123,
+    "metric_version": 2
+  },
+  "prompt_attributions": [
+    {
+      "checkpoint_number": 2,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 0,
+      "agent_lines_removed": 0
+    },
+    {
+      "checkpoint_number": 3,
+      "user_lines_added": 658,
+      "user_lines_removed": 28,
+      "agent_lines_added": 108,
+      "agent_lines_removed": 19,
+      "user_added_per_file": {
+        "agent/arena_kit/evaluate.py": 40,
+        "agent/arena_kit/fit_real.py": 250,
+        "agent/arena_kit/sim_cases/supplier_profile.json": 270,
+        "agent/arena_kit/sim_real.py": 25,
+        "agent/tests/test_sim_real.py": 73
+      },
+      "user_removed_per_file": {
+        "agent/arena_kit/evaluate.py": 11,
+        "agent/arena_kit/sim_cases/supplier_profile.json": 2,
+        "agent/arena_kit/sim_real.py": 9,
+        "agent/tests/test_sim_real.py": 6
+      }
+    }
+  ]
+}
