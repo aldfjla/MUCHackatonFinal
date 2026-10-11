@@ -1,0 +1,15 @@
+{
+  "tool_use_id": "toolu_01R4Ac9QXwhTtv6nBwvGUEN4",
+  "agent_id": "abea3167a3103818d",
+  "subagent_type": "coder",
+  "task_description": "Add DATE_LEVER flag to better",
+  "token_usage": {
+    "input_tokens": 12,
+    "cache_creation_tokens": 23408,
+    "cache_read_tokens": 83974,
+    "output_tokens": 96,
+    "api_call_count": 6
+  },
+  "started_at": "2026-10-11T10:04:17.496919+02:00",
+  "completed_at": "2026-10-11T10:06:30.708172+02:00"
+}

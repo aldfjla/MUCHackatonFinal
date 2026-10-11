@@ -1,0 +1,15 @@
+{
+  "tool_use_id": "toolu_013Zm5279PXbbCFG4PnN82UD",
+  "agent_id": "afd4b2d932e72eb6e",
+  "subagent_type": "reviewer",
+  "task_description": "Review DATE_LEVER block",
+  "token_usage": {
+    "input_tokens": 16,
+    "cache_creation_tokens": 24014,
+    "cache_read_tokens": 131317,
+    "output_tokens": 2021,
+    "api_call_count": 8
+  },
+  "started_at": "2026-10-11T10:14:55.791547+02:00",
+  "completed_at": "2026-10-11T10:15:32.006255+02:00"
+}

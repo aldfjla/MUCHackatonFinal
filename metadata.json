@@ -1,0 +1,53 @@
+{
+  "cli_version": "0.11.4",
+  "checkpoint_id": "01M4N0HAZHTQSQTK2DR9V5T1WB",
+  "strategy": "manual-commit",
+  "branch": "local-alex-niko",
+  "checkpoints_count": 4,
+  "files_touched": [
+    "TIMELINE.md",
+    "agent/arena_kit/agents/better_agent.py",
+    "agent/arena_kit/cli.py",
+    "agent/arena_kit/sim_cases/real_runs_v28_p01_date/r1/better_date_P01.json",
+    "agent/arena_kit/sim_cases/real_runs_v28_p01_date/r2/better_date_P01.json",
+    "agent/arena_kit/sim_cases/real_runs_v28_p01_date/r3/better_date_P01.json",
+    "agent/arena_kit/sim_cases/real_runs_v29_p01_date2/r1/better_date_P01.json",
+    "agent/arena_kit/sim_cases/real_runs_v29_p01_date2/r2/better_date_P01.json",
+    "agent/arena_kit/sim_cases/real_runs_v29_p01_date2/r3/better_date_P01.json",
+    "agent/arena_kit/sim_cases/real_runs_v30/better_P01.json",
+    "agent/arena_kit/sim_cases/real_runs_v30/better_P02.json",
+    "agent/arena_kit/sim_cases/real_runs_v30/better_P03.json",
+    "agent/arena_kit/sim_cases/real_runs_v30/better_P04.json",
+    "agent/arena_kit/sim_cases/real_runs_v30/better_P05.json",
+    "agent/arena_kit/sim_cases/real_runs_v30/better_P07.json",
+    "agent/arena_kit/sim_cases/real_runs_v30/better_P08.json",
+    "agent/arena_kit/sim_cases/real_runs_v30/better_P10.json",
+    "agent/arena_kit/sim_cases/real_runs_v30/better_P11.json",
+    "agent/arena_kit/sim_cases/real_runs_v30/better_P18.json",
+    "agent/tests/test_better_agent.py",
+    "backlog.csv"
+  ],
+  "sessions": [
+    {
+      "metadata": "/0/metadata.json",
+      "transcript": "/0/full.jsonl",
+      "compact_transcript": "/0/transcript.jsonl",
+      "content_hash": "/0/content_hash.txt",
+      "prompt": "/0/prompt.txt"
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 4613,
+    "cache_creation_tokens": 1884532,
+    "cache_read_tokens": 178371280,
+    "output_tokens": 537874,
+    "api_call_count": 793,
+    "subagent_tokens": {
+      "input_tokens": 36,
+      "cache_creation_tokens": 53908,
+      "cache_read_tokens": 321784,
+      "output_tokens": 287,
+      "api_call_count": 18
+    }
+  }
+}
