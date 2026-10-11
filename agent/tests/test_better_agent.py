@@ -2,6 +2,7 @@
 
 import glob
 import json
+import sys
 from pathlib import Path
 
 import pytest
@@ -19,6 +20,21 @@ CASES = Path(evaluate.__file__).parent / "sim_cases"
 
 
 needs_data = pytest.mark.skipif(load_package() is None, reason="no data package (set ARENA_DATA)")
+
+
+P_STD = {"P01": (900, "FCA"), "P02": (250, "DAP"), "P03": (350, "DAP")}  # supplier standard ppm / incoterm (quote PDFs are not in the dumps)
+
+
+def _std(pid):
+    return {"payment_days": 30, "ppm_commitment": P_STD[pid][0], "incoterm": P_STD[pid][1], "chargeback_eur_per_complaint": 0, "tooling_eur": 0}
+
+
+@pytest.fixture
+def p02_quote(monkeypatch):
+    """The dumps carry no quote PDF text: give every module P02's standard terms."""
+    for name, mod in list(sys.modules.items()):
+        if name.startswith("arena_kit") and hasattr(mod, "standard_terms"):
+            monkeypatch.setattr(mod, "standard_terms", lambda events: _std("P02"))
 
 
 def _case(**options):
@@ -115,7 +131,8 @@ def _status(ev, status):
     return [*ev[:-1], {**ev[-1], "status": status}]
 
 
-def test_hold_for_final_counters_an_open_offer_but_closes_on_final_repeat_or_late():
+def test_hold_for_final_counters_an_open_offer_but_closes_on_final_repeat_or_late(monkeypatch):
+    monkeypatch.setattr(BetterAgent, "HOLD_FOR_FINAL", True)
     case = _hold_case()
     ev = [_sup(30.0, 0), _mine(24.0), _sup(24.0, 1)]  # open and met our price, 7 messages left
     assert BetterAgent().decide(case, {"t": ev})["message"].get("term_sheets")  # counter
@@ -125,11 +142,8 @@ def test_hold_for_final_counters_an_open_offer_but_closes_on_final_repeat_or_lat
     late = [_sup(30.0, 0), _mine(24.0), _sup(27.0, 1), _mine(25.0), _sup(26.5, 2), _mine(25.5), _sup(26.0, 3), _mine(25.8), _sup(25.9, 4)]  # 4 sent
     case["round_limit"] = 6  # 2 left
     assert BetterAgent().decide(case, {"t": late})["message"]["action"]["type"] == "accept"  # <= 2 left
-    BetterAgent.HOLD_FOR_FINAL = False
-    try:
-        assert BetterAgent().decide(_hold_case(), {"t": ev})["message"]["action"]["type"] == "accept"
-    finally:
-        BetterAgent.HOLD_FOR_FINAL = True
+    monkeypatch.setattr(BetterAgent, "HOLD_FOR_FINAL", False)
+    assert BetterAgent().decide(_hold_case(), {"t": ev})["message"]["action"]["type"] == "accept"
 
 
 @needs_data
@@ -142,16 +156,16 @@ def test_health_estimate_fits_the_arena_c_deal(pid):
     assert deals
     for r in deals:
         with _with_health(case):
-            c = total_cost(case, r["terms"], {})
-        assert abs(c / r["c_deal"] - 1) < 0.035, (pid, c, r["c_deal"])  # the should-cost sits 1-2 % above the fitted full cost
+            c = total_cost(case, r["terms"], _std(pid))
+        assert abs(c / r["c_deal"] - 1) < 0.005, (pid, c, r["c_deal"])  # 0.98 x should-cost, rate 0.066
 
 
 @needs_data
-def test_p02_recorded_deal_is_not_chosen_and_the_price_stays_above_the_health_floor():
+def test_p02_recorded_deal_is_not_chosen_and_the_price_stays_above_the_health_floor(p02_quote):
     case = json.loads((CASES / "real" / "P02.json").read_text())
     d = json.loads((CASES / "real_runs_v17" / "simplify_P02.json").read_text())
     recorded, msgs = d["result"]["terms"], d["threads"]["sup:70510"]["messages"]
-    ev, std = msgs[: max(i for i, m in enumerate(msgs) if m["from"] != "buyer" and m.get("term_sheets")) + 1], {}
+    ev, std = msgs[: max(i for i, m in enumerate(msgs) if m["from"] != "buyer" and m.get("term_sheets")) + 1], _std("P02")
     ev = _status(ev, "open")
     c_open = BetterAgent()._open_c(case, {"sup:70510": ev})
     assert BetterAgent._est_c(case, ev, recorded, std) > c_open  # the recorded deal is the loss
@@ -163,7 +177,7 @@ def test_p02_recorded_deal_is_not_chosen_and_the_price_stays_above_the_health_fl
 
 
 @needs_data
-def test_full_stack_never_accepts_p02_final_and_never_walks():
+def test_full_stack_never_accepts_p02_final_and_never_walks(p02_quote):
     case = json.loads((CASES / "real" / "P02.json").read_text())
     msgs = json.loads((CASES / "real_runs_v17" / "simplify_P02.json").read_text())["threads"]["sup:70510"]["messages"]
     ends = [i for i, m in enumerate(msgs) if m["from"] != "buyer" and m.get("term_sheets") and m["status"] != "agreed"]
@@ -175,7 +189,35 @@ def test_full_stack_never_accepts_p02_final_and_never_walks():
         c_open, ask = BetterAgent()._open_c(case, {"sup:70510": ev}), min(s["terms"]["unit_price"] for s in ev[-1]["term_sheets"])
         assert m.get("action", {}).get("type") != "walk_away", i
         if m.get("action", {}).get("type") == "accept":
-            assert BetterAgent._est_c(case, ev, find_sheet(ev, m["action"]["term_sheet_id"]), {}) <= c_open
+            assert BetterAgent._est_c(case, ev, find_sheet(ev, m["action"]["term_sheet_id"]), _std("P02")) <= c_open
         else:
-            assert all(BetterAgent._est_c(case, ev, s["terms"], {}) <= c_open for s in m["term_sheets"])
+            assert all(BetterAgent._est_c(case, ev, s["terms"], _std("P02")) <= c_open for s in m["term_sheets"])
     assert m["term_sheets"][0]["terms"]["unit_price"] >= ask  # the final_offer is countered, not accepted or walked from
+
+
+@needs_data
+def test_health_estimate_uses_discounted_should_cost_and_fitted_rate():
+    h = _health(json.loads((CASES / "real" / "P02.json").read_text()))
+    assert abs(h["full_cost"] - 0.98 * 374.95) < 1e-6 and h["interest_rate"] == 0.066
+
+
+@needs_data
+def test_health_case_offers_long_payment_and_an_index_clause_sheet(p02_quote):
+    case = json.loads((CASES / "real" / "P02.json").read_text())
+    ev = json.loads((CASES / "real_runs_v17" / "simplify_P02.json").read_text())["threads"]["sup:70510"]["messages"][:1]
+    sheets = [s["terms"] for s in BetterAgent().decide(case, {"sup:70510": ev})["message"]["term_sheets"]]
+    assert any(t["payment_days"] == 90 for t in sheets)  # payment days are a lever (v16 got 90 days)
+    assert any(t.get("index_clause") for t in sheets) and any(not t.get("index_clause") for t in sheets)
+
+
+def test_step_answers_their_move_in_full():
+    from arena_kit.agents.simplify_agent import SimplifyAgent
+
+    ev = [_sup(30.0, 0), _mine(24.0), _sup(27.0, 1)]  # they moved 3.0; frac x gap = 0.9
+    assert abs(BetterAgent()._price(_case(), ev, 27.0) - 24.9) < 1e-9
+    assert abs(SimplifyAgent()._price(_case(), ev, 27.0) - 24.75) < 1e-9  # MATCH 0.25 x 3.0
+
+
+def test_step_never_exceeds_their_price():
+    ev = [_sup(30.0, 0), _mine(24.0), _sup(26.0, 1), _mine(25.5), _sup(25.0, 2)]  # they dropped below our last offer
+    assert BetterAgent()._price(_case(), ev, 25.0) == 25.0

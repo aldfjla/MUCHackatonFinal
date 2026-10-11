@@ -25,7 +25,7 @@ from ..evidence import _q, load_package
 from ..guard import satisfy_must_haves
 from ..play import find_sheet, latest, moves_left, standing
 from . import simplify_agent
-from .reciprocal import ANCHOR_FLOOR, _c_alt, _live, _mine, _pinned, _sheets, _sup
+from .reciprocal import ANCHOR_FLOOR, FRAC0, FRAC_MAX, FRAC_STEP, KEEP, MIN_STEP, MOVING_MIN, _c_alt, _live, _mine, _pinned, _sheets, _sup, _tick
 from .simplify_agent import FREE_LEVERS, SimplifyAgent, _health_at_stake
 
 CASH_SHORT = re.compile(r"liquidity|working[- ]capital|cash[- ]?flow|short of cash|cash[- ]?(?:tight|short|constrain|crunch)", re.I)
@@ -45,6 +45,11 @@ def _gate(real):
 simplify_agent.closing_accept = _gate(simplify_agent.closing_accept)
 
 
+SHOULD_COST_FACTOR = 0.98  # the should-cost sits ~2% above the arena's fitted full cost (P02: 374.95 vs 367.60)
+HEALTH_RATE = 0.066  # the arena-fitted supplier rate (P01 0.096, P02 0.066); used instead of the kit default 0.08
+KIT_RATE = 0.08
+
+
 def _health(case):
     """{full_cost, interest_rate} of the supplier for cost.HEALTH, or None (no relationship cost / no should-cost row)."""
     if not _health_at_stake(case) or not (pkg := load_package()):
@@ -55,7 +60,8 @@ def _health(case):
         return None
     # the row for one of this case's suppliers, else the generic one (shortcut: a multi-supplier case uses the first match)
     row = next((r for r in sorted(rows, key=lambda r: r["supplier_id"] not in case.get("suppliers", []))), None)
-    return {"full_cost": row["unit_cost"] / (row["price_unit"] or 1), "interest_rate": case["buyer"]["interest_rate"]} if row else None
+    return {"full_cost": SHOULD_COST_FACTOR * row["unit_cost"] / (row["price_unit"] or 1),
+                                                "interest_rate": HEALTH_RATE if case["buyer"]["interest_rate"] == KIT_RATE else case["buyer"]["interest_rate"]} if row else None
 
 
 @contextmanager
@@ -98,8 +104,10 @@ class HealthScope:
 
 
 class BetterAgent(SimplifyAgent):
-    GUARD_C_OPEN = THIRD_SHEET = ANCHOR_BY_SHARE = CASH_SHORT_OFFER = LATE_ACCEPT = HEALTH_ESTIMATE = HOLD_FOR_FINAL = True
+    GUARD_C_OPEN = THIRD_SHEET = ANCHOR_BY_SHARE = CASH_SHORT_OFFER = LATE_ACCEPT = HEALTH_ESTIMATE = True
+    HOLD_FOR_FINAL = False  # dead on the real bots: final_offer comes at a fixed message whatever we do
     LATE_MESSAGES, LATE_TOLERANCE, HOLD_MESSAGES = 2, 0.01, 3
+    MATCH_FACTOR = 1.0  # our step answers their last move in full (simplify: 0.25): the bot's last concession scales with our last step
 
     def decide(self, case, threads):
         token = HOLD.set(_holds if self.HOLD_FOR_FINAL else None)
@@ -219,7 +227,16 @@ class BetterAgent(SimplifyAgent):
     def _price(self, case, events, p):
         if self.ANCHOR_BY_SHARE and not _mine(events) and not _health_at_stake(case) and (f := self._share_factor(case)):
             return max(ANCHOR_FLOOR * p, min(f * p, case["buyer"].get("current_unit_price") or p))
-        return super()._price(case, events, p)
+        mine = [m["term_sheets"][0]["terms"]["unit_price"] for m in _mine(events) if m.get("term_sheets") and m["term_sheets"][0]["terms"].get("unit_price")]
+        if not mine:
+            return super()._price(case, events, p)
+        frac = min(FRAC_MAX, FRAC0 + FRAC_STEP * len(mine))
+        move = self._their_move(events)
+        step = max(frac * (p - mine[-1]), MIN_STEP * p, _tick(p))
+        if move > 0:
+            step = max(MOVING_MIN * p, _tick(p), min(step, self.MATCH_FACTOR * move))
+        top = p if moves_left(case, events) <= 2 else p * (1 - KEEP)
+        return min(p, max(mine[-1], min(top, mine[-1] + step)))  # never above their standing price
 
     # 2 + 5. third equivalent sheet / cash-short -------------------------------------------------------------
     @staticmethod
@@ -251,15 +268,26 @@ class BetterAgent(SimplifyAgent):
 
     def _sheets(self, case, events, std, theirs):
         out = super()._sheets(case, events, std, theirs)
-        if out and HEALTH.get():  # never below the price that minimises C: under it the health term grows faster than the saving
+        if out and HEALTH.get():  # health cases: payment days as a lever, never below the C-minimising price, an index-clause sheet
             seen = [s["terms"] for m in _mine(events) for s in m.get("term_sheets") or []]
+            opts, pins, p = case.get("term_options") or {}, _pinned(events), theirs["unit_price"]
+
+            def best(t):  # t at the price in [its price, theirs] that minimises C
+                grid = [round(t["unit_price"] + (p - t["unit_price"]) * i / 100, 2) for i in range(101)]
+                return min(({**t, "unit_price": x} for x in grid), key=lambda v: total_cost(case, v, std))
+
+            pay = [o for o in opts.get("payment_days", []) if o] if "payment_days" in case["negotiable"] and "payment_days" not in pins else []
             fixed = []
             for t in out:
-                grid = [round(t["unit_price"] + (theirs["unit_price"] - t["unit_price"]) * i / 100, 2) for i in range(101)]
-                t = complete_offer(case, {**t, "unit_price": min(grid, key=lambda x: total_cost(case, {**t, "unit_price": x}, std))})
-                if t not in fixed and t not in seen:
+                t = min((best({**t, "payment_days": o}) for o in dict.fromkeys([t.get("payment_days"), *pay]) if o is not None), key=lambda v: total_cost(case, v, std), default=best(t))
+                if (t := complete_offer(case, t)) not in fixed and t not in seen:
                     fixed.append(t)
             out = fixed
+            clauses = [c for c in opts.get("index_clause", []) if c] if "index_clause" in case["negotiable"] and "index_clause" not in pins else []
+            if out and clauses:  # the clause sheet at its own C-minimising price, even when its C is not below main's
+                v = complete_offer(case, min((best({**out[0], "index_clause": c}) for c in clauses), key=lambda v: total_cost(case, v, std)))
+                if v not in out and v not in seen:
+                    out.append(v)
         if out and (self.THIRD_SHEET or self.CASH_SHORT_OFFER):
             seen = [s["terms"] for m in _mine(events) for s in m.get("term_sheets") or []]
             if extra := self._trade_sheet(case, events, std, out[0], theirs["unit_price"], _pinned(events), seen):

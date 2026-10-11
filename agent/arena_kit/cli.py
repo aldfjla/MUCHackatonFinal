@@ -28,7 +28,7 @@ def load_env(path=".env"):
 
 AGENTS = [
     "naive", "smart", "confident", "rational", "explorer", "anchor", "switcher", "boulware", "router",
-    "confident_boulware", "confident_router", "guarded_boulware", "guarded_rational", "evidence_router", "evidence_rational", "reciprocal", "reciprocal_evidence", "simplify", "better", "50", "llm",
+    "confident_boulware", "confident_router", "guarded_boulware", "guarded_rational", "evidence_router", "evidence_rational", "reciprocal", "reciprocal_evidence", "simplify", "playbook", "better", "50", "llm",
 ]  # fmt: skip
 
 
@@ -42,6 +42,7 @@ def agent_factory(name, data):
         ConfidentRouterAgent,
         SimplifyAgent,
         EvidenceAgent,
+        PlaybookAgent,
         ExplorerAgent,
         FiftyAgent,
         GuardedAgent,
@@ -93,6 +94,8 @@ def agent_factory(name, data):
         return lambda: EvidenceAgent(GuardedAgent(ReciprocalAgent()), data)
     if name == "simplify":
         return lambda: EvidenceAgent(GuardedAgent(SimplifyAgent()), data)
+    if name == "playbook":
+        return lambda: EvidenceAgent(GuardedAgent(PlaybookAgent(SimplifyAgent())), data)
     if name == "better":
         return lambda: EvidenceAgent(HealthScope(GuardedAgent(BetterAgent())), data)
     if name == "50":

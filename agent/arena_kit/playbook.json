@@ -1,0 +1,441 @@
+{
+ "sup:70110": {
+  "price_increase/stabilise": {
+   "case_ids": [
+    "P01"
+   ],
+   "runs": 4,
+   "lowest_offered_price": 132.8,
+   "first_final_offer_round": 4,
+   "replies": 27,
+   "replies_repeating_price": 7,
+   "best_deal": {
+    "c_deal": 1100490.65,
+    "score": 0.935,
+    "price": 132.8,
+    "terms": {
+     "payment_days": 60,
+     "lead_time_days": 42,
+     "volume_per_year": 8150,
+     "contract_months": 12,
+     "effective_date": "2027-01-01",
+     "index_clause": null,
+     "incoterm": "FCA",
+     "tooling_eur": 0.0,
+     "ppm_commitment": 900,
+     "chargeback_eur_per_complaint": 0.0,
+     "unit_price": 132.8
+    },
+    "from": "real_runs/evidence_router_P01.json"
+   },
+   "target": {
+    "c_best": 1096816.0,
+    "price_on_supplier_terms": null,
+    "price_with_best_levers": 129.43,
+    "levers": "effective_date=2027-01-01 payment=14"
+   },
+   "c_min_price": 131.27
+  }
+ },
+ "sup:70140": {
+  "quality/quality_first": {
+   "case_ids": [
+    "P11"
+   ],
+   "runs": 8,
+   "lowest_offered_price": 46.0,
+   "first_final_offer_round": 4,
+   "replies": 46,
+   "replies_repeating_price": 24,
+   "best_deal": {
+    "c_deal": 758032.5,
+    "score": 0.626,
+    "price": 46.0,
+    "terms": {
+     "payment_days": 60,
+     "lead_time_days": 56,
+     "volume_per_year": 15900,
+     "contract_months": 12,
+     "effective_date": "2027-01-01",
+     "index_clause": null,
+     "incoterm": "FCA",
+     "tooling_eur": 0.0,
+     "ppm_commitment": 300,
+     "chargeback_eur_per_complaint": 0.0,
+     "unit_price": 46.0
+    },
+    "from": "real_runs_v17/simplify_P11.json"
+   },
+   "target": {
+    "c_best": 722500.0,
+    "price_on_supplier_terms": 43.23,
+    "price_with_best_levers": 43.9,
+    "levers": "ppm=300 chargebackcb=500"
+   }
+  }
+ },
+ "sup:70210": {
+  "rfq/leverage": {
+   "case_ids": [
+    "P05"
+   ],
+   "runs": 7,
+   "lowest_offered_price": 28.0,
+   "first_final_offer_round": 4,
+   "replies": 30,
+   "replies_repeating_price": 11,
+   "best_deal": {
+    "c_deal": 242124.96,
+    "score": 0.772,
+    "price": 28.5,
+    "terms": {
+     "payment_days": 30,
+     "lead_time_days": 28,
+     "volume_per_year": 4200,
+     "contract_months": 24,
+     "effective_date": "2027-01-01",
+     "index_clause": null,
+     "incoterm": "DAP",
+     "tooling_eur": 0.0,
+     "ppm_commitment": 1200,
+     "chargeback_eur_per_complaint": 0.0,
+     "unit_price": 28.5
+    },
+    "from": "real_runs_v16/simplify_P05.json"
+   },
+   "target": {
+    "c_best": 223424.0,
+    "price_on_supplier_terms": 26.29,
+    "price_with_best_levers": 26.64,
+    "levers": "payment=90 lead_time=28"
+   }
+  }
+ },
+ "sup:70240": {
+  "rfq/leverage": {
+   "case_ids": [
+    "P05"
+   ],
+   "runs": 7,
+   "lowest_offered_price": 31.0,
+   "first_final_offer_round": 4,
+   "replies": 25,
+   "replies_repeating_price": 7,
+   "best_deal": {
+    "c_deal": 269725.12,
+    "score": 0.436,
+    "price": 32.0,
+    "terms": {
+     "payment_days": 90,
+     "lead_time_days": 42,
+     "volume_per_year": 4200,
+     "contract_months": 24,
+     "effective_date": "2027-01-01",
+     "index_clause": null,
+     "incoterm": "DAP",
+     "tooling_eur": 0.0,
+     "ppm_commitment": 1400,
+     "chargeback_eur_per_complaint": 0.0,
+     "unit_price": 32.0
+    },
+    "from": "real_runs/confident_router_P05.json"
+   },
+   "target": {
+    "c_best": 223424.0,
+    "price_on_supplier_terms": 26.29,
+    "price_with_best_levers": 26.64,
+    "levers": "payment=90 lead_time=28"
+   }
+  }
+ },
+ "sup:70250": {
+  "rfq/leverage": {
+   "case_ids": [
+    "P05"
+   ],
+   "runs": 7,
+   "lowest_offered_price": 29.0,
+   "first_final_offer_round": 3,
+   "replies": 22,
+   "replies_repeating_price": 5,
+   "best_deal": null,
+   "target": {
+    "c_best": 223424.0,
+    "price_on_supplier_terms": 26.29,
+    "price_with_best_levers": 26.64,
+    "levers": "payment=90 lead_time=28"
+   }
+  }
+ },
+ "sup:70410": {
+  "capacity/secure_supply": {
+   "case_ids": [
+    "P10"
+   ],
+   "runs": 4,
+   "lowest_offered_price": 31.6,
+   "first_final_offer_round": 2,
+   "replies": 13,
+   "replies_repeating_price": 1,
+   "best_deal": {
+    "c_deal": 1527674.4,
+    "score": 0.671,
+    "price": 31.6,
+    "terms": {
+     "payment_days": 30,
+     "lead_time_days": 56,
+     "volume_per_year": 23400,
+     "contract_months": 24,
+     "effective_date": "2027-01-01",
+     "index_clause": null,
+     "incoterm": "DAP",
+     "tooling_eur": 0.0,
+     "ppm_commitment": 300,
+     "chargeback_eur_per_complaint": 0.0,
+     "unit_price": 31.6
+    },
+    "from": "real_runs/reciprocal_evidence_P10.json"
+   },
+   "target": {
+    "c_best": 1328927.0,
+    "price_on_supplier_terms": null,
+    "price_with_best_levers": 28.09,
+    "levers": "volume=23400 contract=24 lead_time=35"
+   }
+  }
+ },
+ "sup:70510": {
+  "price_increase/stabilise": {
+   "case_ids": [
+    "P02"
+   ],
+   "runs": 8,
+   "lowest_offered_price": 345.51,
+   "first_final_offer_round": 4,
+   "replies": 48,
+   "replies_repeating_price": 11,
+   "best_deal": {
+    "c_deal": 2268912.25,
+    "score": 0.295,
+    "price": 373.64,
+    "terms": {
+     "payment_days": 90,
+     "lead_time_days": 35,
+     "volume_per_year": 6110,
+     "contract_months": 12,
+     "effective_date": "2027-01-01",
+     "index_clause": null,
+     "incoterm": "DAP",
+     "tooling_eur": 0.0,
+     "ppm_commitment": 250,
+     "chargeback_eur_per_complaint": 0.0,
+     "unit_price": 373.64
+    },
+    "from": "real_runs/confident_router_P02.json"
+   },
+   "target": {
+    "c_best": 2235514.0,
+    "price_on_supplier_terms": null,
+    "price_with_best_levers": 365.79,
+    "levers": "payment=90 index_clause=none"
+   },
+   "c_min_price": 357.19
+  }
+ },
+ "sup:70530": {
+  "renewal/stabilise": {
+   "case_ids": [
+    "P03"
+   ],
+   "runs": 5,
+   "lowest_offered_price": 429.22,
+   "first_final_offer_round": 3,
+   "replies": 22,
+   "replies_repeating_price": 14,
+   "best_deal": {
+    "c_deal": 3959920.47,
+    "score": 0.849,
+    "price": 429.22,
+    "terms": {
+     "payment_days": 30,
+     "lead_time_days": 49,
+     "volume_per_year": 4580,
+     "contract_months": 24,
+     "effective_date": "2027-01-01",
+     "index_clause": null,
+     "incoterm": "DAP",
+     "tooling_eur": 0.0,
+     "ppm_commitment": 350,
+     "chargeback_eur_per_complaint": 0.0,
+     "unit_price": 429.22
+    },
+    "from": "real_runs/reciprocal_evidence_P03.json"
+   },
+   "target": {
+    "c_best": 3909043.0,
+    "price_on_supplier_terms": 421.98,
+    "price_with_best_levers": 427.61,
+    "levers": "payment=90 contract=24 volume=4580"
+   },
+   "c_min_price": 413.96
+  }
+ },
+ "sup:70610": {
+  "bundling/routine": {
+   "case_ids": [
+    "P07"
+   ],
+   "runs": 4,
+   "lowest_offered_price": 5.46,
+   "first_final_offer_round": 4,
+   "replies": 24,
+   "replies_repeating_price": 4,
+   "best_deal": {
+    "c_deal": 329812.8,
+    "score": 0.667,
+    "price": 5.46,
+    "terms": {
+     "payment_days": 30,
+     "lead_time_days": 5,
+     "volume_per_year": 30000,
+     "contract_months": 24,
+     "effective_date": "2027-01-01",
+     "index_clause": null,
+     "incoterm": "DAP",
+     "tooling_eur": 0.0,
+     "ppm_commitment": 80,
+     "chargeback_eur_per_complaint": 0.0,
+     "unit_price": 5.46
+    },
+    "from": "real_runs/reciprocal_evidence_P07.json"
+   },
+   "target": {
+    "c_best": 299241.0,
+    "price_on_supplier_terms": 4.95,
+    "price_with_best_levers": 5.02,
+    "levers": "payment=90 contract=24"
+   }
+  }
+ },
+ "sup:70620": {
+  "renewal/routine": {
+   "case_ids": [
+    "P04"
+   ],
+   "runs": 4,
+   "lowest_offered_price": 4.88,
+   "first_final_offer_round": 3,
+   "replies": 20,
+   "replies_repeating_price": 12,
+   "best_deal": {
+    "c_deal": 197071.33,
+    "score": 0.766,
+    "price": 4.88,
+    "terms": {
+     "payment_days": 30,
+     "lead_time_days": 7,
+     "volume_per_year": 20000,
+     "contract_months": 24,
+     "effective_date": "2027-01-01",
+     "index_clause": null,
+     "incoterm": "DAP",
+     "tooling_eur": 0.0,
+     "ppm_commitment": 150,
+     "chargeback_eur_per_complaint": 0.0,
+     "unit_price": 4.88
+    },
+    "from": "real_runs/reciprocal_evidence_P04.json"
+   },
+   "target": {
+    "c_best": 196529.0,
+    "price_on_supplier_terms": 4.87,
+    "price_with_best_levers": 4.93,
+    "levers": "payment=90 contract=24"
+   }
+  }
+ },
+ "sup:70710": {
+  "raw_material/leverage": {
+   "case_ids": [
+    "P08"
+   ],
+   "runs": 8,
+   "lowest_offered_price": 5.4,
+   "first_final_offer_round": 3,
+   "replies": 39,
+   "replies_repeating_price": 9,
+   "best_deal": {
+    "c_deal": 1039531.93,
+    "score": 0.549,
+    "price": 5.47,
+    "terms": {
+     "payment_days": 90,
+     "lead_time_days": 10,
+     "volume_per_year": 94800,
+     "contract_months": 24,
+     "effective_date": "2027-01-01",
+     "index_clause": {
+      "series": "AS-14404",
+      "material_share": 0.45,
+      "deadband_pct": 5.0,
+      "base_month": "2026-08"
+     },
+     "incoterm": "DAP",
+     "tooling_eur": 0.0,
+     "ppm_commitment": 50,
+     "chargeback_eur_per_complaint": 0.0,
+     "unit_price": 5.47
+    },
+    "from": "real_runs_v16/reciprocal_evidence_P08.json"
+   },
+   "target": {
+    "c_best": 960309.0,
+    "price_on_supplier_terms": 4.88,
+    "price_with_best_levers": 5.1,
+    "levers": "index_clause=none payment=90 contract=24"
+   }
+  }
+ },
+ "sup:70740": {
+  "raw_material/leverage": {
+   "case_ids": [
+    "P18"
+   ],
+   "runs": 8,
+   "lowest_offered_price": 5.5,
+   "first_final_offer_round": 2,
+   "replies": 37,
+   "replies_repeating_price": 13,
+   "best_deal": {
+    "c_deal": 264784.3,
+    "score": 0.419,
+    "price": 5.5,
+    "terms": {
+     "payment_days": 30,
+     "lead_time_days": 14,
+     "volume_per_year": 23700,
+     "contract_months": 24,
+     "effective_date": "2027-01-01",
+     "index_clause": {
+      "series": "AS-14404",
+      "material_share": 0.45,
+      "deadband_pct": 5.0,
+      "base_month": "2026-08"
+     },
+     "incoterm": "DAP",
+     "tooling_eur": 0.0,
+     "ppm_commitment": 70,
+     "chargeback_eur_per_complaint": 0.0,
+     "unit_price": 5.5
+    },
+    "from": "real_runs_v16/reciprocal_evidence_P18.json"
+   },
+   "target": {
+    "c_best": 222651.0,
+    "price_on_supplier_terms": 4.52,
+    "price_with_best_levers": 4.73,
+    "levers": "index_clause=none payment=90 contract=24"
+   }
+  }
+ }
+}
