@@ -1,0 +1,204 @@
+{
+  "cli_version": "0.11.4",
+  "checkpoint_id": "01M4N1F0AB7HG1BPHPP4YKYF3N",
+  "session_id": "c839f125-523b-4765-9e0d-736b62052aff",
+  "strategy": "manual-commit",
+  "created_at": "2026-10-11T08:32:29.643258Z",
+  "branch": "local-alex-niko",
+  "checkpoints_count": 3,
+  "save_step_count": 4,
+  "files_touched": [
+    "agent/arena_kit/agents/better_agent.py",
+    "agent/arena_kit/cli.py",
+    "agent/arena_kit/sim_cases/real_runs_v32_idx_lead/P02_r1/better_P02.json",
+    "agent/arena_kit/sim_cases/real_runs_v32_idx_lead/P02_r2/better_P02.json",
+    "agent/arena_kit/sim_cases/real_runs_v32_idx_lead/P02_r3/better_P02.json",
+    "agent/arena_kit/sim_cases/real_runs_v32_idx_lead/P10_r1/better_P10.json",
+    "agent/arena_kit/sim_cases/real_runs_v32_idx_lead/P10_r2/better_P10.json",
+    "agent/arena_kit/sim_cases/real_runs_v32_idx_lead/P10_r3/better_P10.json",
+    "agent/tests/test_better_agent.py",
+    "backlog.csv"
+  ],
+  "agent": "Claude Code",
+  "model": "claude-fable-5-1",
+  "turn_id": "593c53852cf4",
+  "compact_transcript_start": 0,
+  "token_usage": {
+    "input_tokens": 4917,
+    "cache_creation_tokens": 1914886,
+    "cache_read_tokens": 182761700,
+    "output_tokens": 556659,
+    "api_call_count": 808,
+    "subagent_tokens": {
+      "input_tokens": 56,
+      "cache_creation_tokens": 43354,
+      "cache_read_tokens": 842028,
+      "output_tokens": 357,
+      "api_call_count": 28
+    }
+  },
+  "skill_events_version": 1,
+  "skill_events": [
+    {
+      "id": "claude-skill-toolu_01XisbE3fpoi7cwAoVYW8zSo",
+      "event_type": "tool_invocation",
+      "skill": {
+        "name": "claude-in-chrome"
+      },
+      "source": {
+        "agent": "claude-code",
+        "signal": "skill_tool_use",
+        "confidence": "explicit"
+      },
+      "turn_id": "280cb5401056",
+      "transcript_anchor": {
+        "unit": "line",
+        "start": 1647,
+        "end": 1648,
+        "entry_ids": [
+          "736b346a-30d5-4103-b836-0257d9b08dcf"
+        ],
+        "tool_use_id": "toolu_01XisbE3fpoi7cwAoVYW8zSo"
+      },
+      "native": {
+        "tool_name": "Skill",
+        "tool_use_id": "toolu_01XisbE3fpoi7cwAoVYW8zSo"
+      },
+      "collapse": {
+        "target": "tool_pair",
+        "label": "Skill: claude-in-chrome",
+        "default_collapsed": true
+      }
+    },
+    {
+      "id": "claude-skill-toolu_01NwTCQtA8aY9qR4HQFGsa8J",
+      "event_type": "tool_invocation",
+      "skill": {
+        "name": "anthropic-skills:deep-research"
+      },
+      "source": {
+        "agent": "claude-code",
+        "signal": "skill_tool_use",
+        "confidence": "explicit"
+      },
+      "turn_id": "adb3318188ae",
+      "transcript_anchor": {
+        "unit": "line",
+        "start": 1804,
+        "end": 1805,
+        "entry_ids": [
+          "5d32208c-4a11-4e41-9368-95090245be74"
+        ],
+        "tool_use_id": "toolu_01NwTCQtA8aY9qR4HQFGsa8J"
+      },
+      "native": {
+        "tool_name": "Skill",
+        "tool_use_id": "toolu_01NwTCQtA8aY9qR4HQFGsa8J"
+      },
+      "collapse": {
+        "target": "tool_pair",
+        "label": "Skill: anthropic-skills:deep-research",
+        "default_collapsed": true
+      }
+    }
+  ],
+  "session_metrics": {
+    "turn_count": 312
+  },
+  "initial_attribution": {
+    "calculated_at": "2026-10-11T08:32:28.361073Z",
+    "agent_lines": 5583,
+    "agent_removed": 0,
+    "human_added": 4166,
+    "human_modified": 50,
+    "human_removed": 0,
+    "total_committed": 9778,
+    "total_lines_changed": 9799,
+    "agent_percentage": 56.97520155117869,
+    "metric_version": 2
+  },
+  "prompt_attributions": [
+    {
+      "checkpoint_number": 2,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 0,
+      "agent_lines_removed": 0
+    },
+    {
+      "checkpoint_number": 3,
+      "user_lines_added": 52,
+      "user_lines_removed": 0,
+      "agent_lines_added": 150,
+      "agent_lines_removed": 0,
+      "user_added_per_file": {
+        "agent/arena_kit/sim_cases/real_runs_v25_even_better_s/log.txt": 27,
+        "agent/arena_kit/sim_cases/real_runs_v25_even_better_s/log_P01.txt": 1,
+        "agent/arena_kit/sim_cases/real_runs_v25_even_better_s/log_P02.txt": 1,
+        "agent/arena_kit/sim_cases/real_runs_v25_even_better_s/log_P03.txt": 1,
+        "agent/arena_kit/sim_cases/real_runs_v25_even_better_s/log_P04.txt": 1,
+        "agent/arena_kit/sim_cases/real_runs_v25_even_better_s/log_P05.txt": 1,
+        "agent/arena_kit/sim_cases/real_runs_v25_even_better_s/log_P07.txt": 1,
+        "agent/arena_kit/sim_cases/real_runs_v25_even_better_s/log_P08.txt": 1,
+        "agent/arena_kit/sim_cases/real_runs_v25_even_better_s/log_P10.txt": 1,
+        "agent/arena_kit/sim_cases/real_runs_v25_even_better_s/log_P11.txt": 1,
+        "agent/arena_kit/sim_cases/real_runs_v25_even_better_s/log_P18.txt": 16
+      }
+    },
+    {
+      "checkpoint_number": 4,
+      "user_lines_added": 97,
+      "user_lines_removed": 8,
+      "agent_lines_added": 182,
+      "agent_lines_removed": 4,
+      "user_added_per_file": {
+        "agent/arena_kit/agents/better_agent.py": 13,
+        "agent/arena_kit/cli.py": 8,
+        "agent/arena_kit/sim_cases/real_runs_v25_even_better_s/log.txt": 27,
+        "agent/arena_kit/sim_cases/real_runs_v25_even_better_s/log_P01.txt": 1,
+        "agent/arena_kit/sim_cases/real_runs_v25_even_better_s/log_P02.txt": 1,
+        "agent/arena_kit/sim_cases/real_runs_v25_even_better_s/log_P03.txt": 1,
+        "agent/arena_kit/sim_cases/real_runs_v25_even_better_s/log_P04.txt": 1,
+        "agent/arena_kit/sim_cases/real_runs_v25_even_better_s/log_P05.txt": 1,
+        "agent/arena_kit/sim_cases/real_runs_v25_even_better_s/log_P07.txt": 1,
+        "agent/arena_kit/sim_cases/real_runs_v25_even_better_s/log_P08.txt": 1,
+        "agent/arena_kit/sim_cases/real_runs_v25_even_better_s/log_P10.txt": 1,
+        "agent/arena_kit/sim_cases/real_runs_v25_even_better_s/log_P11.txt": 1,
+        "agent/arena_kit/sim_cases/real_runs_v25_even_better_s/log_P18.txt": 16,
+        "agent/tests/test_better_agent.py": 24
+      },
+      "user_removed_per_file": {
+        "agent/arena_kit/cli.py": 2,
+        "agent/tests/test_better_agent.py": 6
+      }
+    },
+    {
+      "checkpoint_number": 5,
+      "user_lines_added": 75,
+      "user_lines_removed": 21,
+      "agent_lines_added": 5836,
+      "agent_lines_removed": 4,
+      "user_added_per_file": {
+        "agent/arena_kit/agents/better_agent.py": 2,
+        "agent/arena_kit/cli.py": 10,
+        "agent/arena_kit/sim_cases/real_runs_v25_even_better_s/log.txt": 27,
+        "agent/arena_kit/sim_cases/real_runs_v25_even_better_s/log_P01.txt": 1,
+        "agent/arena_kit/sim_cases/real_runs_v25_even_better_s/log_P02.txt": 1,
+        "agent/arena_kit/sim_cases/real_runs_v25_even_better_s/log_P03.txt": 1,
+        "agent/arena_kit/sim_cases/real_runs_v25_even_better_s/log_P04.txt": 1,
+        "agent/arena_kit/sim_cases/real_runs_v25_even_better_s/log_P05.txt": 1,
+        "agent/arena_kit/sim_cases/real_runs_v25_even_better_s/log_P07.txt": 1,
+        "agent/arena_kit/sim_cases/real_runs_v25_even_better_s/log_P08.txt": 1,
+        "agent/arena_kit/sim_cases/real_runs_v25_even_better_s/log_P10.txt": 1,
+        "agent/arena_kit/sim_cases/real_runs_v25_even_better_s/log_P11.txt": 1,
+        "agent/arena_kit/sim_cases/real_runs_v25_even_better_s/log_P18.txt": 16,
+        "agent/tests/test_better_agent.py": 11
+      },
+      "user_removed_per_file": {
+        "agent/arena_kit/agents/better_agent.py": 2,
+        "agent/arena_kit/cli.py": 10,
+        "agent/tests/test_better_agent.py": 9
+      }
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "tool_use_id": "toolu_01HSXEVhdZKCFei7E7C2ZDQR",
+  "agent_id": "aeb0b914f42a122a3",
+  "subagent_type": "coder",
+  "task_description": "Gate index sheet in health cases",
+  "token_usage": {
+    "input_tokens": 56,
+    "cache_creation_tokens": 43354,
+    "cache_read_tokens": 842028,
+    "output_tokens": 357,
+    "api_call_count": 28
+  },
+  "started_at": "2026-10-11T10:23:04.377992+02:00",
+  "completed_at": "2026-10-11T10:28:46.962498+02:00"
+}
