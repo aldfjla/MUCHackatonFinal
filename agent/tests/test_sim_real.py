@@ -50,7 +50,7 @@ def test_profile_marks_every_parameter_fitted_or_assumed():
         assert p["status"] in ("fitted", "fitted_n1", "assumed"), name
         assert isinstance(p["n"], int) and p["evidence"] and p["uncertainty"], name
         assert p["status"] != "fitted" or p["n"] >= 3, f"{name}: 'fitted' needs at least 3 cases or threads"
-        assert p["status"] != "fitted_n1" or 1 <= p["n"] <= 2, name
+        assert p["status"] != "fitted_n1" or 0 <= p["n"] <= 2, name  # n=0: its only evidence was reserved
     for name in ("payment_days_hard_limit_30", "volume_cap", "first_reply_drop_multi_supplier", "accept_tolerance"):
         assert params[name]["status"] != "fitted", name  # one thread, one case, or only bounds
     assert {"floor_cap", "pass_through_jitter", "single_sample_halfwidth", "standard_terms_gaps"} <= set(params)
@@ -230,3 +230,31 @@ def test_fit_health_recovers_the_arenas_values_and_a_clause_cuts_the_price():
     plain = {"unit_price": 130.0, "payment_days": 60}
     clause = {**plain, "index_clause": {"series": "X", "material_share": 0.2, "deadband_pct": 3.0}}
     assert REAL._value(s, th, clause) - REAL._value(s, th, plain) == pytest.approx(0.1 * th["opening"], abs=0.01)
+
+
+def test_reserved_split_is_disjoint_and_suppliers_wholly_reserved():
+    from arena_kit.fit_real import ALL_DIRS, dumps, load_split, make_split
+
+    sp = load_split()
+    assert sp == make_split(seed=sp["seed"])  # holdout.json is the deterministic split
+    assert sp["unseen"] and sp["train"] and not set(sp["unseen"]) & set(sp["train"])
+    for d in dumps(ALL_DIRS):
+        reserved = set(sp["suppliers"]) & set(d["threads"])
+        assert not reserved or d["case"] in sp["unseen"]  # a reserved supplier never trains
+        assert (d["case"] in sp["unseen"]) != (d["case"] in sp["train"])
+    cases = load_cases(CASES / "real")
+    for c in sp["unseen"]:
+        assert [cases[f"case:{c}"]["type"], cases[f"case:{c}"]["buyer"]["category_goal"]] in sp["combos"] or any(
+            s in cases[f"case:{c}"]["suppliers"] for s in sp["suppliers"]
+        )
+
+
+def test_evaluate_split_flag_selects_reserved_cases():
+    from arena_kit.fit_real import load_split
+
+    sp = load_split()
+    assert evaluate.split_ids("all") is None
+    assert evaluate.split_ids("unseen") == {f"case:{c}" for c in sp["unseen"]}
+    assert not evaluate.split_ids("unseen") & evaluate.split_ids("train")
+    with pytest.raises(SystemExit):
+        evaluate.main(["--set", "dev", "--split", "unseen"])

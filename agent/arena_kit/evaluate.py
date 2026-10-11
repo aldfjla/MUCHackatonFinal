@@ -22,6 +22,7 @@ from urllib.parse import urlparse
 
 from .cli import AGENTS, agent_factory
 from .client import ArenaClient
+from .fit_real import load_split
 from .play import RemoteTable, hosted, play_all
 from .sim import CASES, load_cases
 from .sim_real import PROFILE, SimReal
@@ -69,10 +70,17 @@ def case_folder(which):
     return {"dev": CASES / "gen_dev", "test": CASES / "gen_test", "real": CASES / "real"}[which]
 
 
-def play_set(agents, which, seeds, data, parallel, profile=None):
+def split_ids(split):
+    """The real-case ids of a split (`holdout.json`): unseen = reserved, train = the rest, all = None (no filter)."""
+    from .fit_real import load_split
+
+    return None if split == "all" else {f"case:{c}" for c in load_split()[split]}
+
+
+def play_set(agents, which, seeds, data, parallel, profile=None, only=None):
     """(cases, {agent: {(case_id, seed): score}}, {agent: [(case_id, seed) of crashed games]})"""
     cases = load_cases(case_folder(which))
-    ids = [c["case_id"] for c in hosted(list(cases.values()))]
+    ids = [c["case_id"] for c in hosted(list(cases.values())) if only is None or c["case_id"] in only]
     facts = {}
     if data and (Path(data) / "facts.json").is_file():
         from .data import DataPackage
@@ -144,29 +152,26 @@ def compare(cases, scores):
     rows = []
     for a in agents:
         for cid in sorted({c for (x, c) in real if x == a}):
-            m = mean([v for (c, _), v in scores[a].items() if c == cid])
-            rows.append((a, cid, real[(a, cid)], m))
-    print("\nMOCK vs REAL (the same agents, the same 10 hosted cases; real = mean over all dumps of the agent)")
-    print("IN-SAMPLE: the supplier profile was fitted on these same real runs, so this checks the fit, not the mock's")
-    print("           power to predict; it says nothing about cases or agents the profile never saw.")
-    print(f"{'agent':20} {'real mean':>9} {'mock mean':>9}")
-    for a in agents:
-        r = [x[2] for x in rows if x[0] == a]
-        m = [x[3] for x in rows if x[0] == a]
-        print(f"{a:20} {mean(r):9.3f} {mean(m):9.3f}")
-    if len(rows) > 2:
-        r_all = st.correlation([x[2] for x in rows], [x[3] for x in rows])
-        print(f"in-sample correlation over {len(rows)} (agent, case) pairs: {r_all:.2f}")
-        by_case = defaultdict(list)
-        for _, cid, r, m in rows:
-            by_case[cid].append((r, m))
-        cm = {c: (mean([r for r, _ in v]), mean([m for _, m in v])) for c, v in by_case.items()}
-        if len(cm) > 2:
-            print(f"in-sample correlation over {len(cm)} case means (does the mock find the same cases hard?): "
-                  f"{st.correlation([v[0] for v in cm.values()], [v[1] for v in cm.values()]):.2f}")  # fmt: skip
+            ms = [v for (c, _), v in scores[a].items() if c == cid]
+            if ms:  # the case was played (a --split leaves the others out)
+                rows.append((a, cid, real[(a, cid)], mean(ms)))
+    fit = json.loads(PROFILE.read_text(encoding="utf-8"))["meta"].get("split", "unknown (profile not fitted by fit_real.py)")
+    unseen = {f"case:{c}" for c in load_split()["unseen"]}
+    print(f"\nMOCK vs REAL (same agents, hosted cases; real = mean over all dumps of the agent). Profile: {fit}")
+    for name, part in (("TRAIN (in-sample: checks the fit)", [x for x in rows if x[1] not in unseen]),
+                       ("UNSEEN (reserved cases: the mock's predictive power)", [x for x in rows if x[1] in unseen])):  # fmt: skip
+        if not part:
+            continue
+        err = mean([abs(r - m) for _, _, r, m in part])
+        cor = st.correlation([x[2] for x in part], [x[3] for x in part]) if len(part) > 2 else float("nan")
+        print(f"{name}: MAE {err:.3f}, correlation {cor:.2f} over {len(part)} (agent, case) pairs")
+        for a in agents:
+            r = [x[2] for x in part if x[0] == a]
+            if r:
+                print(f"  {a:20} real {mean(r):6.3f} mock {mean([x[3] for x in part if x[0] == a]):6.3f}")
     print("biggest mismatches (agent, case, real, mock):")
     for a, cid, r, m in sorted(rows, key=lambda x: -abs(x[2] - x[3]))[:8]:
-        print(f"  {a:20} {cid:10} {r:6.3f} {m:6.3f}")
+        print(f"  {a:20} {cid:10} {r:6.3f} {m:6.3f}{'  (unseen)' if cid in unseen else ''}")
 
 
 def holdout(
@@ -198,6 +203,7 @@ def main(argv=None):
     ap.add_argument("--set", choices=["dev", "test", "real"], default="dev")
     ap.add_argument("--seeds", type=int, default=5)
     ap.add_argument("--data", default=os.environ.get("ARENA_DATA") or str(DEFAULT_DATA))
+    ap.add_argument("--split", choices=["unseen", "train", "all"], default="all", help="--set real only: which cases (holdout.json)")
     ap.add_argument("--holdout", action="store_true", help="fit on real_runs+v16 only, predict the v17 and v19 dumps")
     ap.add_argument("--parallel", type=int, default=8)
     a = ap.parse_args(argv)
@@ -210,8 +216,13 @@ def main(argv=None):
         )
     if a.holdout:
         return holdout(agents, a.seeds, a.data, a.parallel)
-    cases, scores, crashed = play_set(agents, a.set, a.seeds, a.data, a.parallel)
-    report({k: v for k, v in cases.items() if v.get("hosted", True)}, scores, crashed)
+    if a.split != "all" and a.set != "real":
+        raise SystemExit("--split applies to --set real only")
+    only = split_ids(a.split) if a.set == "real" else None
+    if a.set == "real" and json.loads(PROFILE.read_text(encoding="utf-8"))["meta"].get("split", "").startswith("all"):
+        print("profile fitted on all real runs: --split unseen is in-sample for the simulator")
+    cases, scores, crashed = play_set(agents, a.set, a.seeds, a.data, a.parallel, only=only)
+    report({k: v for k, v in cases.items() if v.get("hosted", True) and (only is None or k in only)}, scores, crashed)
     if a.set == "real":
         compare(cases, scores)
 

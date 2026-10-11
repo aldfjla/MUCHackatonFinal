@@ -15,6 +15,7 @@ For generated cases the same quantities become per-type / pooled distributions. 
 
 import argparse
 import glob
+import hashlib
 import json
 import statistics as st
 from pathlib import Path
@@ -25,12 +26,44 @@ from .sim_real import PROFILE
 
 ALL_DIRS = ["real_runs", "real_runs_v16", "real_runs_v17", "real_runs_v19"]
 LONG = 24  # months: the contract length that earns a supplier bonus
+HOLDOUT = Path(__file__).parent / "holdout.json"
 
 
-def dumps(dirs):
+def dumps(dirs, exclude=()):
+    """Every dump of `dirs`, except those of the cases named in `exclude` (e.g. {"P04"})."""
     for d in dirs:
         for f in sorted(glob.glob(str(CASES / d / "*_P*.json"))):
-            yield json.loads(Path(f).read_text(encoding="utf-8"))
+            x = json.loads(Path(f).read_text(encoding="utf-8"))
+            if x["case"] not in exclude:
+                yield x
+
+
+def make_split(seed=0, n_sup=3, n_combo=2, dirs=ALL_DIRS):
+    """Deterministic reserved split of the real cases: n_sup whole suppliers (every case they appear in) plus
+    n_combo (case type, goal) combinations that those cases do not cover (every case of the combination)."""
+    cases = load_cases(CASES / "real")
+    sups, combo_of = {}, {}
+    for d in dumps(dirs):
+        combo_of[d["case"]] = tuple([cases[f"case:{d['case']}"]["type"], cases[f"case:{d['case']}"]["buyer"]["category_goal"]])
+        for s in d["threads"]:
+            sups.setdefault(s, set()).add(d["case"])
+    order = lambda names: sorted(names, key=lambda n: hashlib.sha256(f"{seed}|{n}".encode()).hexdigest())  # noqa: E731
+    picked = order(sups)[:n_sup]
+    unseen = set().union(*(sups[s] for s in picked))
+    covered = {combo_of[c] for c in unseen}
+    combos = order(sorted({c for c in combo_of.values() if c not in covered}))[:n_combo]
+    unseen |= {c for c, k in combo_of.items() if k in combos}
+    return {
+        "seed": seed,
+        "suppliers": sorted(picked),
+        "combos": sorted(map(list, combos)),
+        "unseen": sorted(unseen),
+        "train": sorted(set(combo_of) - unseen),
+    }
+
+
+def load_split():
+    return json.loads(HOLDOUT.read_text(encoding="utf-8"))
 
 
 def spread(xs):
@@ -61,14 +94,14 @@ def fit_health(case, std, rows, rate=None):
     return round(fc, 2), round(r, 4), round(err(fc, r) ** 0.5, 2)
 
 
-def fit(dirs=ALL_DIRS, profile=None):
+def fit(dirs=ALL_DIRS, profile=None, exclude=()):
     prof = profile or json.loads(PROFILE.read_text(encoding="utf-8"))
     cases = load_cases(CASES / "real")
     std_days = prof["meta"]["standard_days"]
     rates = prof["parameters"]["supplier_interest_rate"]["per_case"]
     rate_med = prof["parameters"]["supplier_interest_rate"]["median"]
     threads, health_rows, bounds = {}, {}, {}
-    for d in dumps(dirs):
+    for d in dumps(dirs, exclude):
         cid, res = f"case:{d['case']}", d["result"]
         case = cases[cid]
         bounds[d["case"]] = {"c_open": res["c_open"], "c_best": res["c_best"]}
@@ -237,13 +270,21 @@ def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
     ap.add_argument("--dirs", default=",".join(ALL_DIRS))
     ap.add_argument("--out", default=str(PROFILE))
+    ap.add_argument("--all", action="store_true", help="fit on ALL cases incl. the reserved ones (no unseen score is valid after)")
+    ap.add_argument("--make-split", action="store_true", help="(re)write holdout.json; do it once, then keep it")
     a = ap.parse_args(argv)
+    if a.make_split:
+        HOLDOUT.write_text(json.dumps(make_split(), indent=1) + "\n", encoding="utf-8")
     dirs = a.dirs.split(",")
-    out = json.loads(Path(a.out).read_text(encoding="utf-8"))
-    n = sum(1 for _ in dumps(dirs))
-    out["parameters"].update(to_parameters(fit(dirs, out), n))
+    ex = set() if a.all else set(load_split()["unseen"])
+    from . import fit_supplier  # the base profile (pooled parameters) is refitted without the reserved cases too
+
+    out = fit_supplier.fit(str(Path.home() / "Documents/Codex/negotiation-arena-kit/data"), ex)
+    n = sum(1 for _ in dumps(dirs, ex))
+    out["parameters"].update(to_parameters(fit(dirs, out, ex), n))
+    out["meta"]["split"] = "all (in-sample)" if a.all else f"train only; reserved: {sorted(ex)}"
     Path(a.out).write_text(json.dumps(out, indent=1, ensure_ascii=False), encoding="utf-8")
-    print(f"wrote {a.out} from {n} dumps")
+    print(f"wrote {a.out} from {n} dumps ({out['meta']['split']})")
 
 
 if __name__ == "__main__":

@@ -87,7 +87,7 @@ def draw(profile, case, sup, i, nsup, seed):
     jit = P["pass_through_jitter"]
     kind = P["opening_vs_current_price"]["by_type"].get(case["type"], {})
     lo, hi = (kind["min"], kind["max"]) if kind.get("n", 0) >= 2 else (  # one sample: +- the assumed half-width
-        (kind["median"] - hw, kind["median"] + hw) if kind else P["opening_vs_current_price"]["pooled_excl_rfq"]
+        (kind["median"] - hw, kind["median"] + hw) if kind else (P["opening_vs_current_price"]["pooled_excl_rfq"]["min"], P["opening_vs_current_price"]["pooled_excl_rfq"]["max"])
     )  # fmt: skip
     ratio = rng.uniform(lo, hi)
     f = P["floor_ratio"]

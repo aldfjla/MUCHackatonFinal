@@ -114,7 +114,8 @@
     "recomputed_min": 295173.23,
     "match_pct": 0.0
    }
-  }
+  },
+  "split": "all (in-sample)"
  },
  "parameters": {
   "supplier_interest_rate": {
