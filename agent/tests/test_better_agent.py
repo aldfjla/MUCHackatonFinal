@@ -241,6 +241,62 @@ def test_final_offer_is_accepted_at_the_centre_when_only_the_pessimistic_end_fai
     assert d["message"]["action"] == {"type": "accept", "term_sheet_id": "s1"}  # never walk or stall when accepting is no worse than c_open
 
 
+def _fake_package(monkeypatch, rows, intel):
+    from arena_kit.agents import better_agent
+
+    monkeypatch.setattr(better_agent, "load_package", lambda: object())
+    monkeypatch.setattr(better_agent, "_q", lambda pkg, sql, *a: rows if "should_cost" in sql else intel)
+
+
+def _health_case():
+    case = _case()
+    case.update(parts=["p"], suppliers=["s1"])
+    case["buyer"].update(category_goal="stabilise", relationship_eur_per_point=1000.0)
+    return case
+
+
+def test_health_band_widths_generic_specific_and_weak(monkeypatch):
+    from arena_kit.agents.better_agent import BAND_GENERIC, BAND_SPECIFIC, BAND_WEAK
+
+    case, own, generic = _health_case(), {"supplier_id": "s1", "unit_cost": 100.0, "price_unit": 1}, {"supplier_id": "", "unit_cost": 100.0, "price_unit": 1}
+    ok = [{"equity_ratio_pct": 40.0, "credit_index": 200, "credit_index_12m_ago": 200}]
+    for rows, intel, width in [([generic], ok, BAND_GENERIC), ([own], ok, BAND_SPECIFIC),
+                               ([own], [{**ok[0], "equity_ratio_pct": 0.0}], BAND_SPECIFIC + BAND_WEAK),  # equity 0 is weak, not healthy
+                               ([own], [{**ok[0], "credit_index": 190}], BAND_SPECIFIC + BAND_WEAK),
+                               ([generic], [{**ok[0], "credit_index": 190}], BAND_GENERIC + BAND_WEAK)]:
+        _fake_package(monkeypatch, rows, intel)
+        h = _health(case)
+        assert h["band"] == pytest.approx((1 - width, 1 + width)) and h["full_cost"] == 100.0
+
+
+@needs_data
+def test_accept_above_the_opening_price_is_tested_at_the_lower_end_too(p02_quote):
+    """Priced above the opening, the accept's health term is less sensitive to the full cost: it is worse than the opening at
+    the lower end of the band (+25k) although better at the pessimistic end (-4k)."""
+    from arena_kit.agents.better_agent import _accept_ok
+
+    case = json.loads((CASES / "real" / "P02.json").read_text())
+    first = json.loads((CASES / "real_runs_v17" / "simplify_P02.json").read_text())["threads"]["sup:70510"]["messages"][0]
+    ev = [first, _mine(360.0), _sup(375.0, 1, index_clause=None)]
+    std, t = _std("P02"), ev[-1]["term_sheets"][0]["terms"]
+    with _with_health(case):
+        lo, hi = _health(case)["band"]
+        assert BetterAgent._est_c(case, ev, t, std) <= BetterAgent()._open_c(case, {"t": ev})  # the old (pessimistic only) test passed
+        assert BetterAgent._est_c(case, ev, t, std, lo) > BetterAgent()._open_c(case, {"t": ev}, lo)
+        assert not _accept_ok(case, {"t": ev}, "t", t)
+        final = {"t": [*ev[:-1], {**ev[-1], "status": "final_offer"}]}
+        assert _accept_ok(case, final, "t", t) == (BetterAgent._est_c(case, ev, t, std, 1) <= BetterAgent()._open_c(case, final, 1))  # final: centre test only
+
+
+def test_no_redirect_to_a_thread_that_fails_accept_ok():
+    case = _case(incoterm=["DAP", "EXW"])
+    case["buyer"]["alternative"] = {"terms": {"unit_price": 20.0, "payment_days": 30}}  # both standing sheets are worse than the alternative
+    a = [_sup(30.0, 0, incoterm="DAP"), _mine(24.0), {**_sup(27.0, 1, incoterm="EXW"), "status": "final_offer"}]
+    b = [_sup(30.0, 0, incoterm="DAP"), _mine(24.0), {**_sup(28.0, 1, incoterm="DAP"), "status": "final_offer"}]
+    d = BetterAgent()._guard(case, {"A": a, "B": b}, {"supplier_id": "A", "message": {"action": {"type": "accept", "term_sheet_id": "s1"}}})
+    assert d["message"].get("action") is None  # neither is acceptable: a counter, not a redirect
+
+
 def test_accept_needs_the_best_complete_package_across_threads():
     case = _case(incoterm=["DAP", "EXW"])
     a = [_sup(30.0, 0, incoterm="DAP"), _mine(24.0), {**_sup(27.0, 1, incoterm="EXW"), "status": "final_offer"}]  # cheaper unit price, +2 freight: C of 29

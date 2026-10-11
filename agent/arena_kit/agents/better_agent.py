@@ -70,7 +70,7 @@ def _health(case):
     width = (BAND_SPECIFIC if own else BAND_GENERIC) if BetterAgent.BAND else 0.0  # BAND off: the centre estimate only
     try:
         intel = _q(pkg, "select equity_ratio_pct, credit_index, credit_index_12m_ago from supplier_intel where supplier_id=?", row["supplier_id"] or (suppliers or [None])[0])
-        if intel and ((intel[0]["credit_index"] or 0) < (intel[0]["credit_index_12m_ago"] or 0) or (intel[0]["equity_ratio_pct"] or 100) < WEAK_EQUITY):
+        if intel and ((intel[0]["credit_index"] or 0) < (intel[0]["credit_index_12m_ago"] or 0) or (100 if intel[0]["equity_ratio_pct"] is None else intel[0]["equity_ratio_pct"]) < WEAK_EQUITY):
             width += BAND_WEAK * (width > 0)
     except Exception:
         pass
@@ -171,17 +171,22 @@ def _why(case, threads, d, rule):
 
 
 def _accept_ok(case, threads, sid, t):
-    """May we accept `t`, the standing sheet of thread `sid`? Hard rule: its C at the band's pessimistic end is within the
-    pessimistic c_open and below the alternative, and no other thread's standing sheet is cheaper there. On a final_offer
-    or our last message the same test at the centre estimate is enough: never walk when accepting is no worse than c_open."""
+    """May we accept `t`, the standing sheet of thread `sid`? In every world k of the band (lower end, centre, upper end: C is
+    piecewise linear in k, so the ends suffice; an accept priced above the opening has a less sensitive health term, so the
+    worst case can be the lower end) its C is within c_open and below the alternative, and no other thread's standing sheet
+    is cheaper there. On a final_offer or our last message the centre world alone is enough: never walk when accepting is
+    no worse than c_open."""
     ev, std, b = threads[sid], standard_terms(threads[sid]), BetterAgent()
-    hi = (HEALTH.get() or {}).get("band", (1, 1))[1]
-    final = latest(ev).get("status") == "final_offer" or moves_left(case, ev) <= 1
-    for k in ([hi, 1] if final else [hi]):
+    lo, hi = (HEALTH.get() or {}).get("band", (1, 1))
+
+    def ok(k):
         c, other = b._est_c(case, ev, t, std, k), _best_standing(case, threads, sid, k)
-        if c <= b._open_c(case, threads, k) and c < _c_alt(case) and not (other and other[0] < c - 0.005):
-            return True
-    return False
+        with _scaled(k):
+            c_alt = _c_alt(case)  # the alternative in the same world as the offer
+        return c <= b._open_c(case, threads, k) and c < c_alt and not (other and other[0] < c - 0.005)
+
+    final = latest(ev).get("status") == "final_offer" or moves_left(case, ev) <= 1
+    return ok(1) if final else all(ok(k) for k in dict.fromkeys((lo, 1, hi)))
 
 
 def _vetoes(case, threads, r):
