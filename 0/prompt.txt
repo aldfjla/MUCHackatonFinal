@@ -3960,3 +3960,7 @@ after its done pls open the backlog again in duck duck go
 <status>completed</status>
 <summary>Background command "Wait for the 10 real runs to finish and show results" completed (exit code 0)</summary>
 </task-notification>
+
+---
+
+yea push this and put like something to indicate that the last proven result was with this bot
