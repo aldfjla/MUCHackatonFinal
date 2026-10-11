@@ -5002,3 +5002,7 @@ make the presentation have like animations and sick things like spline animation
 ---
 
 is anything running
+
+---
+
+update the presentation. its kinda lame at the moment. I want you to find the EHL Cognition site that we did a few hackathons back. that website is supper cool and I want you to make it as inspiration for the current one
