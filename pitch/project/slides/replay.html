@@ -3,15 +3,15 @@
 <h2 style="font-size:68px;font-weight:700;line-height:1.08;letter-spacing:-1px">One thread, message by message</h2>
 <x-embed style="position:absolute;left:128px;top:310px;width:1060px;height:590px"><!doctype html><html><head><meta charset="utf-8"><style>
 html,body{margin:0;background:transparent;font-family:ui-monospace,Menlo,Consolas,monospace;color:#E2E8F0}
-#t{box-sizing:border-box;width:1060px;height:590px;padding:26px 30px;border-radius:12px;background:#131A22;border:1px solid #1F2A35;overflow:hidden}
-.l{display:flex;gap:18px;font-size:25px;line-height:1.5;opacity:0;transform:translateY(8px);transition:opacity .35s,transform .35s}
+#t{box-sizing:border-box;width:1060px;height:590px;padding:18px 26px;display:flex;flex-direction:column;gap:4px;border-radius:12px;background:#131A22;border:1px solid #1F2A35;overflow:hidden}
+.l{display:flex;gap:16px;font-size:21px;line-height:1.3;opacity:0;transform:translateY(8px);transition:opacity .35s,transform .35s}
 .l.on{opacity:1;transform:none}
-.tag{flex:0 0 96px;font-size:22px;letter-spacing:2px;padding-top:4px}
+.tag{flex:0 0 84px;font-size:20px;letter-spacing:2px;padding-top:3px}
 .sup{color:#FBBF24}.buy{color:#38BDF8}.sys{color:#64748B}
-.m{color:#E2E8F0}.why{color:#64748B;font-size:23px}
+.m{color:#E2E8F0}.why{color:#64748B;font-size:20px}
 .fin{color:#F87171}.ok{color:#34D399}
 </style></head><body><div id="t"></div><script>
-var L=[["SUP","sup","138.55 · start 2026-11-01","opening ask, +9.5 % on the current 126.53"],
+var L=[["SUP","sup","138.55 · start 2026-11-01 · opening ask, +9.5 % on 126.53",""],
 ["BUY","buy","130.66 · 14 d · start 2027-04-01","0.80 anchor; latest effective date the case allows; cites the 51-day notice vs the contract"],
 ["SUP","sup","138.40 April · or 135.30 January","\"we did not know that - a fair point\"; prices the date itself"],
 ["BUY","buy","133.63 · April","matches the supplier's visible concession"],
@@ -20,7 +20,7 @@ var L=[["SUP","sup","138.55 · start 2026-11-01","opening ask, +9.5 % on the cur
 ["SUP","sup","135.20 · \"our calculation stays internal\"","held; resistance, not proof of a floor"],
 ["BUY","buy","133.91",""],
 ["SUP","sup","134.90",""],
-["BUY","buy","134.45 · 30 d","payment lever: same cost to us, cash for them"],
+["BUY","buy","134.45 · 30 d · payment lever, same cost to us",""],
 ["SUP","fin","FINAL OFFER · 135.80 · 30 d · April","sent at supplier message 6, as every time"],
 ["BUY","ok","ACCEPT · C 1,103,429 < C open 1,153,780 · pessimistic world","score 0.88 (0.69 without the April date)"]];
 var t=document.getElementById("t");

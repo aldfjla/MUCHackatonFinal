@@ -2,8 +2,7 @@
 @page { size: 1920px 1080px; margin: 0 } html,body{margin:0;background:#0B0F14}
 .pg{width:1920px;height:1080px;overflow:hidden;position:relative;page-break-after:always;break-after:page}
 .pg section{width:1920px;height:1080px;box-sizing:border-box;position:relative}
-section [style*="position:absolute"]{position:absolute} h1,h2,h3,p,ul{margin:0} ul{padding-left:1.2em}
-table{border-collapse:collapse} td,th{padding:0.35em 0.6em;border-bottom:1px solid #1F2A35}
+h1,h2,h3,p,ul{margin:0} ul{padding-left:1.2em} table{border-collapse:collapse} td,th{padding:0.35em 0.6em;border-bottom:1px solid #1F2A35}
 </style></head><body><div class="pg"><section id="cover" data-transition="push" style="background:#0B0F14;color:#E2E8F0;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;justify-content:space-between">
 <div style="position:absolute;left:0;top:0;width:1920px;height:4px;background:linear-gradient(90deg, #38BDF8 0%, #34D399 100%)"></div>
 <div style="display:flex;gap:16px;align-items:center">
@@ -182,15 +181,15 @@ w.appendChild(t);setTimeout(function(){t.className=&quot;t ring&quot;;setTimeout
 <h2 style="font-size:68px;font-weight:700;line-height:1.08;letter-spacing:-1px">One thread, message by message</h2>
 <iframe style="position:absolute;left:128px;top:310px;width:1060px;height:590px;border:0;background:transparent" srcdoc="&lt;!doctype html&gt;&lt;html&gt;&lt;head&gt;&lt;meta charset=&quot;utf-8&quot;&gt;&lt;style&gt;
 html,body{margin:0;background:transparent;font-family:ui-monospace,Menlo,Consolas,monospace;color:#E2E8F0}
-#t{box-sizing:border-box;width:1060px;height:590px;padding:26px 30px;border-radius:12px;background:#131A22;border:1px solid #1F2A35;overflow:hidden}
-.l{display:flex;gap:18px;font-size:25px;line-height:1.5;opacity:0;transform:translateY(8px);transition:opacity .35s,transform .35s}
+#t{box-sizing:border-box;width:1060px;height:590px;padding:18px 26px;display:flex;flex-direction:column;gap:4px;border-radius:12px;background:#131A22;border:1px solid #1F2A35;overflow:hidden}
+.l{display:flex;gap:16px;font-size:21px;line-height:1.3;opacity:0;transform:translateY(8px);transition:opacity .35s,transform .35s}
 .l.on{opacity:1;transform:none}
-.tag{flex:0 0 96px;font-size:22px;letter-spacing:2px;padding-top:4px}
+.tag{flex:0 0 84px;font-size:20px;letter-spacing:2px;padding-top:3px}
 .sup{color:#FBBF24}.buy{color:#38BDF8}.sys{color:#64748B}
-.m{color:#E2E8F0}.why{color:#64748B;font-size:23px}
+.m{color:#E2E8F0}.why{color:#64748B;font-size:20px}
 .fin{color:#F87171}.ok{color:#34D399}
 &lt;/style&gt;&lt;/head&gt;&lt;body&gt;&lt;div id=&quot;t&quot;&gt;&lt;/div&gt;&lt;script&gt;
-var L=[[&quot;SUP&quot;,&quot;sup&quot;,&quot;138.55 · start 2026-11-01&quot;,&quot;opening ask, +9.5 % on the current 126.53&quot;],
+var L=[[&quot;SUP&quot;,&quot;sup&quot;,&quot;138.55 · start 2026-11-01 · opening ask, +9.5 % on 126.53&quot;,&quot;&quot;],
 [&quot;BUY&quot;,&quot;buy&quot;,&quot;130.66 · 14 d · start 2027-04-01&quot;,&quot;0.80 anchor; latest effective date the case allows; cites the 51-day notice vs the contract&quot;],
 [&quot;SUP&quot;,&quot;sup&quot;,&quot;138.40 April · or 135.30 January&quot;,&quot;\&quot;we did not know that - a fair point\&quot;; prices the date itself&quot;],
 [&quot;BUY&quot;,&quot;buy&quot;,&quot;133.63 · April&quot;,&quot;matches the supplier&#x27;s visible concession&quot;],
@@ -199,7 +198,7 @@ var L=[[&quot;SUP&quot;,&quot;sup&quot;,&quot;138.55 · start 2026-11-01&quot;,&
 [&quot;SUP&quot;,&quot;sup&quot;,&quot;135.20 · \&quot;our calculation stays internal\&quot;&quot;,&quot;held; resistance, not proof of a floor&quot;],
 [&quot;BUY&quot;,&quot;buy&quot;,&quot;133.91&quot;,&quot;&quot;],
 [&quot;SUP&quot;,&quot;sup&quot;,&quot;134.90&quot;,&quot;&quot;],
-[&quot;BUY&quot;,&quot;buy&quot;,&quot;134.45 · 30 d&quot;,&quot;payment lever: same cost to us, cash for them&quot;],
+[&quot;BUY&quot;,&quot;buy&quot;,&quot;134.45 · 30 d · payment lever, same cost to us&quot;,&quot;&quot;],
 [&quot;SUP&quot;,&quot;fin&quot;,&quot;FINAL OFFER · 135.80 · 30 d · April&quot;,&quot;sent at supplier message 6, as every time&quot;],
 [&quot;BUY&quot;,&quot;ok&quot;,&quot;ACCEPT · C 1,103,429 &lt; C open 1,153,780 · pessimistic world&quot;,&quot;score 0.88 (0.69 without the April date)&quot;]];
 var t=document.getElementById(&quot;t&quot;);
