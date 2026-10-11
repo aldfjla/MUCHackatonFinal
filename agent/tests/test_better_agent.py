@@ -2,6 +2,7 @@
 
 import glob
 import json
+import math
 import sys
 from pathlib import Path
 
@@ -333,3 +334,78 @@ def test_step_answers_their_move_in_full():
 def test_step_never_exceeds_their_price():
     ev = [_sup(30.0, 0), _mine(24.0), _sup(26.0, 1), _mine(25.5), _sup(25.0, 2)]  # they dropped below our last offer
     assert BetterAgent()._price(_case(), ev, 25.0) == 25.0
+
+
+# --- FIXED_PRICE_ALT + concession log ---------------------------------------------------------------------
+def _hist(monkeypatch, series):
+    monkeypatch.setattr(BetterAgent, "FIXED_TWIN", True)
+    monkeypatch.setattr(BetterAgent, "INDEX_PREMIUM", True)
+    """A fake data package whose index_values are `series` (None: no package)."""
+    import arena_kit.agents.better_agent as ba
+    monkeypatch.setattr(ba, "load_package", lambda: None if series is None else object())
+    monkeypatch.setattr(ba, "_q", lambda pkg, sql, *p: [{"value": v} for v in series])
+
+
+def _clause_case(index_paths=None):
+    case = _case(index_clause=[None, {"series": "x", "material_share": 0.5, "deadband_pct": 0.0}], payment_days=[30])
+    case["buyer"]["index_paths"] = index_paths or {"x": 0.05}
+    case["buyer"]["horizon_years"] = 1
+    return case
+
+
+def _vol(sigma, drift=0.0, n=24):
+    return [100 * math.exp(drift * i + sigma * (-1) ** i) for i in range(n)]
+
+
+def _clause_sheet(case, price=28.0):
+    return {"terms": {"unit_price": price, "payment_days": 30, "index_clause": case["term_options"]["index_clause"][1]}}
+
+
+def _decide_fixed(case, monkeypatch, series, price=28.0):
+    _hist(monkeypatch, series)
+    ev = [_sup(30.0, 0), _mine(25.0), _sup(29.0, 1)]
+    d = {"supplier_id": "t", "message": {"term_sheets": [_clause_sheet(case, price)]}}
+    with _with_health(case):
+        return BetterAgent()._with_fixed_price(case, {"t": ev}, d)["message"]["term_sheets"], ev
+
+
+def test_fixed_price_sheet_always_beside_a_clause_sheet(monkeypatch):
+    case = _clause_case()
+    sheets, ev = _decide_fixed(case, monkeypatch, _vol(0.01))
+    assert any(not s["terms"].get("index_clause") for s in sheets) and any(s["terms"].get("index_clause") for s in sheets)
+    fixed = next(s["terms"] for s in sheets if not s["terms"].get("index_clause"))
+    assert total_cost(case, fixed, {}) <= total_cost(case, _clause_sheet(case)["terms"], {}) + 1e-6  # fixed C no worse than the clause sheet offered
+
+
+def test_clause_price_is_below_fixed_by_the_premium_derived_from_history(monkeypatch):
+    case, gaps = _clause_case(), []
+    for sigma in (0.005, 0.01, 0.02):
+        sheets, _ = _decide_fixed(case, monkeypatch, _vol(sigma))
+        fixed = next(s["terms"] for s in sheets if not s["terms"].get("index_clause"))
+        clause = next(s["terms"] for s in sheets if s["terms"].get("index_clause"))
+        prem = BetterAgent._index_premium(case, clause["index_clause"], fixed["unit_price"], 12)
+        assert clause["unit_price"] <= fixed["unit_price"] - prem + 1e-9
+        gaps.append(prem / fixed["unit_price"])
+    assert gaps[0] < gaps[1] < gaps[2]  # monotone in volatility
+    _hist(monkeypatch, _vol(0.01, 0.0))
+    flat = BetterAgent._index_premium(case, case["term_options"]["index_clause"][1], 30.0, 12)
+    _hist(monkeypatch, _vol(0.01, 0.01))
+    assert BetterAgent._index_premium(case, case["term_options"]["index_clause"][1], 30.0, 12) > flat  # and in drift
+
+
+def test_no_index_history_clause_sheet_is_at_least_as_good_in_expected_c(monkeypatch):
+    case = _clause_case()
+    sheets, ev = _decide_fixed(case, monkeypatch, None)
+    fixed = next(s["terms"] for s in sheets if not s["terms"].get("index_clause"))
+    clause = next(s["terms"] for s in sheets if s["terms"].get("index_clause"))
+    assert BetterAgent._index_premium(case, clause["index_clause"], 30.0, 12) is None
+    assert total_cost(case, clause, {}) <= total_cost(case, fixed, {}) + 1e-6
+
+
+def test_concession_log_fields():
+    case = _case()
+    ev = [_sup(30.0, 0), _mine(24.0), _sup(29.0, 1)]
+    why = BetterAgent().decide(case, {"t": ev})["why"]["concession"]
+    assert why["round"] == 2 and why["ours"]["prev"] == 24.0 and why["ours"]["step"] == round(why["ours"]["new"] - 24.0, 2)
+    assert why["supplier"] == {"prev": 30.0, "new": 29.0, "step": -1.0}
+    assert isinstance(why["levers_changed"], list) and why["c_after"] is not None and why["c_before"] is not None

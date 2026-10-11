@@ -12,12 +12,16 @@
 2. ANCHOR_BY_SHARE: first offer = max(floor, price x (1 - share x index drop)) where the case data show a drop.
 3. CASH_SHORT: a cash-short supplier gets shorter payment days against a lower price.
 4. LATE_ACCEPT: with <= 2 messages left, accept a standing sheet within 1% of the best known C.
-5. HOLD_FOR_FINAL: no accept while the supplier's latest message is a plain "open" offer with >= HOLD_MESSAGES
+5. FIXED_TWIN / INDEX_PREMIUM: a message carrying an index-clause sheet also carries the same terms without the clause at a C no worse
+   than the clause sheet's; the clause sheet's price is then at least the index risk premium below the fixed price
+   (see _index_premium), so index risk is only taken when paid for.
+6. HOLD_FOR_FINAL: no accept while the supplier's latest message is a plain "open" offer with >= HOLD_MESSAGES
    messages left, unless it repeated its price (its floor): we keep countering until it sends final_offer.
 Rival-quote citation (RESEARCH rule 12) is not here: EvidenceAgent._rewrite already cites the best real rival offer ID."""
 
 import math
 import re
+import statistics
 from contextlib import contextmanager
 from contextvars import ContextVar
 
@@ -165,9 +169,26 @@ def _why(case, threads, d, rule):
                 out["vs_open"] = {w: _num(b._est_c(case, ev, t, std, k) - b._open_c(case, threads, k)) for w, k in zip(("lo", "mid", "hi"), (est["band"][0], 1, est["band"][1]) if est else (1, 1, 1))}
                 with _scaled((est or {}).get("band", (1, 1))[1]):
                     out["c_breakdown"] = {k: round(v, 2) for k, v in cost_breakdown(case, t, std).items()}
+                out["concession"] = _concession(case, ev, t, std)
     except Exception as e:  # a log line must never break a decision
         out["error"] = repr(e)
     return out
+
+
+def _concession(case, ev, t, std):
+    """Plain dict of this move: round, our previous / new first-sheet price and step, the supplier's previous / new price and
+    step, the levers (fields) that changed against our previous sheet, and the package C (centre world) before / after."""
+    first = lambda m: m["term_sheets"][0]["terms"]  # noqa: E731
+    mine, theirs = [m for m in _mine(ev) if m.get("term_sheets")], [m for m in _sup(ev) if m.get("term_sheets")]
+    prev = first(mine[-1]) if mine else None
+    sp = [first(m).get("unit_price") for m in theirs]
+    step = lambda a, b: None if a is None or b is None else round(b - a, 2)  # noqa: E731
+    return {"round": len(mine) + 1,
+            "ours": {"prev": prev and prev.get("unit_price"), "new": t["unit_price"], "step": step(prev and prev.get("unit_price"), t["unit_price"])},
+            "supplier": {"prev": sp[-2] if len(sp) > 1 else None, "new": sp[-1] if sp else None, "step": step(sp[-2], sp[-1]) if len(sp) > 1 else None},
+            "levers_changed": sorted(k for k in {*t, *(prev or {})} if k != "unit_price" and t.get(k) != (prev or {}).get(k)) if prev else [],
+            "c_before": prev and prev.get("unit_price") is not None and _num(BetterAgent._est_c(case, ev, prev, std, 1)) or None,
+            "c_after": _num(BetterAgent._est_c(case, ev, t, std, 1))}
 
 
 def _accept_ok(case, threads, sid, t):
@@ -234,6 +255,8 @@ class HealthScope:
 
 class BetterAgent(SimplifyAgent):
     BAND = True  # False: the centre estimate only (no uncertainty band)
+    # both OFF: the arena's C prices the clause through a single index path, so a risk premium is not rewarded in score; the twin alone was not better (train 0.505 vs 0.509)
+    FIXED_TWIN = INDEX_PREMIUM = False  # twin: a no-clause sheet beside each clause sheet; premium: clause price below the twin's by the index risk premium
     GUARD_C_OPEN = THIRD_SHEET = ANCHOR_BY_SHARE = CASH_SHORT_OFFER = LATE_ACCEPT = HEALTH_ESTIMATE = True
     HOLD_FOR_FINAL = False  # dead on the real bots: final_offer comes at a fixed message whatever we do
     LATE_MESSAGES, LATE_TOLERANCE, HOLD_MESSAGES = 2, 0.01, 3
@@ -249,9 +272,78 @@ class BetterAgent(SimplifyAgent):
                     d = super().decide(case, threads)
                     rule = {"accept": "accept", "walk_away": "walk_away"}.get(((d.get("message") or {}).get("action") or {}).get("type"), "counter")
                     d = self._guard(case, threads, d)
+                if self.FIXED_TWIN or self.INDEX_PREMIUM:
+                    d = self._with_fixed_price(case, threads, d)
                 return {**d, "why": _why(case, threads, d, (d.get("why") or {}).get("rule") or rule)}
         finally:
             HOLD.reset(token)
+
+    # 7. fixed-price alternative beside every clause sheet ----------------------------------------------------
+    @staticmethod
+    def _index_premium(case, clause, price, months):
+        """Per-unit risk premium of an index clause, or None without index history:
+        price x material_share x (max(0, mu x H) + sigma x sqrt(H)), mu / sigma = mean / stdev of the series' monthly log
+        returns in the data package, H = contract months (the drift we expect to pay plus one standard deviation of it)."""
+        if not (pkg := load_package()):
+            return None
+        try:
+            v = [r["value"] for r in _q(pkg, "select value from index_values where series_id=? order by month", clause["series"]) if r["value"]]
+        except Exception:
+            return None
+        if len(v) < 4:
+            return None
+        r = [math.log(b / a) for a, b in zip(v, v[1:])]
+        return price * clause["material_share"] * (max(0.0, statistics.mean(r) * months) + statistics.stdev(r) * math.sqrt(months))
+
+    @staticmethod
+    def _max_price(ok, hi):
+        """The largest price in (0, hi] (to the cent, bisection: C rises with the price) with ok(price), else None."""
+        if ok(hi):
+            return hi
+        lo = 0.01
+        if not ok(lo):
+            return None
+        for _ in range(40):
+            mid = (lo + hi) / 2
+            lo, hi = (mid, hi) if ok(mid) else (lo, mid)
+        return math.floor(lo * 100) / 100
+
+    def _with_fixed_price(self, case, threads, d):
+        """Every clause sheet of the message gets a no-clause sheet beside it (see FIXED_TWIN); at most 3 sheets."""
+        msg, ev = d.get("message") or {}, threads.get(d.get("supplier_id"))
+        sheets = msg.get("term_sheets") or []
+        if not ev or not any(s["terms"].get("index_clause") for s in sheets):
+            return d
+        std, out, fixed_twins = standard_terms(ev), [], []
+        c, fits = (lambda t: _exp_c(case, t, std)), self._fits(case, threads)
+        ask = standing(ev)[1].get("unit_price") if standing(ev)[0] else None
+        for s in sheets:
+            t = s["terms"]
+            if not t.get("index_clause"):
+                out.append(s)
+                continue
+            fixed = next((o["terms"] for o in sheets if not o["terms"].get("index_clause") and c(o["terms"]) <= c(t)), None)
+            if fixed is None:  # same terms, no clause, the highest price at no more than the clause sheet's C (never above their ask)
+                f = self._max_price(lambda x: c(complete_offer(case, {**t, "index_clause": None, "unit_price": x})) <= c(t), max(t["unit_price"], ask or 0))
+                fixed = f and complete_offer(case, {**t, "index_clause": None, "unit_price": f})
+            if not fixed:
+                continue  # no fixed alternative at that C: do not offer the clause
+            prem = self._index_premium(case, t["index_clause"], fixed["unit_price"], t.get("contract_months") or case["buyer"]["horizon_years"] * 12)
+            if not self.INDEX_PREMIUM:
+                p = t["unit_price"]
+            elif prem is None:  # no history: the clause sheet must be at least as good as the fixed one in expected C
+                p = self._max_price(lambda x: c({**t, "unit_price": x}) <= c(fixed), t["unit_price"])
+            else:
+                p = math.floor(min(t["unit_price"], fixed["unit_price"] - prem) * 100) / 100
+            fixed_twins.append(fixed)
+            if self.FIXED_TWIN and fixed not in [o["terms"] for o in out]:
+                out.append({"terms": fixed})
+            if p and p > 0 and fits(ev, {**t, "unit_price": p}, std):  # a lower price can raise C (health term): then no clause sheet
+                out.append({**s, "terms": {**t, "unit_price": p}})
+        out = [s for i, s in enumerate(out) if s["terms"] not in [o["terms"] for o in out[:i]]]
+        head = [s for s in out if s["terms"].get("index_clause") or s["terms"] in fixed_twins]  # a clause sheet and its twin never get cut
+        out = (head + [s for s in out if s not in head])[:3]
+        return {**d, "message": {**msg, "term_sheets": out}}
 
     # 0. never offer or accept above c_open ------------------------------------------------------------------
     @staticmethod
