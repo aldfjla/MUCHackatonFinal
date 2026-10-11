@@ -3,7 +3,7 @@
 import json
 from pathlib import Path
 
-from arena_kit.agents.combined3 import FLOOR_FACTOR, Combined3Agent, FloorCore, floor_estimate
+from arena_kit.agents.combined3 import FLOOR_FACTOR, Combined3Agent, FloorCore, Gate, floor_estimate
 from arena_kit.cli import agent_factory
 
 ROOT = Path(__file__).parent.parent / "arena_kit/sim_cases"
@@ -59,10 +59,10 @@ def test_early_accept_above_target_becomes_counter_final_offer_is_accepted():
     c = case("P08")
     accept = {"supplier_id": "sup:A", "message": {"action": {"type": "accept", "term_sheet_id": "offer:A-2"}}}
     ev = [sup("A", 1, unit_price=6.05, **P08), buyer(4.70, **P08), sup("A", 2, unit_price=5.60, **P08)]
-    d = Combined3Agent._gate(c, {"sup:A": ev}, accept)
+    d = Gate._gate(c, {"sup:A": ev}, accept)
     assert d["message"].get("term_sheets") and d["message"]["term_sheets"][0]["terms"]["unit_price"] < 5.60
     ev[-1] = sup("A", 2, status="final_offer", unit_price=5.60, **P08)
-    assert Combined3Agent._gate(c, {"sup:A": ev}, accept) is accept
+    assert Gate._gate(c, {"sup:A": ev}, accept) is accept
 
 
 def test_registered_and_decides():
@@ -71,3 +71,42 @@ def test_registered_and_decides():
     assert d["message"].get("term_sheets")
     d = agent_factory("combined3", None)().decide(case("P02"), {"sup:A": [sup("A", 1, unit_price=370.96, payment_days=30)]})
     assert d["supplier_id"] == "sup:A"
+
+
+ACCEPT = {"supplier_id": "sup:A", "message": {"action": {"type": "accept", "term_sheet_id": "offer:A-2"}}}
+
+
+def test_gate_lets_accept_stand_when_they_meet_our_own_offer():
+    c = case("P08")
+    ev = [sup("A", 1, unit_price=6.05, **P08), buyer(5.20, **P08), sup("A", 2, unit_price=5.20, **P08)]
+    assert Gate._gate(c, {"sup:A": ev}, ACCEPT) is ACCEPT  # never counter 5.19 under our own 5.20
+
+
+def test_gate_respects_hold_limit_with_a_real_step():
+    c = case("P08")
+    ev = [sup("A", 1, unit_price=6.05, **P08), buyer(4.70, **P08), sup("A", 2, unit_price=5.60, **P08),
+          buyer(4.71, **P08), sup("A", 3, unit_price=5.58, **P08), buyer(4.72, **P08), sup("A", 4, unit_price=5.56, **P08)]
+    d = Gate._gate(c, {"sup:A": ev}, ACCEPT)
+    assert d is not ACCEPT  # still early and above target: a counter, but after two tick holds a real step
+    assert d["message"]["term_sheets"][0]["terms"]["unit_price"] > 4.72 + 0.05
+
+
+def test_gate_counter_goes_through_evidence(monkeypatch):
+    sent = {}
+
+    class Stub:
+        def decide(self, case, threads):
+            return ACCEPT
+
+    from arena_kit.agents.evidence import EvidenceAgent
+
+    def rewrite(self, case, threads, sid, msg):
+        sent["msg"] = msg
+        return {**msg, "refs": ["idx:test"]}
+
+    monkeypatch.setattr(EvidenceAgent, "_rewrite", rewrite)
+    monkeypatch.setattr("arena_kit.agents.evidence.load_package", lambda *a, **k: object())
+    c = case("P08")
+    ev = [sup("A", 1, unit_price=6.05, **P08), buyer(4.70, **P08), sup("A", 2, unit_price=5.60, **P08)]
+    d = EvidenceAgent(Gate(Stub()), None).decide(c, {"sup:A": ev})
+    assert d["message"].get("term_sheets") and d["message"].get("refs") == ["idx:test"] and "msg" in sent

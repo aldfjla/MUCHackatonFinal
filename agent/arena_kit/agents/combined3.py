@@ -85,12 +85,24 @@ class Combined3Agent(Combined2Agent):
     def __init__(self, data=None):
         super().__init__(data)
         self.chains = {
-            "better": lambda: EvidenceAgent(HealthScope(GuardedAgent(FloorBetter())), data),
-            "combined": lambda: EvidenceAgent(GuardedAgent(FloorCore()), data, questions=False),
+            "better": lambda: EvidenceAgent(HealthScope(Gate(GuardedAgent(FloorBetter()))), data),
+            "combined": lambda: EvidenceAgent(Gate(GuardedAgent(FloorCore())), data, questions=False),
         }
 
+
+class Gate:
+    """Inside the evidence layer, so a gate counter is rewritten with verified facts like any other message."""
+
+    def __init__(self, delegate):
+        self.delegate = delegate
+
+    def __getattr__(self, name):
+        if name == "delegate":
+            raise AttributeError(name)
+        return getattr(self.delegate, name)
+
     def decide(self, case, threads):
-        d = super().decide(case, threads)
+        d = self.delegate.decide(case, threads)
         try:
             return self._gate(case, threads, d)
         except Exception:  # never let the experiment break a decision
@@ -114,7 +126,12 @@ class Combined3Agent(Combined2Agent):
             return d
         std = standard_terms(ev)
         mine = [m["term_sheets"][0]["terms"].get("unit_price") or 0 for m in _mine(ev) if m.get("term_sheets")]
-        price = round(min(p - _tick(p), max(target, (mine[-1] if mine else 0) + _tick(p))), 2)
+        if mine and p <= mine[-1] + _tick(p) + 1e-9:  # they met our own offer: never take it back
+            return d
+        if mine and _holds(mine, p) >= MAX_HOLDS:  # we already crept MAX_HOLDS rounds: a real step, half the gap
+            price = round(min(p - _tick(p), mine[-1] + (p - mine[-1]) / 2), 2)
+        else:
+            price = round(min(p - _tick(p), max(target, (mine[-1] if mine else 0) + _tick(p))), 2)
         t = complete_offer(case, satisfy_must_haves(case, {**terms, "unit_price": price}, std))
         sent = [x["terms"] for m in _mine(ev) for x in m.get("term_sheets") or []]
         c = total_cost(case, t, std)
@@ -124,4 +141,4 @@ class Combined3Agent(Combined2Agent):
                 "body": "Thank you for your offer. We are close; please see our terms.", "term_sheets": [{"terms": t}]}}
 
 
-__all__ = ["Combined3Agent", "floor_estimate", "route"]
+__all__ = ["Combined3Agent", "Gate", "floor_estimate", "route"]
