@@ -1,0 +1,15 @@
+{
+  "tool_use_id": "toolu_01RE2cchgdKakg4mVeFqCHFC",
+  "agent_id": "ab215d8945713a194",
+  "subagent_type": "coder",
+  "task_description": "Mock: reserved suppliers/scenarios split",
+  "token_usage": {
+    "input_tokens": 52,
+    "cache_creation_tokens": 55581,
+    "cache_read_tokens": 1060972,
+    "output_tokens": 1166,
+    "api_call_count": 26
+  },
+  "started_at": "2026-10-11T02:29:24.474955+02:00",
+  "completed_at": "2026-10-11T02:37:43.97288+02:00"
+}
