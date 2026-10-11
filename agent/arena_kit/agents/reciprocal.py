@@ -95,15 +95,21 @@ def _valid(case, events, std, c_alt, musts=True):
     return out
 
 
-def _ready(case, events, sheet):
+def _ready(case, events, sheet, by_cost=False):
     if latest(events).get("status") in ("final_offer", "agreed") or moves_left(case, events) <= 1:
         return True
     mine = [m for m in _mine(events) if m.get("term_sheets")]
     if not mine:
         return False
-    price = sheet["terms"]["unit_price"]
-    if price <= max(s["terms"].get("unit_price") or 0 for s in mine[-1]["term_sheets"]):
-        return True  # they met us
+    if by_cost:  # lever bundles: they met us when their sheet costs us no more than our cheapest sheet
+        std = standard_terms(events)
+        ours = min(total_cost(case, s["terms"], std) for s in mine[-1]["term_sheets"])
+        if total_cost(case, sheet["terms"], std) <= ours + 0.01:
+            return True  # they met us
+    else:
+        price = sheet["terms"]["unit_price"]
+        if price <= max(s["terms"].get("unit_price") or 0 for s in mine[-1]["term_sheets"]):
+            return True  # they met us
     sup = [[s["terms"] for s in m["term_sheets"]] for m in _sup(events) if m.get("term_sheets")]
     return len(mine) >= REPEAT_AFTER and len(sup) >= 2 and sup[-1] == sup[-2]  # every sheet repeated, alternatives too
 
@@ -123,7 +129,7 @@ def _all_heard(case, threads):
     )
 
 
-def closing_accept(case, threads, c_open=None):
+def closing_accept(case, threads, c_open=None, by_cost=False):
     """The decision that closes on the cheapest acceptable sheet when the rule says so, else None: an accept of
     the thread's standing sheet, or, when the best sheet is another one (an alternative `-a`, or one before a
     question-only reply), our term sheet with its exact terms - the supplier then agrees on a standing sheet."""
@@ -144,7 +150,7 @@ def closing_accept(case, threads, c_open=None):
     _, _, sid, sheet_id = best
     events = threads[sid]
     sheet = next(s for s in _sheets(events) if s["term_sheet_id"] == sheet_id)
-    if not _ready(case, events, sheet):
+    if not _ready(case, events, sheet, by_cost):
         return None
     if sheet_id == standing(events)[0]:
         return {"supplier_id": sid, "message": {"action": {"type": "accept", "term_sheet_id": sheet_id}}}
