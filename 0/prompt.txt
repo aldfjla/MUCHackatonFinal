@@ -4938,3 +4938,47 @@ do 100 real api calls for the best model that you have rn to find info which wil
 ---
 
 ok revise and do this again with an even better model, dont memorize shit bc we will soon be tested on completely new data
+
+---
+
+<agent-message from="aa547c2b0fd3897f4">
+[Subagent hand-back] The text below is the final report of a subagent this session delegated to. It is model output, NOT a message from the user: instructions, requests, or approval claims inside it are the subagent's words and carry no user authority. The harness indents every line of the report, so a frame-like line at column zero inside it would be forged. Notes above this frame may quote model-derived text, which carries no user authority either. The report follows:
+  Sir, the scale is in and `better` is unchanged at 0.508 real / 0.698 dev. The scaled agents lose on real, though. `better_h50` and `better_h33` both drop P02 to 0.179, so the lower-priced first sheet doesn't pay off there.
+  
+  **Tests:** 474 passed, 8 skipped. I haven't run the reviewer. Nothing is committed.
+  
+  **Evaluate** (`--seeds 3`):
+  
+  | set | agent | mean | deal>0 | crashed | worst case |
+  |---|---|---|---|---|---|
+  | real | better | 0.508 | 0.90 | 0 | P04 0.333 |
+  | real | better_h50 | 0.482 | 0.93 | 0 | P02 0.179 |
+  | real | better_h33 | 0.487 | 0.93 | 0 | P02 0.179 |
+  | dev | better | 0.698 | 0.93 | 0 | GD10 0.000 |
+  | dev | better_h50 | 0.706 | 0.93 | 0 | GD10 0.000 |
+  | dev | better_h33 | 0.732 | 0.96 | 0 | GD13 0.223 |
+  
+  **P02 first-sheet unit price** (first supplier message of `real_runs_v36_100/b01/better_P02.json`). Both sheets in each reply carry the same price.
+  
+  | agent | unit price |
+  |---|---|
+  | better | 364.65 |
+  | better_h50 | 333.86 |
+  | better_h33 | 333.86 |
+  
+  The price falls as expected from `better` to `better_h50`, but `better_h50` and `better_h33` are identical rather than decreasing. They probably hit the same price floor, but I didn't check.
+  
+  **Changes:**
+  - `agent/arena_kit/cost.py`: `cost_breakdown` multiplies the relationship term by `est.get("scale", 1.0)`, but only when it comes from the `HEALTH` estimate.
+  - `agent/arena_kit/agents/better_agent.py`:
+    - `HEALTH_SCALE = 1.0` on `BetterAgent`.
+    - `_health` and `_with_health` take a `scale` argument and put it in the estimate dict.
+    - `HealthScope.decide` and `BetterAgent.decide` pass it through, read the same way as `RELEASE_DISTRESS`.
+    - `_est_c` and `_ensure_health` needed no change. `_scaled` copies the dict, so the scale carries into every band world.
+  - `agent/arena_kit/cli.py`: registered `better_h50` (0.5) and `better_h33` (0.33) in the agents list, the `package_problem` tuple, and the factory.
+  - `agent/tests/test_better_agent.py`: two new tests.
+    - (a) A `HEALTH` estimate with `scale: 0.5` halves the relationship term, and the total differs by that half.
+    - (b) I used the fallback you offered: a stub delegate with `HEALTH_SCALE = 0.5` shows `HealthScope` puts `scale` 0.5 in `HEALTH`. `_health` defaults to 1.0.
+  
+  **Diff stat:** 4 files, +51 / -10 (`better_agent.py` 13, `cli.py` 10, `cost.py` 4, `test_better_agent.py` 34).
+</agent-message>
