@@ -80,3 +80,29 @@ three), no index clause in the first offer, and tiny visible steps (5.04, 5.05, 
 Which of these moved the supplier is untested; it is the next single-change experiment, not for today.
 
 `PAY_MIRROR` stays in the code, default off, as the record of this test. `better` is unchanged.
+
+## even_better (belief layer + one purposeful move), v25 - niko, 11 Oct ~09:55
+
+`even_better` = better + a per-supplier belief dict (values / refuses / uncertain / resistance, from Petra's
+deterministic supplier model) logged with every decision, plus two rules behind flags: ONE_SHEET (one
+sheet per message, a conditional trade when the supplier has a currency) and HOLD_ON_RESIST (no price cut
+on a repeated price while more than two moves remain). No language model.
+
+Mock ablation (3 seeds): belief-only = better exactly (0.701 dev / 0.507 real); ONE_SHEET −0.03 dev /
+−0.06 real; HOLD_ON_RESIST −0.05 dev / −0.03 real; both −0.08 / −0.08; reserved split 0.443 vs 0.526.
+
+Real arena, same ten cases, vs better's best v21/v22 (mean 0.72):
+
+| variant | P01 | P02 | P03 | P04 | P05 | P07 | P08 | P10 | P11 | P18 | mean |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| belief-only (`even_better_b`) | 0.64 | 0.67 | 0.92 | 0.86 | crash | 0.67 | 0.53 | 0.68 | 0.63 | 0.40 | 0.67 (9) |
+| one sheet (`even_better_s`) | 0.64 | 0.21 | 0.92 | 0.81 | 0.77 | 0.70 | 0.53 | 0.69 | 0.63 | n/a (429 rate limit) | 0.66 (9) |
+
+Belief-only changes only the evidence layer's one question and its frozen fields, yet P01 (−0.20), P11
+(−0.08) and P18 (−0.11) got worse: the supplier bots answered the clarifying question with a harder
+line. P05 crashed with "not a standing offer" (an accept of an offer the arena no longer held, in the
+three-supplier RFQ); better has never done that in 50 sessions. One-sheet lost P02 (−0.46: without the
+index-clause sheet the health case closed above the C-minimising package).
+
+**Verdict: interpreting replies, as implemented, does not improve outcomes; neither rule does. Not
+promoted. `better` unchanged.** Kept in the repo as experimental agents (`even_better`, `_b`, `_s`, `_h`).

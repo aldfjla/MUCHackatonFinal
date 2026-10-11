@@ -1,6 +1,7 @@
 from ..guard import GuardedAgent
 from .anchor import AnchorAgent
 from .better_agent import BetterAgent
+from .even_better_agent import EvenBetterAgent
 from .boulware import BoulwareAgent
 from .combined import CombinedAgent
 from .combined2 import Combined2Agent
@@ -25,6 +26,7 @@ from .switcher import SwitcherAgent
 __all__ = [
     "AnchorAgent",
     "BetterAgent",
+    "EvenBetterAgent",
     "BoulwareAgent",
     "ClosingAgent",
     "CombinedAgent",

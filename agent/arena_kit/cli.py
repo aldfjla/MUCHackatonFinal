@@ -29,7 +29,7 @@ def load_env(path=".env"):
 
 AGENTS = [
     "naive", "smart", "confident", "rational", "explorer", "anchor", "switcher", "boulware", "router",
-    "confident_boulware", "confident_router", "guarded_boulware", "guarded_rational", "evidence_router", "evidence_rational", "reciprocal", "reciprocal_evidence", "simplify", "final", "final_match", "listener", "combined", "combined2", "playbook", "better", "better_pay", "50", "llm",
+    "confident_boulware", "confident_router", "guarded_boulware", "guarded_rational", "evidence_router", "evidence_rational", "reciprocal", "reciprocal_evidence", "simplify", "final", "final_match", "listener", "combined", "combined2", "playbook", "better", "better_pay", "even_better", "even_better_b", "even_better_s", "even_better_h", "50", "llm",
 ]  # fmt: skip
 
 
@@ -43,6 +43,7 @@ def agent_factory(name, data):
         ConfidentAgent,
         ConfidentBoulwareAgent,
         ConfidentRouterAgent,
+        EvenBetterAgent,
         EvidenceAgent,
         PlaybookAgent,
         ExplorerAgent,
@@ -61,6 +62,7 @@ def agent_factory(name, data):
         llm_from_env,
     )
     from .agents.better_agent import HealthScope
+    from .agents.even_better_agent import EvenHealthScope
 
     def _resend_guard(agent):  # v8-petra chains: never resend a refused must-have counter
         g = GuardedAgent(agent)
@@ -94,7 +96,7 @@ def agent_factory(name, data):
     if name == "guarded_rational":
         return lambda: GuardedAgent(RationalAgent())
     # the evidence wrapper replaces the delegate's body and refs by design (it cites verified data)
-    if name in ("evidence_router", "evidence_rational", "listener", "combined", "combined2", "better", "better_pay"):
+    if name in ("evidence_router", "evidence_rational", "listener", "combined", "combined2", "better", "better_pay", "even_better", "even_better_b", "even_better_s", "even_better_h"):
         from .evidence import package_problem
 
         if why := package_problem(data):  # say it before any session opens, not once per message
@@ -123,6 +125,14 @@ def agent_factory(name, data):
         return lambda: EvidenceAgent(GuardedAgent(PlaybookAgent(SimplifyAgent())), data)
     if name == "better":
         return lambda: EvidenceAgent(HealthScope(GuardedAgent(BetterAgent())), data)
+    if name == "even_better":
+        return lambda: EvidenceAgent(EvenHealthScope(GuardedAgent(EvenBetterAgent())), data)
+    if name.startswith("even_better_"):  # ablation: _b belief only, _s one sheet only, _h hold on resistance only
+        def make_ablation():
+            a = EvenBetterAgent()
+            a.ONE_SHEET, a.HOLD_ON_RESIST = name.endswith("s"), name.endswith("h")
+            return EvidenceAgent(EvenHealthScope(GuardedAgent(a)), data)
+        return make_ablation
     if name == "better_pay":  # better with PAY_MIRROR on (A/B)
         def make():
             b = BetterAgent()
