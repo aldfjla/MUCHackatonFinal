@@ -216,6 +216,21 @@ def test_no_index_clause_when_it_costs_us_more(pid):
     assert out and all(not s.get("index_clause") for s in out)
 
 
+def test_required_index_clause_is_kept():
+    """A must-have that requires an index clause: Alex's and the combined sheets keep a compliant one."""
+    from arena_kit.agents import FinalAgent
+
+    c = case("P08")
+    c["buyer"]["must_haves"] = [{"field": "index_clause", "op": "!=", "value": None}]
+    th = json.loads((ROOT / "real_runs" / "reciprocal_evidence_P08.json").read_text())["threads"]
+    sid, t = next(iter(th.items()))
+    ms = t["messages"]
+    i = next(i for i, m in enumerate(ms) if m.get("from") != "buyer")
+    for agent in (FinalAgent(), CombinedAgent()):
+        out = sheets(agent.decide(c, {sid: ms[: i + 1]}))
+        assert out and all(s.get("index_clause") for s in out)
+
+
 def test_index_clause_offered_when_it_is_cheaper(monkeypatch):
     """If total_cost says an index option is cheaper than none, cheapest_index keeps the cheapest one."""
     from arena_kit.agents import reciprocal

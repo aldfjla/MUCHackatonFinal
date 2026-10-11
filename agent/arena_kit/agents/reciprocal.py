@@ -90,6 +90,9 @@ def cheapest_index(case, t, std):
     if not t.get("index_clause") or "index_clause" not in case["negotiable"]:
         return t
     opts = [None] + [c for c in (case.get("term_options") or {}).get("index_clause", []) if c]
+    opts = [c for c in opts if must_haves_ok(case, {**t, "index_clause": c}, std)]  # a required clause stays
+    if not opts:
+        return t
     best = min(opts, key=lambda c: (total_cost(case, {**t, "index_clause": c}, std), c is not None))
     return {**t, "index_clause": best}
 
