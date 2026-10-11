@@ -22,7 +22,7 @@ import random
 import re
 from pathlib import Path
 
-from .cost import must_haves_ok, supplier_value, total_cost
+from .cost import RELATIONSHIP_GOALS, must_haves_ok, supplier_value, total_cost
 from .sim import Sim, structured
 
 PROFILE = Path(__file__).parent / "sim_cases" / "supplier_profile.json"
@@ -46,11 +46,25 @@ def capped(cap, terms):
     return bool(cap and (terms.get("volume_per_year") or 0) > cap and (terms.get("contract_months") or 0) < LIFT_MONTHS)
 
 
-def package_cost(case, std, rate, floor, pd_limit=None, vol_cap=None):
+def bonus_extra(p, opening, terms, share=1.0):
+    """EUR per unit a long contract / an index clause is worth to it (P18: 6.10 -> 5.50 on 24 months + clause)."""
+    b = (
+        p["b_clause"]
+        if terms.get("index_clause")
+        else p["b_long"]
+        if (terms.get("contract_months") or 0) >= LIFT_MONTHS
+        else 0.0
+    )
+    return b * opening * share
+
+
+def package_cost(case, std, rate, floor, pd_limit=None, vol_cap=None, p=None, opening=0.0):
     """C of the cheapest package a supplier accepts: over every allowed value of the other terms, the
-    price at which it receives exactly `floor` (cash per unit at its standard terms). inf if none."""
+    price at which it receives exactly `floor` (cash per unit at its standard terms, plus the bonus a long
+    contract or clause is worth to it when `p` is given). inf if none. A relationship case adds its health term."""
     names = levers(case)
     sup = {"standard": std, "interest_rate": rate}
+    health = {**sup, "full_cost": p["fc"]} if p and p.get("fc") else None
     best = float("inf")
     for combo in itertools.product(*[case["term_options"].get(f) or [None] for f in names]):
         c = dict(zip(names, combo, strict=True))
@@ -58,9 +72,10 @@ def package_cost(case, std, rate, floor, pd_limit=None, vol_cap=None):
             continue
         if not must_haves_ok(case, c, std):
             continue
-        a = supplier_value(case, {**c, "unit_price": 0.0}, sup)
-        b = supplier_value(case, {**c, "unit_price": 1.0}, sup) - a
-        best = min(best, total_cost(case, {**c, "unit_price": (floor - a) / b}, std))
+        ex = {"extra": bonus_extra(p, opening, c)} if p else {}
+        a = supplier_value(case, {**c, "unit_price": 0.0}, {**sup, **ex})
+        b = supplier_value(case, {**c, "unit_price": 1.0}, {**sup, **ex}) - a
+        best = min(best, total_cost(case, {**c, "unit_price": (floor - a) / b}, std, health))
     return best
 
 
@@ -75,11 +90,14 @@ def draw(profile, case, sup, i, nsup, seed):
         (kind["median"] - hw, kind["median"] + hw) if kind else P["opening_vs_current_price"]["pooled_excl_rfq"]
     )  # fmt: skip
     ratio = rng.uniform(lo, hi)
-    f = P["floor_vs_opening"]
+    f = P["floor_ratio"]
     fk = f["by_type"].get(case["type"], {})
     flo, fhi = (fk["min"], fk["max"]) if fk.get("n", 0) >= 2 else (  # one sample: +- the assumed half-width
-        (fk["median"] - hw, fk["median"] + hw) if fk else (f["min"], f["max"])
+        (fk["median"] - hw, fk["median"] + hw) if fk else (f["pooled"]["min"], f["pooled"]["max"])
     )  # fmt: skip
+    real = P["real_suppliers"]["threads"].get(f"{case['case_id'].split(':')[-1]}|{sup}", {})  # exact, the real set
+    hl = P["health"]["threads"].get(f"{case['case_id'].split(':')[-1]}|{sup}")
+    bs, bg = P["package_bonus_start"], P["package_bonus_gain"]
     caps = case["term_options"].get("volume_per_year") or []
     cap = (
         sorted(caps)[1]
@@ -89,19 +107,30 @@ def draw(profile, case, sup, i, nsup, seed):
     r = P["supplier_interest_rate"]
     drops = P["first_reply_drop_multi_supplier" if nsup > 1 else "first_reply_drop_plain"]["samples"]
     verified = P["first_reply_drop_with_verified_claims"]["samples"]
+    health = P["health"]
+    rate = hl["rate"] if hl else rng.uniform(health["rate"]["min"], health["rate"]["max"])
+    fc_ratio = (
+        hl["full_cost_ratio"] if hl else rng.uniform(health["full_cost_ratio"]["min"], health["full_cost_ratio"]["max"])
+    )
     return {
         "ratio": ratio,
-        "r": rng.uniform(r["min"], r["max"]),
+        "r": rate if case["buyer"].get("category_goal") in RELATIONSHIP_GOALS else rng.uniform(r["min"], r["max"]),
+        "fc_ratio": fc_ratio if case["buyer"].get("category_goal") in RELATIONSHIP_GOALS else None,
+        "fc_abs": hl["full_cost"] if hl else None,
         "floor": min(P["floor_cap"]["value"], rng.uniform(flo, fhi)),
+        "floor_abs": real.get("floor"),
+        "b_long": real.get("bonus_long", rng.choice(P["bonus_long"]["samples"])),
+        "b_clause": real.get("bonus_clause", rng.choice(P["bonus_clause"]["samples"])),
+        "bw0": rng.uniform(bs["min"], bs["max"]),
+        "bw_gain": bg,
         "std_pd": rng.choice(P["standard_payment_days"]["samples"]),
-        "final_margin": P["final_at_floor_margin"]["value"],
         "idle_thr": P["idle_threshold"]["value"],
         "g": min(1.0, max(0.0, rng.choice(P["concession_pass_through"]["samples"])))
         * rng.uniform(jit["low"], jit["high"]),
         "idle": rng.choice(P["idle_step"]["samples"]),
         "first": max(0.0, rng.choice(drops)),
         "first_verified": max(0.0, rng.choice(verified)),
-        "final_round": rng.choice(P["final_offer_round"]["samples"]),
+        "final_round": real.get("final_round", rng.choice(P["final_round_index"]["samples"])),
         "walk_after": rng.choice(P["walk_after_pushes_post_final"]["samples"]),
         "tol": rng.uniform(P["accept_tolerance"]["min"], P["accept_tolerance"]["max"]),
         "pd_limit": 30 if rng.random() < P["payment_days_hard_limit_30"]["share"] else None,
@@ -156,14 +185,37 @@ class SimReal(Sim):
     def _init_thread(self, s, th, i):
         sup = s["case"]["suppliers"][i]
         p = self._params(s["case"], sup, i)
-        th.update(p=p, ask=th["opening"], last_ov=None, pushes=0, floor=round(p["floor"] * th["opening"], 2))
+        floor = p["floor_abs"] or round(p["floor"] * th["opening"], 2)
+        fc = p["fc_abs"] or (p["fc_ratio"] or 0) * th["opening"]
+        if (
+            not p["fc_abs"] and fc
+        ):  # generated: at its floor it keeps the sustainable margin (P02: floor 369.55, cost 367.60)
+            fc = min(fc, floor * (1 - (s["case"]["buyer"].get("sustainable_margin_pct") or 0) / 100))
+        p["fc"] = round(fc, 2)  # the cost it holds for the health term (stabilise / secure_supply cases)
+        th.update(p=p, ask=th["opening"], last_ov=None, pushes=0, bw=p["bw0"], prev_plain=None, floor=floor)
         # the quote states the price and most standard terms; some it leaves out (fitted rates per field)
         th["first"] = {"unit_price": th["opening"], **{f: v for f, v in th["standard"].items() if f not in p["omit"]}}
 
+    def _health(self, th):
+        p = th["p"]
+        return {"standard": th["standard"], "interest_rate": p["r"], "full_cost": p["fc"]} if p["fc"] else None
+
     def _bounds(self, case, ths):
+        known = self.profile["real_suppliers"]["bounds"].get(case["case_id"].split(":")[-1])
+        if known:  # a real case: the arena's own C_open and C_best
+            return known["c_open"], known["c_best"]
         c_open = min(total_cost(case, {"unit_price": th["opening"]}, th["standard"]) for th in ths.values())
         c_best = min(
-            package_cost(case, th["standard"], th["p"]["r"], th["floor"], th["p"]["pd_limit"], th["p"]["vol_cap"])
+            package_cost(
+                case,
+                th["standard"],
+                th["p"]["r"],
+                th["floor"],
+                th["p"]["pd_limit"],
+                th["p"]["vol_cap"],
+                th["p"],
+                th["opening"],
+            )  # fmt: skip
             for th in ths.values()
         )
         alt = case["buyer"].get("alternative") or {}
@@ -172,8 +224,11 @@ class SimReal(Sim):
         return c_open, (c_best if c_best < float("inf") else c_open)
 
     # -- the supplier --------------------------------------------------------------------------
-    def _value(self, s, th, terms):
-        return supplier_value(s["case"], terms, {"standard": th["standard"], "interest_rate": th["p"]["r"]})
+    def _value(self, s, th, terms, bonus=True):
+        extra = bonus_extra(th["p"], th["opening"], terms, th["bw"]) if bonus else 0.0
+        return supplier_value(
+            s["case"], terms, {"standard": th["standard"], "interest_rate": th["p"]["r"], "extra": extra}
+        )
 
     def _allowed(self, th, sheet):
         p = th["p"]
@@ -199,6 +254,12 @@ class SimReal(Sim):
         n_ver = sum(r["result"] == "verified" for r in results)
         ok = [t for t in sheets if self._allowed(th, t)]
         best = max(ok, key=lambda t: self._value(s, th, t), default=None)
+        if best and bonus_extra(p, 1.0, best):  # a long contract / clause: its bonus is granted step by step
+            plain = self._value(s, th, best, False)
+            step = 0 if th["prev_plain"] is None else max(0.0, plain - th["prev_plain"]) / th["opening"]
+            th["prev_plain"] = plain if th["prev_plain"] is None else max(th["prev_plain"], plain)
+            g = p["bw_gain"]
+            th["bw"] = min(1.0, th["bw"] + min(g["max"], g["base"] + g["slope"] * step))
         ov = self._value(s, th, best) if best else None
         open0, k, was_final = th["opening"], th["round"], th["status"] == "final_offer"
         # never below its floor, whatever the tolerance: a deal at C_best is the only way to score 1
@@ -235,7 +296,7 @@ class SimReal(Sim):
                 reply = self._mail(s, th, "agreed", best, "We agree.", [*files, "quote.pdf"])
                 why.append(f"It conceded to {th['ask']:.2f} and your sheet now meets it: it agrees.")
             else:
-                final = k >= p["final_round"] or th["ask"] <= th["floor"] * p["final_margin"]
+                final = k >= p["final_round"]  # a fixed index of its own messages, whatever we do
                 terms = self._quote(s, th, best or sheets[0], th["ask"])
                 status = "final_offer" if final else "open"
                 reply = self._mail(
