@@ -3964,3 +3964,23 @@ after its done pls open the backlog again in duck duck go
 ---
 
 yea push this and put like something to indicate that the last proven result was with this bot
+
+---
+
+<pasted_content id="f141">
+Freeze Better’s tested revision as the baseline.
+
+  First, preserve a fixed-price alternative whenever indexation is negotiable. Price index risk explicitly and require
+  compensation.
+
+  Second, preserve conditional trade explanations when adding evidence. Cite relevant facts accurately and explain how they
+  justify the requested change.
+
+  Third, test concession timing separately; do not assume observed prices are supplier floors.
+
+  Add targeted tests and log acceptance reasons, package costs, and concessions. Compare each change independently on identical
+  cases before combining improvements.
+
+  Exclude case-specific rules and evaluation-only targets. Validate on reserved suppliers before spending further real-API
+  sessions.
+</pasted_content id="f141">
