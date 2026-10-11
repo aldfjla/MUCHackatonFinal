@@ -102,3 +102,18 @@ def test_builder_makes_an_entry_from_a_v16_dump(tmp_path):
     e = playbook_build.build(tmp_path)["sup:1"][KEY]
     assert e["lowest_offered_price"] == 5.5 and e["first_final_offer_round"] == 1 and e["replies_repeating_price"] == 1
     assert e["best_deal"]["price"] == 5.5 and e["target"]["price_with_best_levers"] == 4.73 and e["case_ids"] == ["P18"]
+
+
+def test_accepts_an_agreed_sheet_priced_at_the_target_above_the_floor():
+    # P04: our sheet is clamped to the target price (> 1.01 x floor); the supplier "agrees" to it and we must accept, not re-offer
+    a, d = agent(entry(lowest_offered_price=4.0, target={"price_with_best_levers": 4.5}))
+    r = a.decide(case(), thread(6.1, 4.5, status="agreed"))
+    assert r["message"]["action"] == {"type": "accept", "term_sheet_id": "o1"} and d.calls == 0
+
+
+def test_agreed_sheet_is_accepted_even_if_not_cheaper_than_the_opening(monkeypatch):
+    from arena_kit.agents import playbook_agent as pa
+
+    monkeypatch.setattr(pa, "_safe_accept", lambda *a: False)  # as in P04: worse than the opening offer
+    a, d = agent()
+    assert a.decide(case(), thread(6.1, 5.0, status="agreed"))["message"]["action"]["type"] == "accept" and d.calls == 0

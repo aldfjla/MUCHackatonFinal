@@ -13,7 +13,7 @@ from ..cost import RELATIONSHIP_GOALS, total_cost
 from ..docs import standard_terms
 from ..guard import satisfy_must_haves
 from ..play import _safe_accept, latest, live_threads, moves_left, standing
-from .reciprocal import _mine
+from .reciprocal import _c_alt, _mine
 
 PLAYBOOK = Path(__file__).parents[1] / "playbook.json"
 FIRST, NEAR = 0.98, 1.01  # after move 2 any reply not within NEAR of the floor (so also one >5% above it) hands over
@@ -59,11 +59,15 @@ class PlaybookAgent:
             sheet_id, terms = standing(ev)
             price, n = terms.get("unit_price"), len(_mine(ev))
             final = latest(ev).get("status") == "final_offer"
+            agreed = latest(ev).get("status") == "agreed"
             ok = bool(sheet_id) and price is not None and _safe_accept(case, threads, sid, terms)
-            if ok and (price <= floor * NEAR or final and total_cost(case, terms, standard_terms(ev)) <= e["best_deal"]["c_deal"]):
+            # P04: the supplier "agreed" to our sheet (priced above the opening C, so _safe_accept said no) and nobody accepted: no deal
+            if agreed and sheet_id and price is not None and _c_alt(case) > total_cost(case, terms, standard_terms(ev)):
+                ok = True  # a deal that beats the alternative is better than none, even if the opening was cheaper
+            if ok and (agreed or price <= max(floor, (e.get("target") or {}).get("price_with_best_levers") or 0.0) * NEAR or final and total_cost(case, terms, standard_terms(ev)) <= e["best_deal"]["c_deal"]):
                 return {"supplier_id": sid, "message": {"action": {"type": "accept", "term_sheet_id": sheet_id}}}
             # no price or a final offer we do not take, no move left, or both scripted moves spent (a reply more than 5% above the floor is the deviation case)
-            if price is None or final or n >= 2 or moves_left(case, ev) < 1:
+            if price is None or final or agreed or n >= 2 or moves_left(case, ev) <= 2:
                 self.handed.add(sid)
                 continue
             move = self._sheet(case, ev, e, floor * FIRST if n == 0 else floor)
