@@ -1,0 +1,67 @@
+{
+  "cli_version": "0.11.4",
+  "checkpoint_id": "01M4MXS9XSHZSZT1PA59TPFCCY",
+  "strategy": "manual-commit",
+  "branch": "local-alex-niko",
+  "checkpoints_count": 3,
+  "files_touched": [
+    "COMBINED_AGENT.md",
+    "PERFORMANCE_v7_v8.md",
+    "agent/arena_kit/agents/__init__.py",
+    "agent/arena_kit/agents/better_agent.py",
+    "agent/arena_kit/agents/combined.py",
+    "agent/arena_kit/agents/combined2.py",
+    "agent/arena_kit/agents/evidence.py",
+    "agent/arena_kit/agents/final.py",
+    "agent/arena_kit/agents/listener.py",
+    "agent/arena_kit/agents/reciprocal.py",
+    "agent/arena_kit/cli.py",
+    "agent/arena_kit/data.py",
+    "agent/arena_kit/evidence.py",
+    "agent/arena_kit/guard.py",
+    "agent/arena_kit/listener.py",
+    "agent/arena_kit/sim_cases/real_runs/log2.txt",
+    "agent/arena_kit/sim_cases/real_runs/log3.txt",
+    "agent/arena_kit/sim_cases/real_runs_v16/log.txt",
+    "agent/arena_kit/sim_cases/real_runs_v17/log.txt",
+    "agent/arena_kit/sim_cases/real_runs_v19/log.txt",
+    "agent/arena_kit/sim_cases/real_runs_v22/log.txt",
+    "agent/arena_kit/sim_cases/real_runs_v23/log.txt",
+    "agent/arena_kit/sim_cases/real_runs_v23/log_P02.txt",
+    "agent/arena_kit/sim_cases/real_runs_v23/log_P03.txt",
+    "agent/arena_kit/sim_cases/real_runs_v23/log_P05.txt",
+    "agent/arena_kit/sim_cases/real_runs_v23/log_P07.txt",
+    "agent/arena_kit/sim_cases/real_runs_v23/log_P11.txt",
+    "agent/tests/test_combined.py",
+    "agent/tests/test_combined2.py",
+    "agent/tests/test_evidence.py",
+    "agent/tests/test_final.py",
+    "agent/tests/test_listener.py",
+    "agent/tests/test_reciprocal.py",
+    "agent/tests/test_release.py",
+    "backlog.csv"
+  ],
+  "sessions": [
+    {
+      "metadata": "/0/metadata.json",
+      "transcript": "/0/full.jsonl",
+      "compact_transcript": "/0/transcript.jsonl",
+      "content_hash": "/0/content_hash.txt",
+      "prompt": "/0/prompt.txt"
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 3387,
+    "cache_creation_tokens": 1750081,
+    "cache_read_tokens": 164844107,
+    "output_tokens": 469957,
+    "api_call_count": 731,
+    "subagent_tokens": {
+      "input_tokens": 34,
+      "cache_creation_tokens": 55537,
+      "cache_read_tokens": 365604,
+      "output_tokens": 1163,
+      "api_call_count": 16
+    }
+  }
+}

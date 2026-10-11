@@ -1,0 +1,15 @@
+{
+  "tool_use_id": "toolu_01Gfsvwd7KWZkNy2RAKtbGcL",
+  "agent_id": "a6c1b45ba76aa6964",
+  "subagent_type": "reviewer",
+  "task_description": "Review flag-gated merge changes",
+  "token_usage": {
+    "input_tokens": 10,
+    "cache_creation_tokens": 28728,
+    "cache_read_tokens": 74355,
+    "output_tokens": 31,
+    "api_call_count": 5
+  },
+  "started_at": "2026-10-11T09:27:26.103497+02:00",
+  "completed_at": "2026-10-11T09:27:57.649747+02:00"
+}

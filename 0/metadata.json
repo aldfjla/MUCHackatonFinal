@@ -1,0 +1,197 @@
+{
+  "cli_version": "0.11.4",
+  "checkpoint_id": "01M4MXS9XSHZSZT1PA59TPFCCY",
+  "session_id": "c839f125-523b-4765-9e0d-736b62052aff",
+  "strategy": "manual-commit",
+  "created_at": "2026-10-11T07:28:12.858689Z",
+  "branch": "local-alex-niko",
+  "checkpoints_count": 3,
+  "save_step_count": 4,
+  "files_touched": [
+    "COMBINED_AGENT.md",
+    "PERFORMANCE_v7_v8.md",
+    "agent/arena_kit/agents/__init__.py",
+    "agent/arena_kit/agents/better_agent.py",
+    "agent/arena_kit/agents/combined.py",
+    "agent/arena_kit/agents/combined2.py",
+    "agent/arena_kit/agents/evidence.py",
+    "agent/arena_kit/agents/final.py",
+    "agent/arena_kit/agents/listener.py",
+    "agent/arena_kit/agents/reciprocal.py",
+    "agent/arena_kit/cli.py",
+    "agent/arena_kit/data.py",
+    "agent/arena_kit/evidence.py",
+    "agent/arena_kit/guard.py",
+    "agent/arena_kit/listener.py",
+    "agent/arena_kit/sim_cases/real_runs/log2.txt",
+    "agent/arena_kit/sim_cases/real_runs/log3.txt",
+    "agent/arena_kit/sim_cases/real_runs_v16/log.txt",
+    "agent/arena_kit/sim_cases/real_runs_v17/log.txt",
+    "agent/arena_kit/sim_cases/real_runs_v19/log.txt",
+    "agent/arena_kit/sim_cases/real_runs_v22/log.txt",
+    "agent/arena_kit/sim_cases/real_runs_v23/log.txt",
+    "agent/arena_kit/sim_cases/real_runs_v23/log_P02.txt",
+    "agent/arena_kit/sim_cases/real_runs_v23/log_P03.txt",
+    "agent/arena_kit/sim_cases/real_runs_v23/log_P05.txt",
+    "agent/arena_kit/sim_cases/real_runs_v23/log_P07.txt",
+    "agent/arena_kit/sim_cases/real_runs_v23/log_P11.txt",
+    "agent/tests/test_combined.py",
+    "agent/tests/test_combined2.py",
+    "agent/tests/test_evidence.py",
+    "agent/tests/test_final.py",
+    "agent/tests/test_listener.py",
+    "agent/tests/test_reciprocal.py",
+    "agent/tests/test_release.py",
+    "backlog.csv"
+  ],
+  "agent": "Claude Code",
+  "model": "claude-fable-5-1",
+  "turn_id": "6cb90b5b5b48",
+  "compact_transcript_start": 0,
+  "token_usage": {
+    "input_tokens": 3387,
+    "cache_creation_tokens": 1750081,
+    "cache_read_tokens": 164844107,
+    "output_tokens": 469957,
+    "api_call_count": 731,
+    "subagent_tokens": {
+      "input_tokens": 34,
+      "cache_creation_tokens": 55537,
+      "cache_read_tokens": 365604,
+      "output_tokens": 1163,
+      "api_call_count": 16
+    }
+  },
+  "skill_events_version": 1,
+  "skill_events": [
+    {
+      "id": "claude-skill-toolu_01XisbE3fpoi7cwAoVYW8zSo",
+      "event_type": "tool_invocation",
+      "skill": {
+        "name": "claude-in-chrome"
+      },
+      "source": {
+        "agent": "claude-code",
+        "signal": "skill_tool_use",
+        "confidence": "explicit"
+      },
+      "turn_id": "280cb5401056",
+      "transcript_anchor": {
+        "unit": "line",
+        "start": 1647,
+        "end": 1648,
+        "entry_ids": [
+          "736b346a-30d5-4103-b836-0257d9b08dcf"
+        ],
+        "tool_use_id": "toolu_01XisbE3fpoi7cwAoVYW8zSo"
+      },
+      "native": {
+        "tool_name": "Skill",
+        "tool_use_id": "toolu_01XisbE3fpoi7cwAoVYW8zSo"
+      },
+      "collapse": {
+        "target": "tool_pair",
+        "label": "Skill: claude-in-chrome",
+        "default_collapsed": true
+      }
+    },
+    {
+      "id": "claude-skill-toolu_01NwTCQtA8aY9qR4HQFGsa8J",
+      "event_type": "tool_invocation",
+      "skill": {
+        "name": "anthropic-skills:deep-research"
+      },
+      "source": {
+        "agent": "claude-code",
+        "signal": "skill_tool_use",
+        "confidence": "explicit"
+      },
+      "turn_id": "adb3318188ae",
+      "transcript_anchor": {
+        "unit": "line",
+        "start": 1804,
+        "end": 1805,
+        "entry_ids": [
+          "5d32208c-4a11-4e41-9368-95090245be74"
+        ],
+        "tool_use_id": "toolu_01NwTCQtA8aY9qR4HQFGsa8J"
+      },
+      "native": {
+        "tool_name": "Skill",
+        "tool_use_id": "toolu_01NwTCQtA8aY9qR4HQFGsa8J"
+      },
+      "collapse": {
+        "target": "tool_pair",
+        "label": "Skill: anthropic-skills:deep-research",
+        "default_collapsed": true
+      }
+    }
+  ],
+  "session_metrics": {
+    "turn_count": 291
+  },
+  "initial_attribution": {
+    "calculated_at": "2026-10-11T07:28:11.59496Z",
+    "agent_lines": 2393,
+    "agent_removed": 83,
+    "human_added": 84,
+    "human_modified": 18,
+    "human_removed": 0,
+    "total_committed": 2495,
+    "total_lines_changed": 2578,
+    "agent_percentage": 96.04344453064391,
+    "metric_version": 2
+  },
+  "prompt_attributions": [
+    {
+      "checkpoint_number": 2,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 0,
+      "agent_lines_removed": 0
+    },
+    {
+      "checkpoint_number": 3,
+      "user_lines_added": 10,
+      "user_lines_removed": 0,
+      "agent_lines_added": 58,
+      "agent_lines_removed": 0,
+      "user_added_per_file": {
+        "agent/arena_kit/sim_cases/real_runs_v21/log.txt": 10
+      }
+    },
+    {
+      "checkpoint_number": 4,
+      "user_lines_added": 82,
+      "user_lines_removed": 18,
+      "agent_lines_added": 2419,
+      "agent_lines_removed": 91,
+      "user_added_per_file": {
+        "agent/arena_kit/agents/better_agent.py": 16,
+        "agent/arena_kit/agents/combined2.py": 14,
+        "agent/arena_kit/cli.py": 9,
+        "agent/arena_kit/guard.py": 16,
+        "agent/arena_kit/sim_cases/real_runs_v21/log.txt": 10,
+        "agent/tests/test_combined.py": 14,
+        "agent/tests/test_release.py": 3
+      },
+      "user_removed_per_file": {
+        "agent/arena_kit/agents/better_agent.py": 9,
+        "agent/arena_kit/agents/combined2.py": 2,
+        "agent/arena_kit/cli.py": 4,
+        "agent/arena_kit/guard.py": 1,
+        "agent/tests/test_release.py": 2
+      }
+    },
+    {
+      "checkpoint_number": 5,
+      "user_lines_added": 10,
+      "user_lines_removed": 0,
+      "agent_lines_added": 2483,
+      "agent_lines_removed": 101,
+      "user_added_per_file": {
+        "agent/arena_kit/sim_cases/real_runs_v21/log.txt": 10
+      }
+    }
+  ]
+}
