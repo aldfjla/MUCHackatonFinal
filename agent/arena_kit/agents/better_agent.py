@@ -270,9 +270,11 @@ class BetterAgent(SimplifyAgent):
     # PAY_MIRROR (opt-in, `better_pay`): real runs show suppliers lift their whole price ladder 1-3% when we ask for 90 days (P08: 5.40 at 30d
     # unasked vs 5.63/5.69 after asking; P07: 5.35 at 30d vs 5.48 at 60d) while C values 30 extra days at only 0.3-0.6%: without health at stake, mirror their opening term
     PAY_MIRROR = False
+    IDX_SHEET_ALWAYS = True  # the health branch always adds the index-clause sheet; v32: real P02 3/3 0.30 vs 0.67 without it: the clause buys the price (off: `better_noidx`)
     # DATE_LEVER (default on; real P01 3/3 runs 0.88 vs 0.69 with the lever off, v29 - niko; off: `better_nodate`): in price-increase cases effective_date is negotiable and C charges the old price until it, so a later date lowers C
     # directly (P01/P13); `better` only adopts a later date when the supplier volunteers one (P01: 1 of 6 runs, 0.84 vs 0.69)
     DATE_LEVER = True
+    LEAD_LEVER = False  # health cases: pick the plain-C-minimising lead_time_days (simplify's loop skips it there); v32: real P10 3/3 0.65 vs 0.67: asking 35 days hardened the supplier (on: `better_lead`)
     MATCH_FACTOR = 1.0  # our step answers their last move in full (simplify: 0.25): the bot's last concession scales with our last step
 
     def decide(self, case, threads):
@@ -545,9 +547,10 @@ class BetterAgent(SimplifyAgent):
                     fixed.append(t)
             out = fixed
             clauses = [c for c in opts.get("index_clause", []) if c] if "index_clause" in case["negotiable"] and "index_clause" not in pins else []
-            if out and clauses:  # the clause sheet at its own C-minimising price, even when its C is not below main's
+            if out and clauses:  # the clause sheet at its own C-minimising price
                 v = complete_offer(case, min((best({**out[0], "index_clause": c}) for c in clauses), key=lambda v: _exp_c(case, v, std)))
-                if v not in out and v not in seen:
+                need = any(m["field"] == "index_clause" for m in case["buyer"].get("must_haves", []))
+                if v not in out and v not in seen and (self.IDX_SHEET_ALWAYS or need or _exp_c(case, v, std) < _exp_c(case, out[0], std)):
                     out.append(v)
         if out and (self.THIRD_SHEET or self.CASH_SHORT_OFFER):
             seen = [s["terms"] for m in _mine(events) for s in m.get("term_sheets") or []]
@@ -574,6 +577,18 @@ class BetterAgent(SimplifyAgent):
                         t = {**t, "effective_date": min(sorted(dates, reverse=True), key=lambda o: total_cost(case, {**t, "effective_date": o}, std))}
                     finally:
                         HEALTH.reset(tok)
+                if (t := complete_offer(case, satisfy_must_haves(case, t, std))) not in fixed and t not in seen:
+                    fixed.append(t)
+            out = fixed or out
+        if out and self.LEAD_LEVER and _health_at_stake(case) and "lead_time_days" in case["negotiable"] and "lead_time_days" not in _pinned(events) and any(opts.get("lead_time_days") or []):
+            seen = [s["terms"] for m in _mine(events) for s in m.get("term_sheets") or []]
+            fixed = []
+            tok = HEALTH.set(None)  # plain C; ties: the shorter lead time
+            try:
+                picked = [{**t, "lead_time_days": min(sorted(o for o in opts["lead_time_days"] if o), key=lambda o: total_cost(case, {**t, "lead_time_days": o}, std))} for t in out]
+            finally:
+                HEALTH.reset(tok)
+            for t in picked:
                 if (t := complete_offer(case, satisfy_must_haves(case, t, std))) not in fixed and t not in seen:
                     fixed.append(t)
             out = fixed or out

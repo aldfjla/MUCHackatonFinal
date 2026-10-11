@@ -449,3 +449,43 @@ def test_date_lever_picks_the_c_minimising_effective_date():
 def test_date_lever_off_keeps_the_default_effective_date():
     _, _, sheets = _date_sheets(False)
     assert sheets and {s["effective_date"] for s in sheets} == {"2026-11-01"}  # complete_offer default, not a lever
+
+
+def _idx_sheets(monkeypatch, always):  # always: set explicitly on the instance
+    _fake_package(monkeypatch, [{"supplier_id": "s1", "unit_cost": 20.0, "price_unit": 1}], [{"equity_ratio_pct": 40.0, "credit_index": 200, "credit_index_12m_ago": 200}])
+    case = _health_case()  # a clause that only costs us (positive path): its sheet is not cheaper than main's
+    case["term_options"] = {"index_clause": [None, {"series": "x", "material_share": 0.5, "deadband_pct": 0.0}]}
+    case["negotiable"].append("index_clause")
+    case["buyer"].update(index_paths={"x": 0.0}, index_risk_pct=50.0)
+    std = {"unit_price": 30.0, "payment_days": 30}
+    agent = BetterAgent()
+    if always is not None:
+        agent.IDX_SHEET_ALWAYS = always
+    with _with_health(case):
+        return agent._sheets(case, [_sup(30.0, 0)], std, std)
+
+
+def test_health_index_sheet_only_when_cheaper_for_us_with_flag_off(monkeypatch):
+    assert not any(s.get("index_clause") for s in _idx_sheets(monkeypatch, False))
+
+
+def test_health_index_sheet_is_added_by_default(monkeypatch):  # v30 behaviour: IDX_SHEET_ALWAYS = True
+    assert any(s.get("index_clause") for s in _idx_sheets(monkeypatch, None))
+
+
+def _lead_sheets(flag):  # flag None: the class default
+    case = json.loads((CASES / "real" / "P10.json").read_text())  # secure_supply: health at stake, lead_time_days [35, 42, 56], need 42
+    std = {"unit_price": 30.0, "payment_days": 30}
+    agent = BetterAgent()
+    if flag is not None:
+        agent.LEAD_LEVER = flag
+    with _with_health(case):
+        return {s["lead_time_days"] for s in agent._sheets(case, [_sup(30.0, 0, lead_time_days=54)], std, std)}
+
+
+def test_lead_lever_picks_the_c_minimising_lead_time_in_a_health_case():
+    assert _lead_sheets(True) == {35}  # plain C ties 35 / 42 (both on time): the shorter
+
+
+def test_lead_lever_off_by_default_leaves_the_sheets_as_before():
+    assert _lead_sheets(None) == _lead_sheets(False) == {42}
