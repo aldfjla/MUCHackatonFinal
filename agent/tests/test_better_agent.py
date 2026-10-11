@@ -489,3 +489,14 @@ def test_lead_lever_picks_the_c_minimising_lead_time_in_a_health_case():
 
 def test_lead_lever_off_by_default_leaves_the_sheets_as_before():
     assert _lead_sheets(None) == _lead_sheets(False) == {42}
+
+
+def test_idx_sheet_first_flag_drops_the_clause_sheet_from_the_first_message_only():
+    case = _case(index_clause=[None, {"series": "x", "material_share": 0.5, "deadband_pct": 0.0}])
+    std = {"unit_price": 30.0, "payment_days": 30}
+    first, later = [_sup(30.0, 0)], [_sup(30.0, 0), _mine(25.0), _sup(29.0, 1)]
+    on = BetterAgent()
+    on.IDX_SHEET_FIRST = True  # the old behaviour
+    assert not any(s.get("index_clause") for s in BetterAgent()._sheets(case, first, std, std))  # default: none in the first message
+    assert any(s.get("index_clause") for s in on._sheets(case, first, std, std))
+    assert on._sheets(case, later, std, std) == BetterAgent()._sheets(case, later, std, std)

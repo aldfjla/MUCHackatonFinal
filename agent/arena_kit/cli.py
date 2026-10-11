@@ -29,7 +29,7 @@ def load_env(path=".env"):
 
 AGENTS = [
     "naive", "smart", "confident", "rational", "explorer", "anchor", "switcher", "boulware", "router",
-    "confident_boulware", "confident_router", "guarded_boulware", "guarded_rational", "evidence_router", "evidence_rational", "reciprocal", "reciprocal_evidence", "simplify", "final", "final_match", "listener", "combined", "combined2", "playbook", "better", "better_pay", "better_noidx", "better_lead", "better_date", "better_nodate", "even_better", "even_better_b", "even_better_s", "even_better_h", "50", "llm",
+    "confident_boulware", "confident_router", "guarded_boulware", "guarded_rational", "evidence_router", "evidence_rational", "reciprocal", "reciprocal_evidence", "simplify", "final", "final_match", "listener", "combined", "combined2", "playbook", "better", "better_pay", "better_noidx", "better_idx1", "better_lead", "better_date", "better_nodate", "even_better", "even_better_b", "even_better_s", "even_better_h", "50", "llm",
 ]  # fmt: skip
 
 
@@ -96,7 +96,7 @@ def agent_factory(name, data):
     if name == "guarded_rational":
         return lambda: GuardedAgent(RationalAgent())
     # the evidence wrapper replaces the delegate's body and refs by design (it cites verified data)
-    if name in ("evidence_router", "evidence_rational", "listener", "combined", "combined2", "better", "better_pay", "better_noidx", "better_lead", "better_date", "better_nodate", "even_better", "even_better_b", "even_better_s", "even_better_h"):
+    if name in ("evidence_router", "evidence_rational", "listener", "combined", "combined2", "better", "better_pay", "better_noidx", "better_idx1", "better_lead", "better_date", "better_nodate", "even_better", "even_better_b", "even_better_s", "even_better_h"):
         from .evidence import package_problem
 
         if why := package_problem(data):  # say it before any session opens, not once per message
@@ -145,6 +145,12 @@ def agent_factory(name, data):
             b.LEAD_LEVER = True
             return EvidenceAgent(HealthScope(GuardedAgent(b)), data)
         return make_lead
+    if name == "better_idx1":  # better with the index-clause sheet in the first message of non-health cases (A/B, old behaviour)
+        def make_idx1():
+            b = BetterAgent()
+            b.IDX_SHEET_FIRST = True
+            return EvidenceAgent(HealthScope(GuardedAgent(b)), data)
+        return make_idx1
     if name == "better_noidx":  # better without the always-added index-clause sheet in the health branch (A/B)
         def make_noidx():
             b = BetterAgent()

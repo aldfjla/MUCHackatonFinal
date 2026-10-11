@@ -274,6 +274,7 @@ class BetterAgent(SimplifyAgent):
     # DATE_LEVER (default on; real P01 3/3 runs 0.88 vs 0.69 with the lever off, v29 - niko; off: `better_nodate`): in price-increase cases effective_date is negotiable and C charges the old price until it, so a later date lowers C
     # directly (P01/P13); `better` only adopts a later date when the supplier volunteers one (P01: 1 of 6 runs, 0.84 vs 0.69)
     DATE_LEVER = True
+    IDX_SHEET_FIRST = False  # non-health cases send no index-clause sheet in the first message (real P08 3/3 0.54/0.56/0.55 vs 0.53, P18 identical 0.51, v34; Petra's combined does the same; on: `better_idx1`)
     LEAD_LEVER = False  # health cases: pick the plain-C-minimising lead_time_days (simplify's loop skips it there); v32: real P10 3/3 0.65 vs 0.67: asking 35 days hardened the supplier (on: `better_lead`)
     MATCH_FACTOR = 1.0  # our step answers their last move in full (simplify: 0.25): the bot's last concession scales with our last step
 
@@ -580,6 +581,8 @@ class BetterAgent(SimplifyAgent):
                 if (t := complete_offer(case, satisfy_must_haves(case, t, std))) not in fixed and t not in seen:
                     fixed.append(t)
             out = fixed or out
+        if not self.IDX_SHEET_FIRST and not _health_at_stake(case) and not _mine(events):
+            out = [t for t in out if not t.get("index_clause")] or out
         if out and self.LEAD_LEVER and _health_at_stake(case) and "lead_time_days" in case["negotiable"] and "lead_time_days" not in _pinned(events) and any(opts.get("lead_time_days") or []):
             seen = [s["terms"] for m in _mine(events) for s in m.get("term_sheets") or []]
             fixed = []
