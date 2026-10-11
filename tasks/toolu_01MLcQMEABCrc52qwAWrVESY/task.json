@@ -1,0 +1,15 @@
+{
+  "tool_use_id": "toolu_01MLcQMEABCrc52qwAWrVESY",
+  "agent_id": "a80e718c67014a828",
+  "subagent_type": "general-purpose",
+  "task_description": "Analyse v19 replays P02 and P18",
+  "token_usage": {
+    "input_tokens": 354,
+    "cache_creation_tokens": 131763,
+    "cache_read_tokens": 1037447,
+    "output_tokens": 2775,
+    "api_call_count": 12
+  },
+  "started_at": "2026-10-11T01:52:52.389453+02:00",
+  "completed_at": "2026-10-11T01:58:49.573959+02:00"
+}

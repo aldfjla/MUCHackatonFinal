@@ -1,0 +1,15 @@
+{
+  "tool_use_id": "toolu_01UBTVs6qStxEdjQarsxhzWV",
+  "agent_id": "a2b0483bd355e2dd0",
+  "subagent_type": "coder",
+  "task_description": "Build playbook layer from replays",
+  "token_usage": {
+    "input_tokens": 24,
+    "cache_creation_tokens": 65336,
+    "cache_read_tokens": 498424,
+    "output_tokens": 2738,
+    "api_call_count": 12
+  },
+  "started_at": "2026-10-11T01:57:14.83211+02:00",
+  "completed_at": "2026-10-11T02:01:50.289225+02:00"
+}
