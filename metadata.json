@@ -1,0 +1,31 @@
+{
+  "cli_version": "0.11.4",
+  "checkpoint_id": "01M4M5VG09D6R8PQP74AZ6MQN3",
+  "strategy": "manual-commit",
+  "branch": "local-alex-niko",
+  "checkpoints_count": 2,
+  "files_touched": null,
+  "sessions": [
+    {
+      "metadata": "/0/metadata.json",
+      "transcript": "/0/full.jsonl",
+      "compact_transcript": "/0/transcript.jsonl",
+      "content_hash": "/0/content_hash.txt",
+      "prompt": "/0/prompt.txt"
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 2001,
+    "cache_creation_tokens": 1577314,
+    "cache_read_tokens": 149017960,
+    "output_tokens": 416631,
+    "api_call_count": 644,
+    "subagent_tokens": {
+      "input_tokens": 38,
+      "cache_creation_tokens": 65919,
+      "cache_read_tokens": 339371,
+      "output_tokens": 1702,
+      "api_call_count": 19
+    }
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "tool_use_id": "toolu_01AQ9qwfNqBPoj49cKRvuxwq",
+  "agent_id": "a0813fae43e748dad",
+  "subagent_type": "coder",
+  "task_description": "Playbook: fix agreed override, demote",
+  "token_usage": {
+    "input_tokens": 10,
+    "cache_creation_tokens": 16595,
+    "cache_read_tokens": 61588,
+    "output_tokens": 372,
+    "api_call_count": 5
+  },
+  "started_at": "2026-10-11T02:29:24.44119+02:00",
+  "completed_at": "2026-10-11T02:29:50.230729+02:00"
+}
