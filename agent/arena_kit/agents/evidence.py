@@ -1,5 +1,6 @@
 """Evidence wrapper: lets any agent decide, then rewrites each 'send' into a short business e-mail that
-cites verified data (see evidence.py): up to 3 new claims, one question, refs set to the cited IDs.
+cites verified data (see evidence.py): the delegate's body is kept, then up to 3 new claims (grouped by the
+sheet change they justify, body capped at MAX_CHARS) and one question; refs = delegate refs + cited IDs.
 Term sheets, accept and walk-away decisions are untouched; any failure keeps the delegate's decision."""
 
 import logging
@@ -11,7 +12,12 @@ from ..play import live_threads, standing
 
 log = logging.getLogger("arena")
 
-MAX_CLAIMS, MAX_WORDS = 3, 160
+MAX_CLAIMS, MAX_WORDS, MAX_CHARS = 3, 160, 1200
+# which requested change a fact justifies: price facts back unit_price, the forecast backs volume / length
+LEVER = {"idx": "unit_price", "calc": "unit_price", "cost": "unit_price", "quote": "unit_price", "offer": "unit_price", "po": "unit_price",
+         "doc": "unit_price", "fc": "volume_per_year"}
+LEAD = {"unit_price": (("unit_price",), "To support the price in our term sheet"),
+        "volume_per_year": (("volume_per_year", "contract_months"), "To support the volume and contract length we propose")}
 ID = re.compile(r"\b(?:idx|quote|sc|qn|po|fc|cost|news|doc|ctr|offer):[\w@.#-]*\w")
 FIELDS = {"volume_per_year": "lift your allocation to {v} units per year"}
 
@@ -52,7 +58,8 @@ class EvidenceAgent:
         price = terms.get("unit_price")
         used = set().union(*(_cited(e) for e in threads.values()))
         used = {i for i in used if not i.startswith("offer:")} | {i for i in _cited(events) if i.startswith("offer:")}
-        claims = [c for c in build_claims(case, self._pkg, sid, price) if not used & set(c["ids"])]
+        own = {*(msg.get("refs") or []), *ID.findall(msg.get("body") or "")}  # the delegate already cites these
+        claims = [c for c in build_claims(case, self._pkg, sid, price) if not (used | own) & set(c["ids"])]
         asks = []
         for m in case["buyer"].get("must_haves", []):
             cur = terms.get(m["field"])
@@ -92,10 +99,27 @@ class EvidenceAgent:
             return "\n".join(["Dear Sir or Madam,", "", "thank you for your message." + (" Our proposed terms are in the term sheet of this message." if sheets else ""),
                               *[c["sentence"] for c in cs], *qs, "", "Best regards,", sign])
 
+        keep = (msg.get("body") or "").strip()
         qs = list(asks)
+        if keep:  # keep the delegate's conditional trade sentences verbatim; trim only our justification
+            sheet = ((msg.get("term_sheets") or [{}])[-1]).get("terms") or {}
+
+            def just(cs, qs):
+                lines = []
+                for lever in dict.fromkeys(LEVER.get(c["kind"], "") for c in cs):
+                    group = [c for c in cs if LEVER.get(c["kind"], "") == lever]
+                    if lever in LEAD and any(f in sheet for f in LEAD[lever][0]):
+                        lines.append(LEAD[lever][1] + ":")
+                    lines += [c["sentence"] for c in group]
+                return "\n".join([keep, "", *lines, *qs] if lines or qs else [keep])
+
+            while len(just(picked, qs)) > MAX_CHARS and (picked or qs):
+                picked.pop() if picked else qs.pop()
+            refs = list(dict.fromkeys([*(msg.get("refs") or []), *(i for c in picked for i in c["ids"])]))
+            return {**msg, "subject": subject, "body": just(picked, qs), "refs": refs}
         while len(body(picked, qs).split()) > MAX_WORDS and (picked or len(qs) > 1):
             if picked:
                 picked.pop()
             else:
                 qs.pop()
-        return {**msg, "subject": subject, "body": body(picked, qs), "refs": [i for c in picked for i in c["ids"]]}
+        return {**msg, "subject": subject, "body": body(picked, qs), "refs": [*dict.fromkeys([*(msg.get("refs") or []), *(i for c in picked for i in c["ids"])])]}
