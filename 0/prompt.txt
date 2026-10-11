@@ -4744,3 +4744,7 @@ ok do 10 real api scenarios with better so see if we can learn something new
   
   Not checked: pytest and a live P01 run. I also did not read the `cost_breakdown` internals, and assumed it reads `HEALTH`, as the diff comment says.
 </agent-message>
+
+---
+
+ok try this new better for 20 runs of real api scenarios
