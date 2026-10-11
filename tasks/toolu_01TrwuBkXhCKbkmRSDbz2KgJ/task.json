@@ -1,0 +1,15 @@
+{
+  "tool_use_id": "toolu_01TrwuBkXhCKbkmRSDbz2KgJ",
+  "agent_id": "a46b34bf3b082b1db",
+  "subagent_type": "coder",
+  "task_description": "Evidence: keep conditional trade explanations",
+  "token_usage": {
+    "input_tokens": 16,
+    "cache_creation_tokens": 31170,
+    "cache_read_tokens": 152821,
+    "output_tokens": 169,
+    "api_call_count": 8
+  },
+  "started_at": "2026-10-11T02:57:05.467339+02:00",
+  "completed_at": "2026-10-11T02:57:56.281034+02:00"
+}
