@@ -27,7 +27,7 @@ from contextvars import ContextVar
 
 from ..cost import HEALTH, complete_offer, cost_breakdown, must_haves_ok, total_cost
 from ..docs import standard_terms
-from ..evidence import _q, load_package
+from ..evidence import DISTRESS, _q, load_package
 from ..guard import satisfy_must_haves
 from ..play import find_sheet, latest, moves_left, standing
 from . import simplify_agent
@@ -72,12 +72,18 @@ def _health(case):
     if not row:
         return None
     width = (BAND_SPECIFIC if own else BAND_GENERIC) if BetterAgent.BAND else 0.0  # BAND off: the centre estimate only
+    sup, weak = row["supplier_id"] or (suppliers or [None])[0], False
     try:
-        intel = _q(pkg, "select equity_ratio_pct, credit_index, credit_index_12m_ago from supplier_intel where supplier_id=?", row["supplier_id"] or (suppliers or [None])[0])
-        if intel and ((intel[0]["credit_index"] or 0) < (intel[0]["credit_index_12m_ago"] or 0) or (100 if intel[0]["equity_ratio_pct"] is None else intel[0]["equity_ratio_pct"]) < WEAK_EQUITY):
-            width += BAND_WEAK * (width > 0)
+        intel = _q(pkg, "select equity_ratio_pct, credit_index, credit_index_12m_ago from supplier_intel where supplier_id=?", sup)
+        weak = bool(intel and ((intel[0]["credit_index"] or 0) < (intel[0]["credit_index_12m_ago"] or 0) or (100 if intel[0]["equity_ratio_pct"] is None else intel[0]["equity_ratio_pct"]) < WEAK_EQUITY))
     except Exception:
         pass
+    try:  # Sunday release: insolvency or withdrawn credit cover counts like a falling credit index
+        weak = weak or any(n.get("supplier_id") in {sup, *suppliers} and n.get("topic") in DISTRESS for n in pkg.release_rows("news"))
+    except Exception:
+        pass
+    if weak:
+        width += BAND_WEAK * (width > 0)
     return {"full_cost": row["unit_cost"] / (row["price_unit"] or 1), "interest_rate": case["buyer"]["interest_rate"], "band": (1 - width, 1 + width)}
 
 
