@@ -217,3 +217,39 @@ def test_concurrent_decisions_match_sequential(caplog):
         par = list(ex.map(run, REAL * 4))
     assert not [r for r in caplog.records if "evidence: failed" in r.getMessage()]
     assert par == seq * 4
+
+
+COND = "We can commit to 24 months and 30,000 units/year if the price comes to 5.50."
+
+
+@needs_data
+def test_delegate_conditional_sentence_kept_and_facts_attach_to_price_lever():
+    case = _case("P10")
+    msg = {"subject": "S", "body": f"Dear Sir,\n{COND}", "refs": ["offer:keep-0"], "term_sheets": [{"terms": {"unit_price": 5.5, "contract_months": 24}}]}
+    m = EvidenceAgent(Stub(msg)).decide(case, threads(case, 30.0, volume_per_year=19890))["message"]
+    assert m["body"].startswith(f"Dear Sir,\n{COND}") and len(m["body"]) <= 1200
+    assert "To support the price in our term sheet:" in m["body"] and "To support the volume and contract length we propose:" in m["body"]
+    assert m["body"].index("To support the price") < m["body"].index("fc:340010@2026-09")
+    assert m["refs"][0] == "offer:keep-0" and "fc:340010@2026-09" in m["refs"] and len(m["refs"]) == len(set(m["refs"]))
+    assert set(ID.findall(m["body"])) - {"offer:keep-0"} <= set(m["refs"])
+
+
+@needs_data
+def test_cap_trims_justification_never_the_delegate_text():
+    case = _case("P10")
+    long = COND + " " + "x" * 1150
+    m = EvidenceAgent(Stub({"subject": "S", "body": long, "term_sheets": [{"terms": {"unit_price": 5.5}}]})).decide(case, threads(case, 30.0))["message"]
+    assert m["body"] == long and m["refs"] == []
+
+
+@needs_data
+def test_only_verified_claims_are_cited(monkeypatch):
+    import arena_kit.agents.evidence as ev
+
+    case = _case("P10")
+    real = ev.build_claims
+    monkeypatch.setattr(ev, "build_claims", lambda *a: [c for c in real(*a) if c["kind"] != "fc"])
+    m = EvidenceAgent(Stub({"subject": "S", "body": COND, "term_sheets": [{"terms": {"unit_price": 5.5}}]})).decide(case, threads(case, 30.0))["message"]
+    assert "fc:" not in m["body"] and not any(r.startswith("fc:") for r in m["refs"])
+    for r in m["refs"]:  # every cited id comes from a claim that passes check_claim
+        assert any(r in c["ids"] and check_claim(c, pkg) for c in real(case, pkg, case["suppliers"][0], 30.0))

@@ -74,10 +74,12 @@ def standard_days(runs):
     return out
 
 
-def load():
+def load(exclude=()):
     runs = []
     for f in sorted(glob.glob(str(HERE / "real_runs" / "*_P*.json"))):
         d = json.load(open(f))
+        if d["case"] in exclude:
+            continue
         case = json.load(open(HERE / "real" / f"{d['case']}.json"))
         runs.append({"agent": d["agent"], "case_id": d["case"], "case": case, "d": d, "r": d["result"]})
     return runs
@@ -123,8 +125,8 @@ def implied_floor(case, std, r_s, c_best, opening):
     return (lo + hi) / 2
 
 
-def fit(data_dir):
-    runs = load()
+def fit(data_dir, exclude=()):
+    runs = load(exclude)
     by_case = {}
     for r in runs:
         by_case.setdefault(r["case_id"], []).append(r)

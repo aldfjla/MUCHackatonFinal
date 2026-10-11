@@ -16,6 +16,17 @@ DATA = Path.home() / "Documents/Codex/negotiation-arena-kit/data"
 needs_data = pytest.mark.skipif(not (DATA / "world.sqlite").is_file(), reason="data package not on this machine")
 
 
+def synthetic():
+    """The profile without the exact real-set values: P01 is then drawn like a generated case."""
+    prof = json.loads(json.dumps(load_profile()))
+    prof["real_suppliers"].update(threads={}, bounds={})
+    prof["health"]["threads"] = {}
+    return prof
+
+
+SYN = synthetic()
+
+
 def offer(price, pd=60):
     return {
         "term_sheets": [{"terms": {"unit_price": price, "effective_date": "2026-11-01", "payment_days": pd}}],
@@ -24,7 +35,7 @@ def offer(price, pd=60):
 
 
 def session(seed=1, **force):
-    sim = SimReal({P01["case_id"]: P01}, no_clock=True, seed=seed)
+    sim = SimReal({P01["case_id"]: P01}, no_clock=True, seed=seed, profile=SYN)
     sim.teams["k"] = "t"
     sid = sim.open("k", P01["case_id"])["session_id"]
     th = sim.sessions[sid]["threads"][SUP]
@@ -39,7 +50,7 @@ def test_profile_marks_every_parameter_fitted_or_assumed():
         assert p["status"] in ("fitted", "fitted_n1", "assumed"), name
         assert isinstance(p["n"], int) and p["evidence"] and p["uncertainty"], name
         assert p["status"] != "fitted" or p["n"] >= 3, f"{name}: 'fitted' needs at least 3 cases or threads"
-        assert p["status"] != "fitted_n1" or 1 <= p["n"] <= 2, name
+        assert p["status"] != "fitted_n1" or 0 <= p["n"] <= 2, name  # n=0: its only evidence was reserved
     for name in ("payment_days_hard_limit_30", "volume_cap", "first_reply_drop_multi_supplier", "accept_tolerance"):
         assert params[name]["status"] != "fitted", name  # one thread, one case, or only bounds
     assert {"floor_cap", "pass_through_jitter", "single_sample_halfwidth", "standard_terms_gaps"} <= set(params)
@@ -48,13 +59,13 @@ def test_profile_marks_every_parameter_fitted_or_assumed():
 def test_standard_payment_days_are_read_per_supplier_not_always_30():
     p = load_profile()["standard_payment_days"]
     assert set(p["samples"]) > {30} and 45 in p["samples"]
-    prof = load_profile()
+    prof = SYN
     days = {draw(prof, P01, f"sup:7{i}", 0, 1, 1)["std_pd"] for i in range(200)}
     assert days >= {30, 45}
 
 
 def test_same_seed_same_supplier_other_seed_other_supplier():
-    prof = load_profile()
+    prof = SYN
     a, b = draw(prof, P01, SUP, 0, 1, 3), draw(prof, P01, SUP, 0, 1, 3)
     assert a == b and a != draw(prof, P01, SUP, 0, 1, 4)
     opened = [session(seed)[2]["opening"] for seed in (3, 3, 4)]
@@ -67,11 +78,16 @@ def test_floor_makes_c_best_computable_and_reachable():
     c_open, c_best = sim._bounds(P01, sim.sessions[sid]["threads"])
     assert c_best < c_open
     # the cheapest package at the floor really costs C_best (or the alternative does)
-    pk = package_cost(P01, th["standard"], th["p"]["r"], th["floor"], th["p"]["pd_limit"], th["p"]["vol_cap"])
+    pk = package_cost(
+        P01, th["standard"], th["p"]["r"], th["floor"], th["p"]["pd_limit"], th["p"]["vol_cap"], th["p"], th["opening"]
+    )
     assert c_best == min(pk, total_cost(P01, P01["buyer"]["alternative"]["terms"]))
     assert score(c_open, c_best, c_best) == 1.0 and score(c_open, c_open, c_best) == 0.0
     # a lower floor leaves more room (C_best falls), a floor at the opening leaves none of the supplier's side
-    th["floor"] = round(th["opening"] * 0.8, 2)
+    # (not far below: past the supplier's sustainable margin the health term makes a deal costlier again)
+    th["floor"] = round(th["floor"] + 1.0, 2)
+    assert sim._bounds(P01, sim.sessions[sid]["threads"])[1] > c_best  # a higher floor costs more
+    th["floor"] = round(th["floor"] - 2.0, 2)
     assert sim._bounds(P01, sim.sessions[sid]["threads"])[1] < c_best
 
 
@@ -152,7 +168,10 @@ def test_generator_is_reproducible_and_validates():
         != gen_cases.build(world, tmpls, ratios, "dev", 3, "1.1")
     )
     for f in sorted((CASES / "gen_test").glob("*.json"))[:10]:
-        assert gen_cases.validate(json.loads(f.read_text(encoding="utf-8")), world) == []
+        bad = gen_cases.validate(json.loads(f.read_text(encoding="utf-8")), world)
+        # the realistic floors (fit_real) sit close to the opening: GT06 (a 0.41 EUR part, 1 cent = 2.4 %) and the
+        # cases whose real-quote alternative is as cheap as the best supplier deal have no room in the mock
+        assert [b for b in bad if not b.startswith(("no room", "the alternative beats"))] == [], f
 
 
 def test_evaluate_refuses_a_remote_arena_and_the_llm_agent(monkeypatch):
@@ -163,3 +182,79 @@ def test_evaluate_refuses_a_remote_arena_and_the_llm_agent(monkeypatch):
     evaluate.check_local()
     with pytest.raises(SystemExit, match="llm"):
         evaluate.main(["--agents", "llm", "--set", "dev"])
+
+
+REAL = SimReal({P01["case_id"]: P01}, no_clock=True, seed=1)  # the exact real-set values
+
+
+def real_session(seed=1):
+    REAL.teams["k"] = "t"
+    sid = REAL.open("k", P01["case_id"])["session_id"]
+    return sid, REAL.sessions[sid]["threads"][SUP]
+
+
+def test_real_set_uses_exact_values_whatever_the_seed_and_the_arenas_bounds():
+    thr = load_profile()["real_suppliers"]["threads"]["P01|sup:70110"]
+    for seed in (1, 2):
+        sim = SimReal({P01["case_id"]: P01}, no_clock=True, seed=seed)
+        sim.teams["k"] = "t"
+        th = sim.sessions[sim.open("k", P01["case_id"])["session_id"]]["threads"][SUP]
+        assert th["floor"] == thr["floor"] and th["p"]["final_round"] == thr["final_round"]
+        assert (th["p"]["fc"], th["p"]["r"]) == (130.04, 0.0959)  # fitted from the arena's relationship values
+    sid, th = real_session()
+    assert REAL._bounds(P01, REAL.sessions[sid]["threads"]) == (1153779.74, 1096815.78)
+
+
+def test_health_term_is_priced_in_the_deal_like_the_arena():
+    sid, th = real_session()
+    th["p"].update(tol=0.0)
+    sheet = offer(132.8, 30)  # reciprocal_evidence's real P01 deal: the arena recorded relationship 4473.39
+    reply = REAL.message("k", sid, SUP, sheet)
+    done = REAL.message(
+        "k", sid, SUP, {"action": {"type": "accept", "term_sheet_id": reply["term_sheets"][0]["term_sheet_id"]}}
+    )
+    if reply["status"] == "agreed":  # a sheet worth its ask closes at its own price
+        assert done["result"]["cost_breakdown"]["relationship"] > 0
+    assert SimReal._health(REAL, th)["full_cost"] == 130.04
+
+
+def test_fit_health_recovers_the_arenas_values_and_a_clause_cuts_the_price():
+    from arena_kit import fit_real
+
+    f = fit_real.fit(["real_runs"])
+    assert f["health"]["P01|sup:70110"]["full_cost"] == pytest.approx(130.04, abs=0.5)
+    sid, th = real_session()
+    th["p"].update(b_clause=0.1, b_long=0.0, bw0=1.0, tol=0.0)
+    th["bw"] = 1.0
+    s = REAL.sessions[sid]
+    plain = {"unit_price": 130.0, "payment_days": 60}
+    clause = {**plain, "index_clause": {"series": "X", "material_share": 0.2, "deadband_pct": 3.0}}
+    assert REAL._value(s, th, clause) - REAL._value(s, th, plain) == pytest.approx(0.1 * th["opening"], abs=0.01)
+
+
+def test_reserved_split_is_disjoint_and_suppliers_wholly_reserved():
+    from arena_kit.fit_real import ALL_DIRS, dumps, load_split, make_split
+
+    sp = load_split()
+    assert sp == make_split(seed=sp["seed"])  # holdout.json is the deterministic split
+    assert sp["unseen"] and sp["train"] and not set(sp["unseen"]) & set(sp["train"])
+    for d in dumps(ALL_DIRS):
+        reserved = set(sp["suppliers"]) & set(d["threads"])
+        assert not reserved or d["case"] in sp["unseen"]  # a reserved supplier never trains
+        assert (d["case"] in sp["unseen"]) != (d["case"] in sp["train"])
+    cases = load_cases(CASES / "real")
+    for c in sp["unseen"]:
+        assert [cases[f"case:{c}"]["type"], cases[f"case:{c}"]["buyer"]["category_goal"]] in sp["combos"] or any(
+            s in cases[f"case:{c}"]["suppliers"] for s in sp["suppliers"]
+        )
+
+
+def test_evaluate_split_flag_selects_reserved_cases():
+    from arena_kit.fit_real import load_split
+
+    sp = load_split()
+    assert evaluate.split_ids("all") is None
+    assert evaluate.split_ids("unseen") == {f"case:{c}" for c in sp["unseen"]}
+    assert not evaluate.split_ids("unseen") & evaluate.split_ids("train")
+    with pytest.raises(SystemExit):
+        evaluate.main(["--set", "dev", "--split", "unseen"])

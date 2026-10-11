@@ -1,0 +1,32 @@
+{
+ "seed": 0,
+ "suppliers": [
+  "sup:70140",
+  "sup:70510",
+  "sup:70740"
+ ],
+ "combos": [
+  [
+   "capacity",
+   "secure_supply"
+  ],
+  [
+   "renewal",
+   "stabilise"
+  ]
+ ],
+ "unseen": [
+  "P02",
+  "P03",
+  "P10",
+  "P11",
+  "P18"
+ ],
+ "train": [
+  "P01",
+  "P04",
+  "P05",
+  "P07",
+  "P08"
+ ]
+}

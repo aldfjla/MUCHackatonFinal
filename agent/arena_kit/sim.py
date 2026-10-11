@@ -195,6 +195,10 @@ class Sim:
     def _init_thread(self, s, th, i):
         """Hook: a subclass gives each supplier thread its own behaviour (here: one fixed script)."""
 
+    def _health(self, th):
+        """Hook: the supplier estimate (cost.supplier_value + full_cost) that prices the relationship term of a deal."""
+        return None
+
     def _bounds(self, case, ths):
         """C_open (the cheapest opening quote) and C_best (the cheapest package this script accepts)."""
         c_open = min(total_cost(case, {"unit_price": th["opening"]}, th["standard"]) for th in ths.values())
@@ -344,9 +348,9 @@ class Sim:
                 supplier_id=sup,
                 offer_id=ths[sup]["offer_id"],
                 terms=t,
-                c_deal=total_cost(case, t),
+                c_deal=total_cost(case, t, supplier=self._health(ths[sup])),
                 must_haves_ok=must_haves_ok(case, t),
-                cost_breakdown=cost_breakdown(case, t),
+                cost_breakdown=cost_breakdown(case, t, supplier=self._health(ths[sup])),
             )
             r["score"] = score(c_open, r["c_deal"], c_best) if r["must_haves_ok"] else 0.0
         s.update(status="ended", end_reason=reason, result=r)

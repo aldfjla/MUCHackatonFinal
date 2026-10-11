@@ -114,7 +114,8 @@
     "recomputed_min": 295173.23,
     "match_pct": 0.0
    }
-  }
+  },
+  "split": "all (in-sample)"
  },
  "parameters": {
   "supplier_interest_rate": {
@@ -1292,9 +1293,9 @@
   "floor_cap": {
    "status": "assumed",
    "n": 0,
-   "evidence": "the floor is at most 0.995 of the opening, so a supplier always has room to concede",
+   "evidence": "a generated case always leaves room: the floor is at most 0.98 of the opening (real plain floors reach 0.99-1.0, the room there came from long contracts and clauses)",
    "uncertainty": "no evidence",
-   "value": 0.995
+   "value": 0.98
   },
   "final_at_floor_margin": {
    "status": "assumed",
@@ -1330,6 +1331,274 @@
    "evidence": "contract length and volume change nothing in the supplier's cash value (cost.supplier_value), so they are accepted at the same price; P03 accepted 36 months, P10 lifted its cap for 24 months",
    "uncertainty": "2 cases of evidence, no case where it refused",
    "value": true
+  },
+  "real_suppliers": {
+   "status": "fitted",
+   "n": 12,
+   "evidence": "60 real dumps (fit_real.py), 12 supplier threads",
+   "uncertainty": "floor = lowest plain quote seen over all runs: an upper bound of the true floor",
+   "threads": {
+    "P01|sup:70110": {
+     "opening": 138.55,
+     "floor": 130.7,
+     "final_round": 4
+    },
+    "P02|sup:70510": {
+     "opening": 370.96,
+     "floor": 369.52,
+     "final_round": 4,
+     "bonus_clause": 0.0647
+    },
+    "P03|sup:70530": {
+     "opening": 438.21,
+     "floor": 435.78,
+     "final_round": 3,
+     "bonus_long": 0.015
+    },
+    "P04|sup:70620": {
+     "opening": 4.96,
+     "floor": 4.96,
+     "final_round": 3,
+     "bonus_long": 0.0158
+    },
+    "P05|sup:70210": {
+     "opening": 36.0,
+     "floor": 28.0,
+     "final_round": 4
+    },
+    "P05|sup:70240": {
+     "opening": 31.5,
+     "floor": 31.0,
+     "final_round": 4
+    },
+    "P05|sup:70250": {
+     "opening": 38.5,
+     "floor": 29.0,
+     "final_round": 3
+    },
+    "P07|sup:70610": {
+     "opening": 5.74,
+     "floor": 5.57,
+     "final_round": 4,
+     "bonus_long": 0.0193
+    },
+    "P08|sup:70710": {
+     "opening": 6.05,
+     "floor": 5.85,
+     "final_round": 3,
+     "bonus_clause": 0.0747
+    },
+    "P10|sup:70410": {
+     "opening": 32.2,
+     "floor": 31.6,
+     "final_round": 2,
+     "bonus_long": 0.0
+    },
+    "P11|sup:70140": {
+     "opening": 47.0,
+     "floor": 46.0,
+     "final_round": 4
+    },
+    "P18|sup:70740": {
+     "opening": 6.1,
+     "floor": 6.0,
+     "final_round": 3,
+     "bonus_clause": 0.0967
+    }
+   },
+   "bounds": {
+    "P01": {
+     "c_open": 1153779.74,
+     "c_best": 1096815.78
+    },
+    "P02": {
+     "c_open": 2282867.49,
+     "c_best": 2235514.05
+    },
+    "P03": {
+     "c_open": 4246314.02,
+     "c_best": 3909043.1
+    },
+    "P04": {
+     "c_open": 198846.33,
+     "c_best": 196529.32
+    },
+    "P05": {
+     "c_open": 305544.96,
+     "c_best": 223424.17
+    },
+    "P07": {
+     "c_open": 391027.4,
+     "c_best": 299241.49
+    },
+    "P08": {
+     "c_open": 1135887.28,
+     "c_best": 960309.33
+    },
+    "P10": {
+     "c_open": 1932492.18,
+     "c_best": 1328926.89
+    },
+    "P11": {
+     "c_open": 817578.0,
+     "c_best": 722500.02
+    },
+    "P18": {
+     "c_open": 295173.23,
+     "c_best": 222651.27
+    }
+   }
+  },
+  "floor_ratio": {
+   "status": "fitted",
+   "n": 12,
+   "evidence": "60 real dumps (fit_real.py), 12 supplier threads: lowest plain quote / opening",
+   "uncertainty": "1-3 threads per case type",
+   "by_type": {
+    "price_increase": {
+     "min": 0.9433417538794657,
+     "median": 0.9697299668685662,
+     "max": 0.9961181798576666,
+     "n": 2
+    },
+    "renewal": {
+     "min": 0.9944547134935304,
+     "median": 0.9972273567467652,
+     "max": 1.0,
+     "n": 2
+    },
+    "rfq": {
+     "min": 0.7532467532467533,
+     "median": 0.7777777777777778,
+     "max": 0.9841269841269841,
+     "n": 3
+    },
+    "bundling": {
+     "min": 0.9703832752613241,
+     "median": 0.9703832752613241,
+     "max": 0.9703832752613241,
+     "n": 1
+    },
+    "raw_material": {
+     "min": 0.9669421487603306,
+     "median": 0.9752743530686899,
+     "max": 0.9836065573770493,
+     "n": 2
+    },
+    "capacity": {
+     "min": 0.9813664596273292,
+     "median": 0.9813664596273292,
+     "max": 0.9813664596273292,
+     "n": 1
+    },
+    "quality": {
+     "min": 0.9787234042553191,
+     "median": 0.9787234042553191,
+     "max": 0.9787234042553191,
+     "n": 1
+    }
+   },
+   "pooled": {
+    "min": 0.7532467532467533,
+    "median": 0.9800449319413241,
+    "max": 1.0
+   }
+  },
+  "bonus_long": {
+   "status": "fitted",
+   "n": 4,
+   "evidence": "60 real dumps (fit_real.py), 12 supplier threads: price cut for a contract >= 24 months, share of opening",
+   "uncertainty": "threads that never tried it are missing",
+   "samples": [
+    0.015,
+    0.0158,
+    0.0193,
+    0.0
+   ]
+  },
+  "bonus_clause": {
+   "status": "fitted",
+   "n": 3,
+   "evidence": "60 real dumps (fit_real.py), 12 supplier threads: price cut for an index clause (with 24 months), share of opening",
+   "uncertainty": "P02/P08/P18 only",
+   "samples": [
+    0.0647,
+    0.0747,
+    0.0967
+   ]
+  },
+  "final_round_index": {
+   "status": "fitted",
+   "n": 12,
+   "evidence": "60 real dumps (fit_real.py), 12 supplier threads: earliest round of final_offer per thread",
+   "uncertainty": "fixed per supplier, not by our moves; a thread we accepted early shows none",
+   "samples": [
+    4,
+    4,
+    3,
+    3,
+    4,
+    4,
+    3,
+    4,
+    3,
+    2,
+    4,
+    3
+   ]
+  },
+  "health": {
+   "status": "fitted",
+   "n": 3,
+   "evidence": "arena's recorded `relationship` term of the deals (P01, P02, P03), grid fit of (full_cost, rate)",
+   "uncertainty": "P03 has one nonzero value, so its rate is not identified",
+   "threads": {
+    "P01|sup:70110": {
+     "full_cost": 130.04,
+     "rate": 0.0959,
+     "residual_eur": 3.5,
+     "full_cost_ratio": 0.9386
+    },
+    "P02|sup:70510": {
+     "full_cost": 367.6,
+     "rate": 0.066,
+     "residual_eur": 5.21,
+     "full_cost_ratio": 0.9909
+    },
+    "P03|sup:70530": {
+     "full_cost": 395.3,
+     "rate": 0.081,
+     "residual_eur": 0.34,
+     "full_cost_ratio": 0.9021
+    }
+   },
+   "full_cost_ratio": {
+    "min": 0.9021,
+    "median": 0.9386,
+    "max": 0.9909
+   },
+   "rate": {
+    "min": 0.066,
+    "median": 0.081,
+    "max": 0.0959
+   }
+  },
+  "package_bonus_start": {
+   "status": "assumed",
+   "n": 0,
+   "evidence": "first quote for a long/clause package gives this share of the bonus (P18 first quotes 5.7-5.8 vs 5.5 final)",
+   "uncertainty": "no evidence beyond P18",
+   "min": 0.3,
+   "max": 0.6
+  },
+  "package_bonus_gain": {
+   "status": "assumed",
+   "n": 0,
+   "evidence": "per round the share of the bonus rises by base + slope * (our step / its opening)",
+   "uncertainty": "P18: step +0.02 -> 5.70, +0.25 -> 5.60, more -> 5.50",
+   "base": 0.1,
+   "slope": 8.0,
+   "max": 0.5
   }
  },
  "pass_through_rows": [
