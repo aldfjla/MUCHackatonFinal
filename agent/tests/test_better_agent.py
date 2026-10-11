@@ -9,7 +9,7 @@ import pytest
 
 from arena_kit import evaluate
 from arena_kit.agents import EvidenceAgent, GuardedAgent
-from arena_kit.agents.better_agent import BetterAgent, HealthScope, _health, _with_health
+from arena_kit.agents.better_agent import BetterAgent, HealthScope, _c_at, _health, _vetoes, _with_health
 from arena_kit.agents.reciprocal import case_c_open
 from arena_kit.cost import total_cost
 from arena_kit.docs import standard_terms
@@ -37,6 +37,17 @@ def p02_quote(monkeypatch):
             monkeypatch.setattr(mod, "standard_terms", lambda events: _std("P02"))
 
 
+def _offer_ok(case, ev, t, std):
+    """Our offer is no worse than the opening package in the centre and the optimistic world."""
+    with _with_health(case):
+        return BetterAgent()._fits(case, {"t": ev}, )(ev, t, std)
+
+
+def _accept_ok_centre(case, ev, t, std):
+    """The weakest accept test (final offers): the centre-world C is within the centre-world c_open."""
+    return BetterAgent._est_c(case, ev, t, std, 1) <= BetterAgent()._open_c(case, {"t": ev}, 1)
+
+
 def _case(**options):
     b = {"need_per_year": 1000, "horizon_years": 2, "fallback_unit_price": 40.0, "interest_rate": 0.1, "reference_payment_days": 30,
          "freight_eur_per_unit": {"DAP": 0.0, "EXW": 2.0}, "need_lead_time_days": 10, "current_unit_price": 30.0, "alternative": None}
@@ -62,9 +73,9 @@ def test_p02_never_accepts_or_offers_above_c_open():
         c_open, std = BetterAgent()._open_c(case, {"sup:70510": ev}), standard_terms(ev)
         m = d["message"]
         if m.get("action", {}).get("type") == "accept":
-            assert BetterAgent._est_c(case, ev, find_sheet(ev, m["action"]["term_sheet_id"]), std) <= c_open
+            assert _accept_ok_centre(case, ev, find_sheet(ev, m["action"]["term_sheet_id"]), std)
         for s in m.get("term_sheets", []):
-            assert BetterAgent._est_c(case, ev, s["terms"], std) <= c_open
+            assert _offer_ok(case, ev, s["terms"], std)
 
 
 def test_third_sheet_is_equal_cost_with_shorter_payment_and_lower_price():
@@ -148,16 +159,17 @@ def test_hold_for_final_counters_an_open_offer_but_closes_on_final_repeat_or_lat
 
 @needs_data
 @pytest.mark.parametrize("pid", ["P01", "P02", "P03"])
-def test_health_estimate_fits_the_arena_c_deal(pid):
+def test_health_band_brackets_the_arena_c_deal(pid):
+    """The arena's own C of every recorded deal lies inside the C band of the data-package estimate (no memorised factor)."""
     case = json.loads((CASES / "real" / f"{pid}.json").read_text())
-    assert _health(case)["full_cost"] > 0
+    lo, hi = _health(case)["band"]
     dumps = [json.loads(Path(f).read_text()) for f in glob.glob(str(CASES / "real_runs*" / f"*_{pid}.json"))]
     deals = [d["result"] for d in dumps if d["result"].get("deal")]
     assert deals
     for r in deals:
         with _with_health(case):
-            c = total_cost(case, r["terms"], _std(pid))
-        assert abs(c / r["c_deal"] - 1) < 0.005, (pid, c, r["c_deal"])  # 0.98 x should-cost, rate 0.066
+            c_lo, c_hi = _c_at(case, r["terms"], _std(pid), lo), _c_at(case, r["terms"], _std(pid), hi)
+        assert c_lo <= r["c_deal"] * 1.01 and c_hi >= r["c_deal"] * 0.99, (pid, c_lo, c_hi, r["c_deal"])  # 1%: the buyer rate, not the arena's fitted supplier rate
 
 
 @needs_data
@@ -173,7 +185,7 @@ def test_p02_recorded_deal_is_not_chosen_and_the_price_stays_above_the_health_fl
     assert m.get("action", {}).get("term_sheet_id") != d["result"]["offer_id"]
     for s in m.get("term_sheets", []):
         assert not (s["terms"]["unit_price"] == recorded["unit_price"] and s["terms"]["payment_days"] == recorded["payment_days"])
-        assert BetterAgent._est_c(case, ev, s["terms"], std) < c_open
+        assert _offer_ok(case, ev, s["terms"], std)
 
 
 @needs_data
@@ -189,25 +201,69 @@ def test_full_stack_never_accepts_p02_final_and_never_walks(p02_quote):
         c_open, ask = BetterAgent()._open_c(case, {"sup:70510": ev}), min(s["terms"]["unit_price"] for s in ev[-1]["term_sheets"])
         assert m.get("action", {}).get("type") != "walk_away", i
         if m.get("action", {}).get("type") == "accept":
-            assert BetterAgent._est_c(case, ev, find_sheet(ev, m["action"]["term_sheet_id"]), _std("P02")) <= c_open
+            assert _accept_ok_centre(case, ev, find_sheet(ev, m["action"]["term_sheet_id"]), _std("P02"))
         else:
-            assert all(BetterAgent._est_c(case, ev, s["terms"], _std("P02")) <= c_open for s in m["term_sheets"])
+            assert all(_offer_ok(case, ev, s["terms"], _std("P02")) for s in m["term_sheets"])
     assert m["term_sheets"][0]["terms"]["unit_price"] >= ask  # the final_offer is countered, not accepted or walked from
 
 
 @needs_data
-def test_health_estimate_uses_discounted_should_cost_and_fitted_rate():
-    h = _health(json.loads((CASES / "real" / "P02.json").read_text()))
-    assert abs(h["full_cost"] - 0.98 * 374.95) < 1e-6 and h["interest_rate"] == 0.066
+def test_health_estimate_is_the_suppliers_should_cost_with_a_band():
+    case = json.loads((CASES / "real" / "P02.json").read_text())
+    h = _health(case)
+    assert h["full_cost"] == 374.95 and h["interest_rate"] == case["buyer"]["interest_rate"]  # the supplier's own row, the buyer's rate
+    assert h["band"][0] < 1 < h["band"][1]
+    assert 0.03 <= h["band"][1] - 1 <= 0.06  # BAND_SPECIFIC, plus BAND_WEAK for a weak supplier
 
 
 @needs_data
-def test_health_case_offers_long_payment_and_an_index_clause_sheet(p02_quote):
+def test_pessimistic_band_guard_repairs_a_sheet_that_is_only_safe_at_the_estimate(p02_quote):
     case = json.loads((CASES / "real" / "P02.json").read_text())
-    ev = json.loads((CASES / "real_runs_v17" / "simplify_P02.json").read_text())["threads"]["sup:70510"]["messages"][:1]
-    sheets = [s["terms"] for s in BetterAgent().decide(case, {"sup:70510": ev})["message"]["term_sheets"]]
-    assert any(t["payment_days"] == 90 for t in sheets)  # payment days are a lever (v16 got 90 days)
-    assert any(t.get("index_clause") for t in sheets) and any(not t.get("index_clause") for t in sheets)
+    first = json.loads((CASES / "real_runs_v17" / "simplify_P02.json").read_text())["threads"]["sup:70510"]["messages"][0]
+    ev = [first, _mine(360.0), _sup(369.0, 1, index_clause=None)]
+    std, agent = _std("P02"), BetterAgent()
+    c_open = agent._open_c(case, {"t": ev})
+    sheet = ev[-1]["term_sheets"][0]["terms"]
+    with _with_health(case):
+        assert _c_at(case, sheet, std, 1) <= c_open < agent._est_c(case, ev, sheet, std)  # fine at the estimate, over at the pessimistic end
+        d = agent._guard(case, {"t": ev}, {"supplier_id": "t", "message": {"action": {"type": "accept", "term_sheet_id": "s1"}}})
+        assert d["message"].get("action") is None and d["why"]["rule"] in ("guard_repair", "not_walk")
+        assert all(agent._fits(case, {"t": ev})(ev, s["terms"], std) for s in d["message"]["term_sheets"])
+
+
+@needs_data
+def test_final_offer_is_accepted_at_the_centre_when_only_the_pessimistic_end_fails(p02_quote):
+    case = json.loads((CASES / "real" / "P02.json").read_text())
+    first = json.loads((CASES / "real_runs_v17" / "simplify_P02.json").read_text())["threads"]["sup:70510"]["messages"][0]
+    ev = [first, _mine(360.0), {**_sup(369.0, 1, index_clause=None), "status": "final_offer"}]
+    with _with_health(case):
+        d = BetterAgent()._guard(case, {"t": ev}, {"supplier_id": "t", "message": {"action": {"type": "accept", "term_sheet_id": "s1"}}})
+    assert d["message"]["action"] == {"type": "accept", "term_sheet_id": "s1"}  # never walk or stall when accepting is no worse than c_open
+
+
+def test_accept_needs_the_best_complete_package_across_threads():
+    case = _case(incoterm=["DAP", "EXW"])
+    a = [_sup(30.0, 0, incoterm="DAP"), _mine(24.0), {**_sup(27.0, 1, incoterm="EXW"), "status": "final_offer"}]  # cheaper unit price, +2 freight: C of 29
+    b = [_sup(30.0, 0, incoterm="DAP"), _mine(24.0), {**_sup(28.0, 1, incoterm="DAP"), "status": "final_offer"}]  # C of 28
+    threads = {"A": a, "B": b}
+    accept_a = {"supplier_id": "A", "message": {"action": {"type": "accept", "term_sheet_id": "s1"}}}
+    assert _vetoes(case, threads, accept_a)  # closing rule: not the best complete package
+    assert not _vetoes(case, threads, {**accept_a, "supplier_id": "B"})
+    d = BetterAgent()._guard(case, threads, accept_a)
+    assert d["supplier_id"] == "B" and d["message"]["action"] == {"type": "accept", "term_sheet_id": "s1"} and d["why"]["rule"] == "accept_best_package"
+    assert BetterAgent().decide(case, threads)["supplier_id"] == "B"
+
+
+def test_every_decision_carries_a_plain_why():
+    case = _case()
+    case["round_limit"] = 4
+    ev = [_sup(30.0, 0), _mine(24.0), _sup(29.0, 1), _mine(26.0), _sup(28.9, 2)]
+    for threads in ({"t": ev}, {"t": ev[:1]}):
+        d = BetterAgent().decide(case, threads)
+        why = json.loads(json.dumps(d["why"]))  # plain, serialisable
+        assert {"rule", "c_open", "c_offer", "c_breakdown", "band", "alternative"} <= why.keys()
+        assert why["c_offer"] is not None and abs(sum(why["c_breakdown"].values()) - why["c_offer"]) < 0.1 * len(why["c_breakdown"])
+    assert BetterAgent().decide(case, {"t": ev})["why"]["rule"] == "late_accept"
 
 
 def test_step_answers_their_move_in_full():

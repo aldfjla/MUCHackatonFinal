@@ -211,6 +211,10 @@ def play(table, case_id, agent, deadline=None):
         for m in events:
             fetch_documents(table, m)
     slowest = 0.0  # the longest round so far: decision + the supplier's reply
+    decisions = []  # the `why` of every decision an agent logged (BetterAgent), in order; added to the result as "decisions"
+
+    def finish(result):
+        return {**result, "decisions": decisions} if decisions and isinstance(result, dict) else result
 
     def run_action(sid, msg):
         """(True, result) when the case ended, else (False, None): the case goes on."""
@@ -279,10 +283,12 @@ def play(table, case_id, agent, deadline=None):
                 if pending and not near and (msg.get("action") or sid in pending):
                     _restore(snap)  # decided again once the replies in flight are in
                     break
+                if isinstance(decision.get("why"), dict):
+                    decisions.append(decision["why"])
                 if msg.get("action"):
                     done, result = run_action(sid, msg)
                     if done:
-                        return result
+                        return finish(result)
                     continue
                 pending[sid], started[sid] = msg, t0
                 futures[pool.submit(send, sid, msg)] = sid
@@ -303,11 +309,11 @@ def play(table, case_id, agent, deadline=None):
                     continue
                 errored.clear()
                 if "result" in reply:  # the reply ended the case, e.g. the last supplier walked away
-                    return reply["result"]
+                    return finish(reply["result"])
                 threads[sid] += [{**msg, "from": "buyer"}, fetch_documents(table, reply)]
                 slowest = max(slowest, time.monotonic() - started.pop(sid))
                 log.info("%s %s %s", sid, reply.get("status"), standing(threads[sid])[1])
-    return table.result()
+    return finish(table.result())
 
 
 def hosted(cases):
