@@ -1,8 +1,8 @@
-"""Build playbook.json: what the real practice runs taught us per (supplier, case type, goal).
+"""Build playbook.json (evidence for the experimental PlaybookAgent, not proven floors): what the real practice runs taught us per (supplier, case type, goal).
 
     python -m arena_kit.playbook_build
 
-Reads sim_cases/real_runs*/*.json (session dumps) and sim_cases/targets.md (C_best target deals). Local files only.
+Reads sim_cases/real_runs*/*.json (session dumps) and sim_cases/targets.md (C_best target deals, kept in playbook.json as evidence only; the agent does not use them). Local files only.
 backlog.csv is not read: it has no term sheets or supplier threads, the dumps hold the same deals in full.
 """
 

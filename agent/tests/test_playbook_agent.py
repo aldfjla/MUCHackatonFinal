@@ -58,9 +58,9 @@ def test_first_sheet_is_best_package_two_percent_below_floor():
     assert t["unit_price"] == 4.9 and t["payment_days"] == 90 and t["contract_months"] == 24 and d.calls == 0
 
 
-def test_never_below_target_and_second_move_is_the_floor():
+def test_second_move_is_the_floor_and_target_is_ignored():
     a, _ = agent(entry(lowest_offered_price=4.4))
-    assert sheet(a.decide(case(), thread(6.1)))["unit_price"] == 4.5
+    assert sheet(a.decide(case(), thread(6.1)))["unit_price"] == 4.31
     a, _ = agent()
     assert sheet(a.decide(case(), thread(6.1, 5.6)))["unit_price"] == 5.0
 
@@ -104,16 +104,13 @@ def test_builder_makes_an_entry_from_a_v16_dump(tmp_path):
     assert e["best_deal"]["price"] == 5.5 and e["target"]["price_with_best_levers"] == 4.73 and e["case_ids"] == ["P18"]
 
 
-def test_accepts_an_agreed_sheet_priced_at_the_target_above_the_floor():
-    # P04: our sheet is clamped to the target price (> 1.01 x floor); the supplier "agrees" to it and we must accept, not re-offer
-    a, d = agent(entry(lowest_offered_price=4.0, target={"price_with_best_levers": 4.5}))
-    r = a.decide(case(), thread(6.1, 4.5, status="agreed"))
+def test_accepts_an_agreed_sheet_that_beats_opening_and_alternative():
+    a, d = agent()
+    r = a.decide(case(), thread(6.1, 5.0, status="agreed"))
     assert r["message"]["action"] == {"type": "accept", "term_sheet_id": "o1"} and d.calls == 0
 
 
-def test_agreed_sheet_is_accepted_even_if_not_cheaper_than_the_opening(monkeypatch):
-    from arena_kit.agents import playbook_agent as pa
-
-    monkeypatch.setattr(pa, "_safe_accept", lambda *a: False)  # as in P04: worse than the opening offer
+def test_agreed_sheet_above_the_opening_is_not_accepted_and_goes_to_delegate():
     a, d = agent()
-    assert a.decide(case(), thread(6.1, 5.0, status="agreed"))["message"]["action"]["type"] == "accept" and d.calls == 0
+    r = a.decide(case(), thread(6.1, 9.0, status="agreed"))
+    assert "action" not in r["message"] and r["message"]["body"] == "delegate" and d.calls == 1
