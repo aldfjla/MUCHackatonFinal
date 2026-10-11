@@ -1,0 +1,15 @@
+{
+  "tool_use_id": "toolu_01A8WNeefwdMKMsprunDSZmZ",
+  "agent_id": "ac09c4039d44e282a",
+  "subagent_type": "reviewer",
+  "task_description": "Review indifferent-bundle changes",
+  "token_usage": {
+    "input_tokens": 22,
+    "cache_creation_tokens": 38824,
+    "cache_read_tokens": 266819,
+    "output_tokens": 114,
+    "api_call_count": 11
+  },
+  "started_at": "2026-10-11T03:12:49.546775632+02:00",
+  "completed_at": "2026-10-11T03:16:39.682524076+02:00"
+}
