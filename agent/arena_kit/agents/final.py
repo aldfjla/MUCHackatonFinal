@@ -4,12 +4,13 @@ Why: the supplier prices every sheet by what it is worth to it in cash (price at
 the cost of the payment days we ask), and terms such as contract months, lead time or an index clause are
 free for it. So we (1) fix the VALUE we offer each round, (2) pick the lever combination that is cheapest
 for US at that value (long payment, short lead time, ...), and set the price that gives exactly that value.
-- Value schedule: anchor at 0.76 x the value of their sheet, then close 55% of the gap, then jump to the
+- Value schedule: anchor at 0.80 x the value of their sheet, then close 50% of the gap, then jump to the
   fixed point of "their ask falls by g x our rise" (g estimated, default 0.25): the ask freezes at a random
   early round, so two big moves beat ten small steps. A sheet above their value x (1 - tol) is accepted at
   our price, so we only go above it in the message at moves_left == 2 (A - tick); at moves_left <= 1 we close.
-- Sheets: the lowest-C bundle, the lowest-C bundle with payment <= their standard (suppliers that refuse
-  long terms), their own terms re-priced (pure price move). Cheapest for us first: they take the first of equal value.
+- Sheets: the lowest-C bundle at the target value (sheet 1, cost C1), the lowest-C bundle with payment <= their
+  standard (suppliers that refuse long terms) and their own terms (pure price move), each priced so that its cost
+  to us is C1 too: buyer-indifferent, whichever sheet the supplier takes costs us the same. Never above their ask.
 - Closing: a supplier sheet meets us when its C is no more than our cheapest sheet's C.
 - A silent thread is skipped after `max_asks` messages; never walk away while a supplier is alive.
 """
@@ -41,7 +42,8 @@ BODY = (
     "please pick the one that suits you best."
 )
 R_SUP, STD_PD, TOL = 0.074, 30, 0.012  # fitted median supplier rate, its payment days, tolerance
-ANCHOR, JUMP = 0.76, 0.55
+ANCHOR, JUMP, CAP_RISE = 0.80, 0.5, 0.5
+LOW_SHEET = 0.93  # a lever worth more than 7% of the price to us is not worth offering at their terms
 G_DEFAULT, G_MIN, G_MAX, MIN_STEP = 0.25, 0.1, 0.8, 0.01
 MAX_COMBOS, MAX_SHEETS = 3000, 3
 
@@ -79,6 +81,8 @@ def _target(case, events, std_full, anchor=ANCHOR):
     mine = [m["term_sheets"][0]["terms"] for m in _mine(events) if m.get("term_sheets")]
     ours = [_value(case, std_full, t) for t in mine if t.get("unit_price")]
     tick = _tick(a)
+    if ours and ours[-1] >= a * (1 - TOL):  # their ask is already met within tolerance: never push above it
+        return ours[-1]
     if not ours:
         o = anchor * a
     elif len(ours) == 1:
@@ -88,6 +92,8 @@ def _target(case, events, std_full, anchor=ANCHOR):
         if len(theirs) >= 2 and (fall := theirs[-2] - theirs[-1]) > 0 and (rise := ours[-1] - ours[-2]) > 0:
             g = min(G_MAX, max(G_MIN, fall / rise))
         o_star = (1 - TOL) * (a + g * ours[-1]) / (1 + g * (1 - TOL))
+        if moves_left(case, events) > 3:  # a slow supplier keeps stepping down: do not overshoot
+            o_star = min(o_star, ours[-1] + CAP_RISE * (a - ours[-1]))
         o = min(a - tick, max(o_star, ours[-1] + max(MIN_STEP * a, tick)))
     if moves_left(case, events) <= 2:
         o = a - tick
@@ -115,6 +121,24 @@ def _reduce(opts, centre, k):
     keep = {min(opts), max(opts)} | ({centre} if centre in opts else set())
     rest = sorted((o for o in opts if o not in keep), key=lambda o: (abs(o - (centre if centre is not None else o)), o))
     return sorted(keep | set(rest[: max(0, k - len(keep))]))
+
+
+def _their_prices(case, events, std_full, levers):
+    """[(lever terms, newest price)] of their sheets, newest per identical lever terms."""
+    out = {}
+    for m in _sup(events):
+        for sh in m.get("term_sheets") or []:
+            t = sh.get("terms") or {}
+            if t.get("unit_price") is not None:
+                key = tuple(repr(t.get(f, std_full.get(f))) for f in levers)
+                out[key] = t["unit_price"]
+    return out
+
+
+def _above(t, cap, levers, std_full):
+    """True when their newest price for these very lever terms is below ours (never offer more than they ask)."""
+    key = tuple(repr(t.get(f, std_full.get(f))) for f in levers)
+    return key in cap and t["unit_price"] > cap[key]
 
 
 def _builder(case, events, std_full, theirs, pins, c_alt, c_open):
@@ -151,22 +175,36 @@ def _builder(case, events, std_full, theirs, pins, c_alt, c_open):
             return False
         return (c := total_cost(case, t, std_full)) < c_alt and c < c_open
 
+    cap = _their_prices(case, events, std_full, levers)
+
+    def reprice(t, c1):
+        """t with the price that makes its cost to us c1, or None."""
+        p, c = t["unit_price"], total_cost(case, t, std_full)
+        slope = total_cost(case, {**t, "unit_price": p + 1}, std_full) - c
+        if not slope > 0:  # also skips a NaN slope
+            return None
+        return {**t, "unit_price": max(0.01, round(p + (c1 - c) / slope, 2))}
+
     def build(value):
         cands = []
         for combo, c0, b in priced:
             t = {**combo, "unit_price": round((value - c0) / b, 2)}
             if ok(t):
                 cands.append((total_cost(case, t, std_full), t))
-        out = []
-        if cands:
-            out.append(min(cands, key=lambda x: x[0])[1])
-            short = [x for x in cands if (x[1].get("payment_days") or 0) <= std_full["payment_days"]]
-            if short:
-                out.append(min(short, key=lambda x: x[0])[1])
+        if not cands:
+            return []
+        c1, first = min(cands, key=lambda x: x[0])
+        out = [first]
+        others = []
+        short = [x for x in cands if (x[1].get("payment_days") or 0) <= std_full["payment_days"]]
+        if short:
+            others.append(min(short, key=lambda x: x[0])[1])
         if own_b > 0:
-            t = satisfy_must_haves(case, {**own, "unit_price": round((value - v0) / own_b, 2)}, std_full)
-            if ok(t):
-                out.append(t)
+            others.append(satisfy_must_haves(case, {**own, "unit_price": round((value - v0) / own_b, 2)}, std_full))
+        for t in others:
+            if t["unit_price"] > 0 and (t := reprice(t, c1)) and ok(t):
+                if t["unit_price"] >= LOW_SHEET * first["unit_price"] and not _above(t, cap, levers, std_full):
+                    out.append(t)
         done = []
         for t in out:
             if (c := complete_offer(case, t)) not in done:
@@ -238,11 +276,22 @@ class FinalAgent(ReciprocalAgent):
             theirs = {**newest, "payment_days": std_full["payment_days"]}
             build = _builder(case, ev, std_full, theirs, _pins(ev), c_alt, c_open)
             sent = [x["terms"] for m in _mine(ev) for x in m.get("term_sheets") or []]
-            for t in build(a):
-                if t not in sent and must_haves_ok(case, t, std_full):
-                    c = total_cost(case, t, std_full)
-                    if best is None or c < best[0]:
-                        best = (c, sid, t)
+            # sheet 1 is worth exactly `a`; the others only equal its cost, so they come after it
+            # (a fallback sheet must still be worth ~a to them, else it answers a final_offer with a push)
+            t = next(
+                (
+                    t
+                    for t in build(a)
+                    if t not in sent
+                    and must_haves_ok(case, t, std_full)
+                    and _value(case, std_full, t) >= a * (1 - TOL)
+                ),
+                None,
+            )
+            if t is not None:
+                c = total_cost(case, t, std_full)
+                if best is None or c < best[0]:
+                    best = (c, sid, t)
         return best and (best[1], best[2])
 
     def decide(self, case, threads):
@@ -303,6 +352,8 @@ class FinalAgent(ReciprocalAgent):
         pins, c_alt, tick = _pins(events), _c_alt(case), _tick(a)
         build = _builder(case, events, std_full, theirs, pins, c_alt, c_open)
         seen = [s["terms"] for m in _mine(events) if m.get("term_sheets") for s in m["term_sheets"]]
+        if any(_value(case, std_full, t) >= a * (1 - TOL) for t in seen if t.get("unit_price")):
+            return []  # a sheet of ours already meets their ask within tolerance: nothing new to push
         sheets = build(o)
         while sheets and sheets[0] in seen and o < a:
             o += tick

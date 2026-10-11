@@ -6,8 +6,8 @@ import pytest
 
 from arena_kit.agents import FinalAgent, GuardedAgent
 from arena_kit.agents.evidence import EvidenceAgent
-from arena_kit.agents.final import ANCHOR, JUMP, _std_full, _target, _value
-from arena_kit.agents.reciprocal import _c_alt, _tick
+from arena_kit.agents.final import ANCHOR, CAP_RISE, JUMP, LOW_SHEET, TOL, _std_full, _target, _value
+from arena_kit.agents.reciprocal import _c_alt, _tick, case_c_open
 from arena_kit.cli import AGENTS, agent_factory
 from arena_kit.cost import must_haves_ok, total_cost
 from arena_kit.play import closing_move, moves_left
@@ -104,7 +104,7 @@ def play(c, ev, rounds):
     return out
 
 
-def test_anchor_value_is_76_percent_of_theirs_and_price_only_sheet_is_included():
+def test_anchor_value_is_80_percent_of_theirs_and_price_only_sheet_is_included():
     c, ev = case("P05"), [reply(sheet("0", 34.0, **P05_TERMS))]
     d = FinalAgent().decide(c, {"sup:A": ev})
     sheets = sent(d)
@@ -115,7 +115,7 @@ def test_anchor_value_is_76_percent_of_theirs_and_price_only_sheet_is_included()
     assert len(sheets) <= 3
 
 
-def test_second_message_closes_55_percent_of_the_value_gap():
+def test_second_message_closes_half_of_the_value_gap():
     c, ev = case("P05"), value_thread(33.0)
     first = ev[1]["term_sheets"][0]["terms"]
     std = _std_full(c, ev)
@@ -125,7 +125,7 @@ def test_second_message_closes_55_percent_of_the_value_gap():
     assert min(val(c, ev, t) for t in sent(d)) == pytest.approx(want, abs=0.1)
 
 
-def test_third_message_uses_the_fixed_point_and_stays_below_their_value():
+def test_third_message_uses_the_capped_fixed_point_and_stays_below_their_value():
     c = case("P05")
     ev = [reply(sheet("0", 34.0, **P05_TERMS)), ours(25.0, **P05_TERMS), reply(sheet("1", 33.0, **P05_TERMS)),
           ours(28.0, **P05_TERMS), reply(sheet("2", 32.6, **P05_TERMS))]
@@ -135,8 +135,10 @@ def test_third_message_uses_the_fixed_point_and_stays_below_their_value():
     o1, o2 = (_value(c, std, {**P05_TERMS, "unit_price": p}) for p in (25.0, 28.0))
     g = min(0.8, max(0.1, (_value(c, std, {**P05_TERMS, "unit_price": 33.0}) - t2) / (o2 - o1)))
     star = (1 - 0.012) * (t2 + g * o2) / (1 + g * (1 - 0.012))
+    star = min(star, o2 + CAP_RISE * (t2 - o2))
     assert o == pytest.approx(min(t2 - _tick(t2), max(star, o2 + 0.01 * t2)), abs=1e-6)
     assert o2 <= o <= t2 - _tick(t2) and t1 > t2
+    assert o <= o2 + CAP_RISE * (t2 - o2) + 1e-9
 
 
 def test_last_two_messages_offer_their_value_minus_a_tick():
@@ -375,3 +377,90 @@ def test_sheets_stay_below_the_opening_cost():
     cap = max(total_cost(c, t, std) for t in free)
     limited = FinalAgent()._sheets(c, ev, {}, theirs, c_open=cap)
     assert all(total_cost(c, t, std) < cap for t in limited)
+
+
+def test_sheets_are_buyer_indifferent_and_never_above_their_ask():
+    c = case("P05")
+    for ev in ([reply(sheet("0", 34.0, **P05_TERMS))], value_thread(33.0), value_thread(33.0, 32.0)):
+        std = _std_full(c, ev)
+        sheets = sent(FinalAgent().decide(c, {"sup:A": ev}))
+        c1 = total_cost(c, sheets[0], std)
+        for t in sheets:
+            assert abs(total_cost(c, t, std) - c1) <= 0.005 * c1
+        for m in ev:
+            for sh in m.get("term_sheets", []) if m["from"] == "sup" else []:
+                for t in sheets:
+                    if all(t[f] == sh["terms"].get(f) for f in P05_TERMS):
+                        assert t["unit_price"] <= sh["terms"]["unit_price"]
+
+
+def test_p18_short_contract_sheet_is_priced_down_to_the_same_cost():
+    c = case("P18")
+    terms = {"payment_days": 30, "contract_months": 12, "index_clause": None}
+    ev = [reply(sheet("0", 6.30, **terms))]
+    std = _std_full(c, ev)
+    sheets = sent(FinalAgent().decide(c, {"sup:A": ev}))
+    c1 = total_cost(c, sheets[0], std)
+    for t in sheets:
+        assert abs(total_cost(c, t, std) - c1) <= 0.005 * c1
+    long_ = [t for t in sheets if t["contract_months"] == 24]
+    short = [t for t in sheets if t["contract_months"] == 12]
+    if long_ and short:
+        assert short[0]["unit_price"] < long_[0]["unit_price"]
+
+
+def test_p18_drops_repriced_sheet_far_below_sheet_one():
+    c = case("P18")
+    terms = {"payment_days": 30, "contract_months": 12, "index_clause": None}
+    ev = [reply(sheet("0", 6.30, **terms))]
+    sheets = sent(FinalAgent().decide(c, {"sup:A": ev}))
+    assert sheets[0]["contract_months"] == 24
+    assert all(t["unit_price"] >= LOW_SHEET * sheets[0]["unit_price"] for t in sheets)
+    assert not [t for t in sheets if t["contract_months"] == 12 and t["payment_days"] == 30]
+
+
+def test_slow_supplier_cannot_pull_the_third_message_past_half_the_gap():
+    c = case("P08")
+    terms = {"payment_days": 30, "contract_months": 12, "index_clause": None}
+    ev = [reply(sheet("0", 6.05, **terms)), ours(4.60, **terms), reply(sheet("1", 6.03, **terms)),
+          ours(5.38, **terms), reply(sheet("2", 5.91, **terms))]
+    std = _std_full(c, ev)
+    assert moves_left(c, ev) > 3
+    v = lambda p: _value(c, std, {**terms, "unit_price": p})  # noqa: E731
+    assert _target(c, ev, std) <= v(5.38) + CAP_RISE * (v(5.91) - v(5.38)) + 1e-9
+
+
+def test_value_match_never_sends_a_sheet_worth_less_than_their_ask():
+    """Fallback sheets worth under a*(1-TOL) to them would answer a final_offer with a push: skip, return None."""
+    c = case("P05")
+    ev = [reply(sheet("0", 34.0, **P05_TERMS)), ours(25.0, **P05_TERMS),
+          reply(sheet("1", 33.9, payment_days=30, lead_time_days=56), status="final_offer")]
+    std = _std_full(c, ev)
+    a = val(c, ev, ev[-1]["term_sheets"][0]["terms"])
+    agent, c_alt, c_open = FinalAgent(), _c_alt(c), case_c_open(c, {"sup:A": ev})
+    for _ in range(6):
+        m = agent._value_match(c, {"sup:A": ev}, c_alt, c_open)
+        if m is None:
+            break
+        assert _value(c, std, m[1]) >= a * (1 - TOL)
+        ev = ev + [{"from": "buyer", "term_sheets": [{"terms": m[1]}]}, ev[-1]]
+    assert m is None
+
+
+def test_target_does_not_push_above_their_ask_once_it_is_met():
+    c = case("P05")
+    first = [reply(sheet("0", 34.0, **P05_TERMS))]
+    std = _std_full(c, first)
+    mine = sent(FinalAgent().decide(c, {"sup:A": first}))
+    o = _value(c, std, mine[0])
+    lo, hi = 1.0, 34.0
+    for _ in range(60):  # their next price: a value of o / (1 - 0.005), i.e. our sheet is 0.5% under their ask
+        mid = (lo + hi) / 2
+        lo, hi = (mid, hi) if _value(c, std, {**P05_TERMS, "unit_price": mid}) < o / 0.995 else (lo, mid)
+    ev = first + [{"from": "buyer", "term_sheets": [{"terms": t} for t in mine]}, reply(sheet("1", hi, **P05_TERMS))]
+    a = _value(c, std, ev[-1]["term_sheets"][0]["terms"])
+    assert o >= a * (1 - TOL) and o < a
+    assert _target(c, ev, std) == pytest.approx(o)
+    assert FinalAgent()._sheets(c, ev, {}, ev[-1]["term_sheets"][0]["terms"]) == []
+    d = FinalAgent().decide(c, {"sup:A": ev})
+    assert d["message"].get("action") or all(_value(c, std, t) <= a * (1 + 1e-9) for t in sent(d))
