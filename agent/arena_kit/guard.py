@@ -95,6 +95,8 @@ def _walk(sid):
 
 
 class GuardedAgent:
+    RESEND_CHECK = False  # True: never send a must-have counter we already sent and had refused
+
     def __init__(self, delegate, log_name="arena"):
         self.delegate = delegate
         self.log = logging.getLogger(log_name)
@@ -201,8 +203,20 @@ class GuardedAgent:
         if close["message"]["action"]["type"] == "accept":
             self.log.info("%s guard: accept on last move (a lower counter would be refused)", self._case_id)
             return close
+        if self.RESEND_CHECK and self._resend(case, threads[sid]):  # that counter was sent and refused: keep the agent's own new sheet
+            return decision
         self.log.info("%s guard: must-have counter at their price on last move", self._case_id)
         return self._counter(case, threads, sid)
+
+    @staticmethod
+    def _resend(case, events):
+        """True when the must-have counter at their standing price was already sent by us."""
+        _, terms = standing(events)
+        if terms.get("unit_price") is None:
+            return False
+        sheet = satisfy_must_haves(case, dict(terms), standard_terms(events))
+        sent = [x["terms"] for m in events if m.get("from") == "buyer" for x in m.get("term_sheets") or []]
+        return sheet in sent or complete_offer(case, sheet) in sent
 
     def _counter(self, case, threads, sid):
         events = threads[sid]
@@ -220,7 +234,8 @@ class GuardedAgent:
         events = threads[sid]
         status, left = latest(events).get("status"), moves_left(case, events)
         cap = 1 if status == "final_offer" else MAX_COUNTERS
-        return status not in ENDED | {"agreed"} and left >= 1 and self._tried.get((self._case_id, sid), 0) < cap
+        ok = status not in ENDED | {"agreed"} and left >= 1 and self._tried.get((self._case_id, sid), 0) < cap
+        return ok and not (self.RESEND_CHECK and self._resend(case, events))
 
     def _supplier_moved(self, case, threads, sid):
         """The standing sheet costs at most EARLY_ACCEPT x the thread's opening sheet."""

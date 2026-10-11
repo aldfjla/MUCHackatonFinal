@@ -8,6 +8,7 @@ import json
 import logging
 import os
 import statistics
+import sys
 import zipfile
 from pathlib import Path
 
@@ -28,7 +29,7 @@ def load_env(path=".env"):
 
 AGENTS = [
     "naive", "smart", "confident", "rational", "explorer", "anchor", "switcher", "boulware", "router",
-    "confident_boulware", "confident_router", "guarded_boulware", "guarded_rational", "evidence_router", "evidence_rational", "reciprocal", "reciprocal_evidence", "simplify", "playbook", "better", "50", "llm",
+    "confident_boulware", "confident_router", "guarded_boulware", "guarded_rational", "evidence_router", "evidence_rational", "reciprocal", "reciprocal_evidence", "simplify", "final", "final_match", "listener", "combined", "combined2", "playbook", "better", "50", "llm",
 ]  # fmt: skip
 
 
@@ -37,25 +38,34 @@ def agent_factory(name, data):
         AnchorAgent,
         BetterAgent,
         BoulwareAgent,
+        CombinedAgent,
+        Combined2Agent,
         ConfidentAgent,
         ConfidentBoulwareAgent,
         ConfidentRouterAgent,
-        SimplifyAgent,
         EvidenceAgent,
         PlaybookAgent,
         ExplorerAgent,
+        FinalAgent,
         FiftyAgent,
         GuardedAgent,
+        ListenerAgent,
         LLMAgent,
         NaiveAgent,
         RationalAgent,
         ReciprocalAgent,
         RouterAgent,
+        SimplifyAgent,
         SmartAgent,
         SwitcherAgent,
         llm_from_env,
     )
     from .agents.better_agent import HealthScope
+
+    def _resend_guard(agent):  # v8-petra chains: never resend a refused must-have counter
+        g = GuardedAgent(agent)
+        g.RESEND_CHECK = True
+        return g
 
     if name == "naive":
         return NaiveAgent
@@ -84,6 +94,11 @@ def agent_factory(name, data):
     if name == "guarded_rational":
         return lambda: GuardedAgent(RationalAgent())
     # the evidence wrapper replaces the delegate's body and refs by design (it cites verified data)
+    if name in ("evidence_router", "evidence_rational", "listener", "combined", "combined2", "better"):
+        from .evidence import package_problem
+
+        if why := package_problem(data):  # say it before any session opens, not once per message
+            print(f"WARNING: {why} - messages will cite NO data. Pass --data <folder with world.sqlite>.", file=sys.stderr)
     if name == "evidence_router":
         return lambda: EvidenceAgent(ConfidentRouterAgent(), data)
     if name == "evidence_rational":
@@ -94,6 +109,16 @@ def agent_factory(name, data):
         return lambda: EvidenceAgent(GuardedAgent(ReciprocalAgent()), data)
     if name == "simplify":
         return lambda: EvidenceAgent(GuardedAgent(SimplifyAgent()), data)
+    if name == "final":
+        return lambda: EvidenceAgent(_resend_guard(FinalAgent()), data, questions=False)
+    if name == "final_match":
+        return lambda: EvidenceAgent(_resend_guard(FinalAgent(match=1.0)), data, questions=False)
+    if name == "combined":  # v6-petra: Alex's final agent moves + the listener's supplier model
+        return lambda: EvidenceAgent(_resend_guard(CombinedAgent()), data, questions=False)
+    if name == "combined2":  # v8-petra: router - index-clause cases without health at stake -> combined, else better
+        return lambda: Combined2Agent(data)  # each route builds its own evidence / guard chain
+    if name == "listener":  # v4-petra: supplier model + packages, inside the guard and the evidence layer
+        return lambda: EvidenceAgent(_resend_guard(ListenerAgent()), data)
     if name == "playbook":
         return lambda: EvidenceAgent(GuardedAgent(PlaybookAgent(SimplifyAgent())), data)
     if name == "better":

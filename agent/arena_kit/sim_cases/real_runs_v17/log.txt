@@ -1,0 +1,5 @@
+simplify P05 True 0.772277032405558
+simplify P18 True 0.4014490231648455
+simplify P08 True 0.4405513904223171
+simplify P02 True 0.0
+simplify P11 True 0.6262806593072341

@@ -17,6 +17,7 @@ log = logging.getLogger("arena")
 
 DEFAULT_DATA = "~/Documents/Codex/negotiation-arena-kit/data"
 GREEN = 85.0  # scorecard on-time-delivery green line, %
+DISTRESS = ("insolvency", "credit_downgrade")  # news topics that mark a supplier in financial trouble: never cited at it
 
 
 @lru_cache(maxsize=4)
@@ -35,6 +36,17 @@ def load_package(path=None):
         _missing(f"{path}: {e}")
 
 
+def package_problem(path=None):
+    """Why the evidence layer cannot cite data from this package, or None when it can. Checked at startup:
+    a package without its SQLite file silently drops every citation (all 10 v4-petra runs, 2026-10-10)."""
+    pkg = load_package(path)
+    if pkg is None:
+        return f"no data package at {Path(path or os.environ.get('ARENA_DATA') or DEFAULT_DATA).expanduser()}"
+    if pkg.db is None:
+        return f"data package at {pkg.root} has no world.sqlite"
+    return None
+
+
 @lru_cache(maxsize=None)
 def _missing(why):  # lru_cache: logs once per reason
     log.warning("evidence: no data package (%s) - messages stay as the delegate wrote them", why)
@@ -42,6 +54,14 @@ def _missing(why):  # lru_cache: logs once per reason
 
 def _q(pkg, sql, *params):
     return pkg.query(sql, params, limit=100000)
+
+
+def _release(pkg, table):
+    """The Sunday release's rows of `table` (news, documents), or [] (no release, or a package without the helper)."""
+    try:
+        return pkg.release_rows(table)
+    except Exception:
+        return []
 
 
 def _mi(month):
@@ -104,6 +124,7 @@ def build_claims(case, package, supplier=None, price=None):
     supplier = supplier or case["suppliers"][0]
     sid = supplier.split(":")[-1]
     docs = [d for r in dict.fromkeys(_case_docs(case)) for d in _q(pkg, "select * from documents where id=? and supplier_id=?", r, supplier)]
+    docs += [d for d in _release(pkg, "documents") if d["id"] in _case_docs(case) and d["supplier_id"] == supplier and d not in docs]
     ask = next((d["asked_pct"] for d in docs if d["asked_pct"] is not None), None)
     ref = price or next((d["asked_price"] for d in docs if d["asked_price"]), None) or case["buyer"]["current_unit_price"]
     out = []
@@ -164,7 +185,11 @@ def build_claims(case, package, supplier=None, price=None):
         if row and row["unit_cost"] < ref:
             add("cost", [row["id"]], f"Our should-cost estimate for {_of(parts, part)} is EUR {row['unit_cost']:.2f} {_per(pkg, part)}, before any margin ({row['id']}).",
                 50 + (ref - row["unit_cost"]) / ref * 100, row["unit_cost"], part=part)
-    for row in _q(pkg, "select * from news where supplier_id=? and topic != 'noise' and date >= ?", supplier, _month(_data_end(pkg) - 12)):
+    since = _month(_data_end(pkg) - 12)
+    # Sunday release news too; its distress news (DISTRESS) is a signal for us, not an argument to put to the supplier
+    fresh = [r for r in _release(pkg, "news") if r["supplier_id"] == supplier and r["id"] in pkg.facts and str(r["date"]) >= since
+             and r["topic"] not in ("noise", *DISTRESS)]
+    for row in [*_q(pkg, "select * from news where supplier_id=? and topic != 'noise' and date >= ?", supplier, since), *fresh]:
         add("news", [row["id"]], f'We noted the report "{row["headline"]}" ({row["id"]}).', 25)
     # (f) the letter gives less notice than the contract requires
     if case.get("type") == "price_increase":
@@ -204,7 +229,8 @@ def check_claim(claim, package):
             r = _q(pkg, "select * from should_cost where id=?", ids[0])[0]
             return r["part_id"] == claim["part"] and _tol_ok(fig, r["unit_cost"], False)
         if kind == "news":
-            return _q(pkg, "select supplier_id from news where id=?", ids[0])[0]["supplier_id"] == claim["supplier"]
+            rows = _q(pkg, "select supplier_id from news where id=?", ids[0]) or [r for r in _release(pkg, "news") if r["id"] == ids[0] and ids[0] in pkg.facts]
+            return rows[0]["supplier_id"] == claim["supplier"]
         if kind == "doc":
             d, c = _q(pkg, "select * from documents where id=?", ids[0])[0], _q(pkg, "select * from contracts where id=?", ids[1])[0]
             return (d["supplier_id"] == c["supplier_id"] == claim["supplier"] and d["notice_days"] == fig < c["notice_days"]

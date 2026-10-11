@@ -8,7 +8,7 @@ from arena_kit.agents.evidence import ID, EvidenceAgent
 from arena_kit.evidence import DEFAULT_DATA, build_claims, check_claim, load_package
 
 REAL = sorted((Path(__file__).parent.parent / "arena_kit/sim_cases/real").glob("P*.json"))
-pkg = load_package() if Path(DEFAULT_DATA).expanduser().exists() else None
+pkg = load_package()  # ARENA_DATA, else DEFAULT_DATA; None if neither has a package
 needs_data = pytest.mark.skipif(pkg is None, reason=f"data package not found at {DEFAULT_DATA} (set ARENA_DATA): evidence tests skipped")
 
 

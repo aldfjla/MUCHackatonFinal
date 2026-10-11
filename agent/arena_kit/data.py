@@ -4,6 +4,7 @@ plus the Sunday release (new news, letters and a memo) once you have downloaded 
 import csv
 import json
 import os
+import re
 import sqlite3
 import threading
 from functools import cached_property
@@ -80,6 +81,16 @@ class DataPackage:
                 for row in csv.DictReader(f):
                     index[row["id"]] = {"table": path.stem, **row, "root": str(self.release)}
         return index
+
+    def release_rows(self, table):
+        """Rows of the Sunday release's `data/<table>.csv` (they are not in the SQLite), or [] without a release.
+        Empty cells become None and plain numbers become floats, like the SQLite rows."""
+        path = self.release / "data" / f"{table}.csv" if self.release else None
+        if not path or not path.is_file():
+            return []
+        num = re.compile(r"-?\d+(\.\d+)?")
+        with path.open(encoding="utf-8", newline="") as f:
+            return [{k: None if v == "" else float(v) if num.fullmatch(v or "") else v for k, v in row.items()} for row in csv.DictReader(f)]
 
     def lookup(self, ref):
         """The fact behind a citable ID (from facts.json, else its table row), or None."""

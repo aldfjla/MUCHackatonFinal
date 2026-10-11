@@ -27,7 +27,7 @@ from contextvars import ContextVar
 
 from ..cost import HEALTH, complete_offer, cost_breakdown, must_haves_ok, total_cost
 from ..docs import standard_terms
-from ..evidence import _q, load_package
+from ..evidence import DISTRESS, _q, load_package
 from ..guard import satisfy_must_haves
 from ..play import find_sheet, latest, moves_left, standing
 from . import simplify_agent
@@ -57,7 +57,7 @@ BAND_WEAK = 0.02  # extra width for a supplier with a falling credit index or eq
 WEAK_EQUITY = 20.0  # equity ratio, %
 
 
-def _health(case):
+def _health(case, distress=False):
     """{full_cost, interest_rate, band: (lo, hi) multipliers of full_cost} of the supplier for cost.HEALTH, or None
     (no relationship cost / no should-cost row). Only the data package and the case are used."""
     if not _health_at_stake(case) or not (pkg := load_package()):
@@ -72,18 +72,24 @@ def _health(case):
     if not row:
         return None
     width = (BAND_SPECIFIC if own else BAND_GENERIC) if BetterAgent.BAND else 0.0  # BAND off: the centre estimate only
+    sup, weak = row["supplier_id"] or (suppliers or [None])[0], False
     try:
-        intel = _q(pkg, "select equity_ratio_pct, credit_index, credit_index_12m_ago from supplier_intel where supplier_id=?", row["supplier_id"] or (suppliers or [None])[0])
-        if intel and ((intel[0]["credit_index"] or 0) < (intel[0]["credit_index_12m_ago"] or 0) or (100 if intel[0]["equity_ratio_pct"] is None else intel[0]["equity_ratio_pct"]) < WEAK_EQUITY):
-            width += BAND_WEAK * (width > 0)
+        intel = _q(pkg, "select equity_ratio_pct, credit_index, credit_index_12m_ago from supplier_intel where supplier_id=?", sup)
+        weak = bool(intel and ((intel[0]["credit_index"] or 0) < (intel[0]["credit_index_12m_ago"] or 0) or (100 if intel[0]["equity_ratio_pct"] is None else intel[0]["equity_ratio_pct"]) < WEAK_EQUITY))
     except Exception:
         pass
+    try:  # RELEASE_DISTRESS: Sunday release news (insolvency, withdrawn credit cover) counts like a falling credit index
+        weak = weak or bool(distress) and any(n.get("supplier_id") in {sup, *suppliers} and n.get("topic") in DISTRESS for n in pkg.release_rows("news"))
+    except Exception:
+        pass
+    if weak:
+        width += BAND_WEAK * (width > 0)
     return {"full_cost": row["unit_cost"] / (row["price_unit"] or 1), "interest_rate": case["buyer"]["interest_rate"], "band": (1 - width, 1 + width)}
 
 
 @contextmanager
-def _with_health(case, on=True):
-    token = HEALTH.set(_health(case) if on else None)
+def _with_health(case, on=True, distress=False):
+    token = HEALTH.set(_health(case, distress) if on else None)
     try:
         yield
     finally:
@@ -244,7 +250,7 @@ class HealthScope:
     def decide(self, case, threads):
         token = HOLD.set(_vetoes)
         try:
-            with _with_health(case, BetterAgent.HEALTH_ESTIMATE):
+            with _with_health(case, BetterAgent.HEALTH_ESTIMATE, getattr(self.delegate, "RELEASE_DISTRESS", False)):
                 d = self.delegate.decide(case, threads)
                 if isinstance(d, dict) and d.get("message"):  # the wrappers inside may have changed the message: log the final one
                     d = {**d, "why": _why(case, threads, d, (d.get("why") or {}).get("rule") or "wrapper")}
@@ -254,6 +260,7 @@ class HealthScope:
 
 
 class BetterAgent(SimplifyAgent):
+    RELEASE_DISTRESS = False  # True: Sunday-release distress news widens the health band (set on the instance, per chain)
     BAND = True  # False: the centre estimate only (no uncertainty band)
     # both OFF: the arena's C prices the clause through a single index path, so a risk premium is not rewarded in score; the twin alone was not better (train 0.505 vs 0.509)
     FIXED_TWIN = INDEX_PREMIUM = False  # twin: a no-clause sheet beside each clause sheet; premium: clause price below the twin's by the index risk premium
@@ -265,7 +272,7 @@ class BetterAgent(SimplifyAgent):
     def decide(self, case, threads):
         token = HOLD.set(_vetoes)
         try:
-            with _with_health(case, self.HEALTH_ESTIMATE):
+            with _with_health(case, self.HEALTH_ESTIMATE, self.RELEASE_DISTRESS):
                 if self.LATE_ACCEPT and (late := self._late_accept(case, threads)):
                     d, rule = self._guard(case, threads, late), "late_accept"
                 else:

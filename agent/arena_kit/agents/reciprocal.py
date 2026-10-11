@@ -84,6 +84,19 @@ def case_c_open(case, threads):
     return out
 
 
+def cheapest_index(case, t, std):
+    """Our sheet carries an index clause only when total_cost says it is strictly cheaper than every other
+    option, None included (P02/P08/P18: a 5 % deadband clause cost 2-17k more than none at the same price)."""
+    if not t.get("index_clause") or "index_clause" not in case["negotiable"]:
+        return t
+    opts = [None] + [c for c in (case.get("term_options") or {}).get("index_clause", []) if c]
+    opts = [c for c in opts if must_haves_ok(case, {**t, "index_clause": c}, std)]  # a required clause stays
+    if not opts:
+        return t
+    best = min(opts, key=lambda c: (total_cost(case, {**t, "index_clause": c}, std), c is not None))
+    return {**t, "index_clause": best}
+
+
 def _valid(case, events, std, c_alt, musts=True):
     """[(C, sheet)] of the thread's standing sheets that keep the must-haves (unless musts=False), beat the alternative."""
     out = []
@@ -264,7 +277,13 @@ class ReciprocalAgent:
                 continue
             price = round(max(0.75 * p, min(p, t["unit_price"] - (cost(t) - cost(main)) / slope - 0.01)), 2)  # no lowball
             v = cap({**t, "unit_price": price})
-            if 0 < price and v not in seen and cost(v) < cost(main) and (best is None or v["unit_price"] > best["unit_price"]):
+            if (
+                0 < price
+                and v not in seen
+                and cost(v) < cost(main)
+                and cost(v) < cost({**v, "index_clause": None})  # the clause itself must save us money
+                and (best is None or v["unit_price"] > best["unit_price"])
+            ):
                 best = v
         return best
 
@@ -321,4 +340,9 @@ class ReciprocalAgent:
         out = [main] + ([theirs] if theirs != main and theirs not in seen else [])
         if (extra := self._index_variant(case, main, p, opts, pins, make, cost, cap, seen)) and extra not in out:
             out.append(extra)
-        return [complete_offer(case, t) for t in out]
+        done = []
+        for t in out:
+            t = complete_offer(case, t if "index_clause" in pins else cheapest_index(case, t, std))
+            if t not in done and t not in seen:
+                done.append(t)
+        return done
