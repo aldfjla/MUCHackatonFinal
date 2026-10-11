@@ -53,3 +53,31 @@ def test_router_builds_one_chain_per_case_and_decides():
     assert a.chosen == "combined" and d["message"].get("term_sheets")
     d = a.decide(case("P11"), {"sup:A": [sup("A", 1, unit_price=47.0, ppm_commitment=1500, chargeback_eur_per_complaint=0.0)]})
     assert a.chosen == "better" and d["supplier_id"] == "sup:A"
+
+
+def _ppm_case():
+    """P11 with a fake C: our 300 ppm saves 3.00 of 1000 (< MIN_ASK), so it would normally go back to their 1500."""
+    c = case("P11")
+    theirs = {"unit_price": 46.5, "ppm_commitment": 1500, "chargeback_eur_per_complaint": 0.0}
+    ours = {**theirs, "unit_price": 44.0, "ppm_commitment": 300}
+    cost = lambda t: 1000.0 + (0.0 if t["ppm_commitment"] == 300 else 3.0)  # noqa: E731
+    return c, theirs, ours, cost
+
+
+def test_drop_small_ask_keeps_original_when_back_exceeds_upper():
+    c, theirs, ours, cost = _ppm_case()
+    assert CombinedCore._drop_small_asks(c, {}, [ours], theirs, cost)[0]["ppm_commitment"] == 1500  # unbounded: dropped
+    out = CombinedCore._drop_small_asks(c, {}, [ours], theirs, cost, upper=1001.0)
+    assert out[0] == ours  # 1003 > upper: keep our sheet
+
+
+def test_drop_small_ask_keeps_original_when_back_was_sent():
+    c, theirs, ours, cost = _ppm_case()
+    back = CombinedCore._drop_small_asks(c, {}, [ours], theirs, cost)[0]
+    out = CombinedCore._drop_small_asks(c, {}, [ours], theirs, cost, sent=[back])
+    assert out[0] == ours  # never turn a sheet into one we already sent
+
+
+def test_route_without_buyer_block_defaults_to_better():
+    assert route({"negotiable": ["unit_price", "index_clause"]}) == "better"
+    assert route({}) == "better"

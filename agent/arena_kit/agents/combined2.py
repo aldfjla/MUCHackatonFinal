@@ -15,12 +15,14 @@ us +3.50 a unit and were worth ~0.14): counter from the supplier's cheapest pack
 that saves less than MIN_ASK of C (the index clause keeps its own rule, cheapest_index).
 """
 
+import math
+
 from ..cost import complete_offer, must_haves_ok, total_cost
 from ..guard import GuardedAgent, satisfy_must_haves
 from .better_agent import BetterAgent, HealthScope
 from .combined import CombinedAgent
 from .evidence import EvidenceAgent
-from .reciprocal import _sup
+from .reciprocal import _c_alt, _mine, _sup
 from .simplify_agent import _health_at_stake
 
 MIN_ASK = 0.005  # a non-price ask must save at least this share of C
@@ -28,14 +30,21 @@ MIN_ASK = 0.005  # a non-price ask must save at least this share of C
 
 def route(case):
     """'combined' or 'better' for this case (see the module doc)."""
-    return "combined" if "index_clause" in case.get("negotiable", ()) and not _health_at_stake(case) else "better"
+    try:
+        index_on_table = "index_clause" in case.get("negotiable", ())
+        return "combined" if index_on_table and not _health_at_stake(case) else "better"
+    except Exception:  # missing fields (e.g. no buyer block): the default chain
+        return "better"
 
 
 class CombinedCore(CombinedAgent):
     def _sheets(self, case, events, std, theirs):
         cost = lambda t: total_cost(case, t, std)  # noqa: E731
         theirs = self._cheapest_theirs(case, events, std, theirs, cost)
-        return self._drop_small_asks(case, std, super()._sheets(case, events, std, theirs), theirs, cost)
+        upper = min(_c_alt(case), self._c_open)  # the same bound `_clean` used
+        sent = [x["terms"] for m in _mine(events) for x in m.get("term_sheets") or []]
+        sheets = super()._sheets(case, events, std, theirs)
+        return self._drop_small_asks(case, std, sheets, theirs, cost, upper, sent)
 
     @staticmethod
     def _cheapest_theirs(case, events, std, theirs, cost):
@@ -51,15 +60,21 @@ class CombinedCore(CombinedAgent):
         return best
 
     @staticmethod
-    def _drop_small_asks(case, std, sheets, theirs, cost):
-        """A non-price field we ask away from the supplier's value goes back to theirs unless it saves >= MIN_ASK of C."""
+    def _drop_small_asks(case, std, sheets, theirs, cost, upper=math.inf, sent=()):
+        """A non-price field we ask away from the supplier's value goes back to theirs unless it saves >= MIN_ASK of C,
+        and only if the result still fits under `upper` and was not sent before."""
         out = []
         for t in sheets:
             for f in case["negotiable"]:
                 if f in ("unit_price", "index_clause") or f not in theirs or t.get(f) == theirs[f]:
                     continue
                 back = complete_offer(case, satisfy_must_haves(case, {**t, f: theirs[f]}, std))
-                if must_haves_ok(case, back, std) and cost(back) - cost(t) < MIN_ASK * cost(t):
+                if (
+                    must_haves_ok(case, back, std)
+                    and cost(back) - cost(t) < MIN_ASK * cost(t)
+                    and cost(back) <= upper
+                    and back not in sent
+                ):
                     t = back
             if t not in out:
                 out.append(t)
