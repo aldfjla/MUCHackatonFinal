@@ -57,7 +57,7 @@ BAND_WEAK = 0.02  # extra width for a supplier with a falling credit index or eq
 WEAK_EQUITY = 20.0  # equity ratio, %
 
 
-def _health(case, distress=False):
+def _health(case, distress=False, scale=1.0):
     """{full_cost, interest_rate, band: (lo, hi) multipliers of full_cost} of the supplier for cost.HEALTH, or None
     (no relationship cost / no should-cost row). Only the data package and the case are used."""
     if not _health_at_stake(case) or not (pkg := load_package()):
@@ -84,12 +84,12 @@ def _health(case, distress=False):
         pass
     if weak:
         width += BAND_WEAK * (width > 0)
-    return {"full_cost": row["unit_cost"] / (row["price_unit"] or 1), "interest_rate": case["buyer"]["interest_rate"], "band": (1 - width, 1 + width)}
+    return {"full_cost": row["unit_cost"] / (row["price_unit"] or 1), "interest_rate": case["buyer"]["interest_rate"], "band": (1 - width, 1 + width), "scale": scale}
 
 
 @contextmanager
-def _with_health(case, on=True, distress=False):
-    token = HEALTH.set(_health(case, distress) if on else None)
+def _with_health(case, on=True, distress=False, scale=1.0):
+    token = HEALTH.set(_health(case, distress, scale) if on else None)
     try:
         yield
     finally:
@@ -250,7 +250,7 @@ class HealthScope:
     def decide(self, case, threads):
         token = HOLD.set(_vetoes)
         try:
-            with _with_health(case, BetterAgent.HEALTH_ESTIMATE, getattr(self.delegate, "RELEASE_DISTRESS", False)):
+            with _with_health(case, BetterAgent.HEALTH_ESTIMATE, getattr(self.delegate, "RELEASE_DISTRESS", False), getattr(self.delegate, "HEALTH_SCALE", 1.0)):
                 d = self.delegate.decide(case, threads)
                 if isinstance(d, dict) and d.get("message"):  # the wrappers inside may have changed the message: log the final one
                     d = {**d, "why": _why(case, threads, d, (d.get("why") or {}).get("rule") or "wrapper")}
@@ -261,6 +261,7 @@ class HealthScope:
 
 class BetterAgent(SimplifyAgent):
     RELEASE_DISTRESS = False  # True: Sunday-release distress news widens the health band (set on the instance, per chain)
+    HEALTH_SCALE = 1.0  # x the relationship term of C (arena charged 3-22x less than our estimate: P01 3.7k vs 12.5k, P02 18.9k vs 51.4k, P03 1.0k vs 21.1k)
     BAND = True  # False: the centre estimate only (no uncertainty band)
     # both OFF: the arena's C prices the clause through a single index path, so a risk premium is not rewarded in score; the twin alone was not better (train 0.505 vs 0.509)
     FIXED_TWIN = INDEX_PREMIUM = False  # twin: a no-clause sheet beside each clause sheet; premium: clause price below the twin's by the index risk premium
@@ -281,7 +282,7 @@ class BetterAgent(SimplifyAgent):
     def decide(self, case, threads):
         token = HOLD.set(_vetoes)
         try:
-            with _with_health(case, self.HEALTH_ESTIMATE, self.RELEASE_DISTRESS):
+            with _with_health(case, self.HEALTH_ESTIMATE, self.RELEASE_DISTRESS, self.HEALTH_SCALE):
                 if self.LATE_ACCEPT and (late := self._late_accept(case, threads)):
                     d, rule = self._guard(case, threads, late), "late_accept"
                 else:

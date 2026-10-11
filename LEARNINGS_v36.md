@@ -81,3 +81,23 @@ instead of three small ones, one session per variant. Mock cannot judge this; th
 ## 5. Quota and time
 
 316 sessions used before this batch, 416 after; 184 left before the 14:36 UTC reset. Freeze 12:00.
+
+## 6. Correction after v37 (11 Oct 10:50): the health charge is a cliff, not a scale error
+
+Tested a global HEALTH_SCALE on the four health cases, one session each (deterministic):
+
+| case | scale 1.0 | 0.5 | 0.33 | arena relationship at the 0.5 deal |
+|---|---|---|---|---|
+| P01 | 0.88 | 0.93 | - | 21,469 at 134.5 (3,675 at 135.8) |
+| P02 | 0.67 | 0.25 | 0.25 | 119,494 at 351.5 (18,852 at 364.65) |
+| P03 | 0.92 | 0.92 | - | 965 (same deal) |
+| P10 | 0.67 | 0.67 | - | 0 (same deal) |
+
+The arena's relationship term rises steeply below a supplier-specific price (P02: 3.6 % lower price,
+6x the charge). Our estimate's ratio at one point (section 2) says nothing about that slope, so section 2's
+"3x-22x too high" is the wrong conclusion. What generalises: (a) our band centre is roughly right at the
+price we close at; (b) below it the true curve is steeper than ours, so the pessimistic world (`lo`) should
+be the one that prices our offers in health cases, not the centre; (c) P01's +0.05 came from a lower price
+being tolerated there, so the cliff position differs per supplier and must be probed, not assumed. A
+future model should probe the cliff with one cheap sheet (deterministic replies) rather than assume a scale.
+HEALTH_SCALE stays 1.0 (names `better_h50` / `better_h33` kept for A/B).

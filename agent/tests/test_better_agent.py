@@ -12,7 +12,7 @@ from arena_kit import evaluate
 from arena_kit.agents import EvidenceAgent, GuardedAgent
 from arena_kit.agents.better_agent import BetterAgent, HealthScope, _c_at, _health, _vetoes, _with_health
 from arena_kit.agents.reciprocal import case_c_open
-from arena_kit.cost import total_cost
+from arena_kit.cost import HEALTH, cost_breakdown, total_cost
 from arena_kit.docs import standard_terms
 from arena_kit.evidence import load_package
 from arena_kit.play import find_sheet
@@ -500,3 +500,35 @@ def test_idx_sheet_first_flag_drops_the_clause_sheet_from_the_first_message_only
     assert not any(s.get("index_clause") for s in BetterAgent()._sheets(case, first, std, std))  # default: none in the first message
     assert any(s.get("index_clause") for s in on._sheets(case, first, std, std))
     assert on._sheets(case, later, std, std) == BetterAgent()._sheets(case, later, std, std)
+
+
+def test_health_scale_halves_the_relationship_term():
+    case = _health_case()
+    case["buyer"]["sustainable_margin_pct"] = 20.0
+    est, terms = {"full_cost": 29.0, "interest_rate": 0.1}, {"unit_price": 30.0, "payment_days": 30}
+    rels, tots = [], []
+    for e in (est, {**est, "scale": 0.5}):
+        tok = HEALTH.set(e)
+        try:
+            rels.append(cost_breakdown(case, terms))
+            tots.append(total_cost(case, terms))
+        finally:
+            HEALTH.reset(tok)
+    assert rels[0]["relationship"] > 0
+    assert rels[1]["relationship"] == pytest.approx(rels[0]["relationship"] / 2)
+    assert tots[0] - tots[1] == pytest.approx(rels[0]["relationship"] / 2)
+
+
+def test_health_scope_puts_the_agents_health_scale_in_the_estimate(monkeypatch):
+    _fake_package(monkeypatch, [{"supplier_id": "s1", "unit_cost": 100.0, "price_unit": 1}], [])
+    seen = []
+
+    class Stub:
+        HEALTH_SCALE = 0.5
+
+        def decide(self, case, threads):
+            seen.append(HEALTH.get()["scale"])
+            return {}
+
+    HealthScope(Stub()).decide(_health_case(), {})
+    assert seen == [0.5] and _health(_health_case())["scale"] == 1.0

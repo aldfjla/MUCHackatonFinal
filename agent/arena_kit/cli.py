@@ -29,7 +29,7 @@ def load_env(path=".env"):
 
 AGENTS = [
     "naive", "smart", "confident", "rational", "explorer", "anchor", "switcher", "boulware", "router",
-    "confident_boulware", "confident_router", "guarded_boulware", "guarded_rational", "evidence_router", "evidence_rational", "reciprocal", "reciprocal_evidence", "simplify", "final", "final_match", "listener", "combined", "combined2", "playbook", "better", "better_pay", "better_noidx", "better_idx1", "better_lead", "better_date", "better_nodate", "even_better", "even_better_b", "even_better_s", "even_better_h", "50", "llm",
+    "confident_boulware", "confident_router", "guarded_boulware", "guarded_rational", "evidence_router", "evidence_rational", "reciprocal", "reciprocal_evidence", "simplify", "final", "final_match", "listener", "combined", "combined2", "playbook", "better", "better_pay", "better_noidx", "better_idx1", "better_lead", "better_date", "better_nodate", "better_h50", "better_h33", "even_better", "even_better_b", "even_better_s", "even_better_h", "50", "llm",
 ]  # fmt: skip
 
 
@@ -96,7 +96,7 @@ def agent_factory(name, data):
     if name == "guarded_rational":
         return lambda: GuardedAgent(RationalAgent())
     # the evidence wrapper replaces the delegate's body and refs by design (it cites verified data)
-    if name in ("evidence_router", "evidence_rational", "listener", "combined", "combined2", "better", "better_pay", "better_noidx", "better_idx1", "better_lead", "better_date", "better_nodate", "even_better", "even_better_b", "even_better_s", "even_better_h"):
+    if name in ("evidence_router", "evidence_rational", "listener", "combined", "combined2", "better", "better_pay", "better_noidx", "better_idx1", "better_lead", "better_date", "better_nodate", "better_h50", "better_h33", "even_better", "even_better_b", "even_better_s", "even_better_h"):
         from .evidence import package_problem
 
         if why := package_problem(data):  # say it before any session opens, not once per message
@@ -163,6 +163,12 @@ def agent_factory(name, data):
             b.DATE_LEVER = name == "better_date"
             return EvidenceAgent(HealthScope(GuardedAgent(b)), data)
         return make_date
+    if name in ("better_h50", "better_h33"):  # better with the supplier-health cost scaled x0.5 / x0.33 (A/B)
+        def make_h():
+            b = BetterAgent()
+            b.HEALTH_SCALE = 0.5 if name == "better_h50" else 0.33
+            return EvidenceAgent(HealthScope(GuardedAgent(b)), data)
+        return make_h
     if name == "50":
         return lambda: EvidenceAgent(GuardedAgent(FiftyAgent()), data)
     package = None

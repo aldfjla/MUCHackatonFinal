@@ -130,7 +130,9 @@ def cost_breakdown(case, terms, standard=None, supplier=None):
     """C by part. `standard`: the supplier's standard terms for anything the term sheet leaves out.
     `supplier`: your estimate of the supplier for the relationship term (`supplier_value`)."""
     b, t = case["buyer"], closing_terms(case, terms, standard)
+    scale = 1.0
     if supplier is None and (est := HEALTH.get()):
+        scale = est.get("scale", 1.0)  # arena charged 3-22x less relationship than our estimate (P01-P03)
         supplier = {**est, "standard": closing_terms(case, {}, standard)}
     if t.get("unit_price") is None:
         raise ValueError("no unit_price: a term sheet without a price has no cost")
@@ -161,7 +163,7 @@ def cost_breakdown(case, terms, standard=None, supplier=None):
         "tooling": t.get("tooling_eur") or 0.0,
         "index_clause": index,
         "index_risk": index_risk,
-        "relationship": relationship_cost(case, t, supplier=supplier),
+        "relationship": relationship_cost(case, t, supplier=supplier) * scale,
     }
 
 

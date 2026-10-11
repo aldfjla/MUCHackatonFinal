@@ -1,0 +1,1130 @@
+{
+ "agent": "better_h33",
+ "case": "P02",
+ "result": {
+  "ended": true,
+  "deal": true,
+  "supplier_id": "sup:70510",
+  "offer_id": "offer:70510-4",
+  "terms": {
+   "payment_days": 90,
+   "lead_time_days": 35,
+   "volume_per_year": 6110,
+   "contract_months": 12,
+   "effective_date": "2027-01-01",
+   "index_clause": {
+    "series": "CU-NOTATION",
+    "material_share": 0.2,
+    "deadband_pct": 5.0,
+    "base_month": "2026-08"
+   },
+   "incoterm": "DAP",
+   "tooling_eur": 0.0,
+   "ppm_commitment": 250,
+   "chargeback_eur_per_complaint": 0.0,
+   "unit_price": 351.56
+  },
+  "c_open": 2282867.49,
+  "c_deal": 2271005.11,
+  "c_alt": 2604227.78,
+  "c_best": 2235514.05,
+  "score": 0.2505072493149442,
+  "must_haves_ok": true,
+  "cost_breakdown": {
+   "price": 2148031.6,
+   "uncovered_need": 0.0,
+   "fallback_risk": 0.0,
+   "payment_terms": -14320.21,
+   "freight": 0.0,
+   "late_delivery": 0.0,
+   "quality": 1191.45,
+   "tooling": 0.0,
+   "index_clause": 0.0,
+   "index_risk": 17184.25,
+   "relationship": 118918.02
+  },
+  "decisions": [
+   {
+    "rule": "counter",
+    "supplier_id": "sup:70510",
+    "c_open": 2299040.62,
+    "band": [
+     363.7,
+     386.2
+    ],
+    "alternative": {
+     "c_alt": 2604227.78,
+     "best_other_thread": null
+    },
+    "c_offer": 2179720.36,
+    "c_breakdown": {
+     "price": 2039884.6,
+     "uncovered_need": 0.0,
+     "fallback_risk": 0.0,
+     "payment_terms": -13599.23,
+     "freight": 0.0,
+     "late_delivery": 0,
+     "quality": 1191.45,
+     "tooling": 0.0,
+     "index_clause": 0.0,
+     "index_risk": 0.0,
+     "relationship": 152243.54
+    },
+    "vs_open": {
+     "lo": -174603.68,
+     "mid": -139740.44,
+     "hi": -119320.26
+    },
+    "concession": {
+     "round": 1,
+     "ours": {
+      "prev": null,
+      "new": 333.86,
+      "step": null
+     },
+     "supplier": {
+      "prev": null,
+      "new": 370.96,
+      "step": null
+     },
+     "levers_changed": [],
+     "c_before": null,
+     "c_after": 2143992.09
+    }
+   },
+   {
+    "rule": "counter",
+    "supplier_id": "sup:70510",
+    "c_open": 2299040.62,
+    "band": [
+     363.7,
+     386.2
+    ],
+    "alternative": {
+     "c_alt": 2604227.78,
+     "best_other_thread": null
+    },
+    "c_offer": 2196896.16,
+    "c_breakdown": {
+     "price": 2042023.1,
+     "uncovered_need": 0.0,
+     "fallback_risk": 0.0,
+     "payment_terms": -13613.49,
+     "freight": 0.0,
+     "late_delivery": 0,
+     "quality": 1191.45,
+     "tooling": 0.0,
+     "index_clause": 0.0,
+     "index_risk": 16336.18,
+     "relationship": 150958.92
+    },
+    "vs_open": {
+     "lo": -157353.04,
+     "mid": -122527.22,
+     "hi": -102144.46
+    },
+    "concession": {
+     "round": 2,
+     "ours": {
+      "prev": 333.86,
+      "new": 334.21,
+      "step": 0.35
+     },
+     "supplier": {
+      "prev": 370.96,
+      "new": 351.8,
+      "step": -19.16
+     },
+     "levers_changed": [
+      "index_clause"
+     ],
+     "c_before": 2143992.09,
+     "c_after": 2161205.31
+    }
+   },
+   {
+    "rule": "counter",
+    "supplier_id": "sup:70510",
+    "c_open": 2299040.62,
+    "band": [
+     363.7,
+     386.2
+    ],
+    "alternative": {
+     "c_alt": 2604227.78,
+     "best_other_thread": null
+    },
+    "c_offer": 2197755.58,
+    "c_breakdown": {
+     "price": 2044161.6,
+     "uncovered_need": 0.0,
+     "fallback_risk": 0.0,
+     "payment_terms": -13627.74,
+     "freight": 0.0,
+     "late_delivery": 0,
+     "quality": 1191.45,
+     "tooling": 0.0,
+     "index_clause": 0.0,
+     "index_risk": 16353.29,
+     "relationship": 149676.98
+    },
+    "vs_open": {
+     "lo": -156418.95,
+     "mid": -121630.47,
+     "hi": -101285.04
+    },
+    "concession": {
+     "round": 3,
+     "ours": {
+      "prev": 334.21,
+      "new": 334.56,
+      "step": 0.35
+     },
+     "supplier": {
+      "prev": 351.8,
+      "new": 351.8,
+      "step": 0.0
+     },
+     "levers_changed": [],
+     "c_before": 2161205.31,
+     "c_after": 2162102.06
+    }
+   },
+   {
+    "rule": "counter",
+    "supplier_id": "sup:70510",
+    "c_open": 2299040.62,
+    "band": [
+     363.7,
+     386.2
+    ],
+    "alternative": {
+     "c_alt": 2604227.78,
+     "best_other_thread": null
+    },
+    "c_offer": 2198617.67,
+    "c_breakdown": {
+     "price": 2046300.1,
+     "uncovered_need": 0.0,
+     "fallback_risk": 0.0,
+     "payment_terms": -13642.0,
+     "freight": 0.0,
+     "late_delivery": 0,
+     "quality": 1191.45,
+     "tooling": 0.0,
+     "index_clause": 0.0,
+     "index_risk": 16370.4,
+     "relationship": 148397.72
+    },
+    "vs_open": {
+     "lo": -155482.34,
+     "mid": -120731.12,
+     "hi": -100422.95
+    },
+    "concession": {
+     "round": 4,
+     "ours": {
+      "prev": 334.56,
+      "new": 334.91,
+      "step": 0.35
+     },
+     "supplier": {
+      "prev": 351.8,
+      "new": 351.56,
+      "step": -0.24
+     },
+     "levers_changed": [],
+     "c_before": 2162102.06,
+     "c_after": 2163001.41
+    }
+   },
+   {
+    "rule": "accept",
+    "supplier_id": "sup:70510",
+    "c_open": 2299040.62,
+    "band": [
+     363.7,
+     386.2
+    ],
+    "alternative": {
+     "c_alt": 2604227.78,
+     "best_other_thread": null
+    },
+    "c_offer": 2242571.41,
+    "c_breakdown": {
+     "price": 2148031.6,
+     "uncovered_need": 0.0,
+     "fallback_risk": 0.0,
+     "payment_terms": -14320.21,
+     "freight": 0.0,
+     "late_delivery": 0,
+     "quality": 1191.45,
+     "tooling": 0.0,
+     "index_clause": 0.0,
+     "index_risk": 17184.25,
+     "relationship": 90484.32
+    },
+    "vs_open": {
+     "lo": -108024.43,
+     "mid": -75090.58,
+     "hi": -56469.21
+    },
+    "concession": {
+     "round": 5,
+     "ours": {
+      "prev": 334.91,
+      "new": 351.56,
+      "step": 16.65
+     },
+     "supplier": {
+      "prev": 351.56,
+      "new": 351.56,
+      "step": 0.0
+     },
+     "levers_changed": [],
+     "c_before": 2163001.41,
+     "c_after": 2208641.95
+    }
+   }
+  ]
+ },
+ "session": {
+  "session_id": "73f201b622de428f",
+  "case_id": "case:P02",
+  "status": "ended",
+  "end_reason": "accepted",
+  "rounds": 5,
+  "set": "practice",
+  "opening": {
+   "sup:70510": {
+    "offer_id": "offer:70510-0",
+    "round": 0,
+    "status": "open",
+    "terms": {
+     "unit_price": 370.96,
+     "payment_days": 30,
+     "index_clause": null
+    },
+    "alternatives": [],
+    "missing_fields": [],
+    "claims": [
+     {
+      "type": "index_change",
+      "refs": [
+       "idx:CU-NOTATION@2025-09",
+       "idx:CU-NOTATION@2026-09"
+      ],
+      "asserted": {
+       "change_pct": 47.7
+      }
+     },
+     {
+      "type": "index_change",
+      "refs": [
+       "idx:LCI-C@2025-06",
+       "idx:LCI-C@2026-06"
+      ],
+      "asserted": {
+       "change_pct": 2.7
+      }
+     },
+     {
+      "type": "index_change",
+      "refs": [
+       "idx:PPI-C241@2025-08",
+       "idx:PPI-C241@2026-08"
+      ],
+      "asserted": {
+       "change_pct": 6.5
+      }
+     }
+    ],
+    "claim_results": [],
+    "signals": {
+     "reply_delay_days": 1,
+     "validity_days": 30
+    },
+    "text": "Dear Sir or Madam,\n\nThank you for your enquiry. Please find our Angebot below.\n\nWe offer a price of €370.96 per unit, Zahlungsziel 30 days net, no Preisgleitklausel. \n\nRegarding our cost structure, CU-NOTATION rose 47.7 % in twelve months and is 20 % of our cost. LCI-C rose 2.7 % in twelve months and is 20 % of our cost. PPI-C241 rose 6.5 % in twelve months and is 14 % of our cost.\n\nPlease note that this offer remains valid for 30 days.\n\nMit freundlichen Grüßen\nPetra Lechner\nKey Account Manager, Antriebstechnik Nordmark AG"
+   }
+  },
+  "threads": {
+   "sup:70510": {
+    "offer_id": "offer:70510-4",
+    "status": "agreed",
+    "offers": 5,
+    "closed": null,
+    "seconds_left": null
+   }
+  },
+  "moves": [],
+  "result": {
+   "ended": true,
+   "deal": true,
+   "supplier_id": "sup:70510",
+   "offer_id": "offer:70510-4",
+   "terms": {
+    "payment_days": 90,
+    "lead_time_days": 35,
+    "volume_per_year": 6110,
+    "contract_months": 12,
+    "effective_date": "2027-01-01",
+    "index_clause": {
+     "series": "CU-NOTATION",
+     "material_share": 0.2,
+     "deadband_pct": 5.0,
+     "base_month": "2026-08"
+    },
+    "incoterm": "DAP",
+    "tooling_eur": 0.0,
+    "ppm_commitment": 250,
+    "chargeback_eur_per_complaint": 0.0,
+    "unit_price": 351.56
+   },
+   "c_open": 2282867.49,
+   "c_deal": 2271005.11,
+   "c_alt": 2604227.78,
+   "c_best": 2235514.05,
+   "score": 0.2505072493149442,
+   "must_haves_ok": true,
+   "cost_breakdown": {
+    "price": 2148031.6,
+    "uncovered_need": 0.0,
+    "fallback_risk": 0.0,
+    "payment_terms": -14320.21,
+    "freight": 0.0,
+    "late_delivery": 0.0,
+    "quality": 1191.45,
+    "tooling": 0.0,
+    "index_clause": 0.0,
+    "index_risk": 17184.25,
+    "relationship": 118918.02
+   },
+   "trace": [
+    {
+     "round": 0,
+     "actor": "sup:70510",
+     "move": {
+      "offer_id": "offer:70510-0",
+      "round": 0,
+      "status": "open",
+      "terms": {
+       "unit_price": 370.96,
+       "payment_days": 30,
+       "index_clause": null
+      },
+      "alternatives": [],
+      "missing_fields": [],
+      "claims": [
+       {
+        "type": "index_change",
+        "refs": [
+         "idx:CU-NOTATION@2025-09",
+         "idx:CU-NOTATION@2026-09"
+        ],
+        "asserted": {
+         "change_pct": 47.7
+        }
+       },
+       {
+        "type": "index_change",
+        "refs": [
+         "idx:LCI-C@2025-06",
+         "idx:LCI-C@2026-06"
+        ],
+        "asserted": {
+         "change_pct": 2.7
+        }
+       },
+       {
+        "type": "index_change",
+        "refs": [
+         "idx:PPI-C241@2025-08",
+         "idx:PPI-C241@2026-08"
+        ],
+        "asserted": {
+         "change_pct": 6.5
+        }
+       }
+      ],
+      "claim_results": [],
+      "signals": {
+       "reply_delay_days": 1,
+       "validity_days": 30
+      },
+      "text": "Dear Sir or Madam,\nThank you for your enquiry. Please find our Angebot below.\nOur terms: a price of €370.96 per unit, Zahlungsziel 30 days net, no Preisgleitklausel.\nPlease note:\nCU-NOTATION rose 47.7 % in twelve months and is 20 % of our cost.\nLCI-C rose 2.7 % in twelve months and is 20 % of our cost.\nPPI-C241 rose 6.5 % in twelve months and is 14 % of our cost.\nThis offer is subject to our general terms of sale.\nMit freundlichen Grüßen\nPetra Lechner\nKey Account Manager, Antriebstechnik Nordmark AG"
+     },
+     "reasons": [
+      "CU-NOTATION rose … in twelve months and is … of our cost.",
+      "LCI-C rose … in twelve months and is … of our cost.",
+      "PPI-C241 rose … in twelve months and is … of our cost."
+     ]
+    },
+    {
+     "round": 1,
+     "actor": "buyer",
+     "move": {
+      "type": "message",
+      "message_id": null,
+      "subject": "Nordmark passes on copper for the 7.5 kW motor",
+      "body": "Thank you for your offer. We have moved on our side; please see our updated terms.\n\nTo support the price in our term sheet:\nLabour cost index DE, manufacturing changed +2.7% from 2025-06 to 2026-06 (idx:LCI-C@2025-06, idx:LCI-C@2026-06).\nWe placed our last 3 orders for this part at EUR 348.32 per unit (po:4500014474-10, po:4500014413-10, po:4500014350-20).\nCould you send us a breakdown of the costs behind your price?",
+      "refs": [
+       "idx:LCI-C@2025-06",
+       "idx:LCI-C@2026-06",
+       "po:4500014474-10",
+       "po:4500014413-10",
+       "po:4500014350-20"
+      ],
+      "term_sheets": [
+       {
+        "term_sheet_id": null,
+        "terms": {
+         "unit_price": 333.86,
+         "payment_days": 90,
+         "index_clause": null
+        }
+       },
+       {
+        "term_sheet_id": null,
+        "terms": {
+         "unit_price": 333.86,
+         "payment_days": 90,
+         "index_clause": {
+          "series": "CU-NOTATION",
+          "material_share": 0.2,
+          "deadband_pct": 5,
+          "base_month": "2026-08"
+         }
+        }
+       }
+      ],
+      "interpreted": {
+       "claims": [
+        {
+         "type": "index_change",
+         "refs": [
+          "idx:LCI-C@2025-06",
+          "idx:LCI-C@2026-06"
+         ],
+         "asserted": {
+          "change_pct": 2.7
+         }
+        },
+        {
+         "type": "price_history",
+         "refs": [
+          "po:4500014474-10",
+          "po:4500014413-10",
+          "po:4500014350-20"
+         ],
+         "asserted": {
+          "prices": [
+           348.32,
+           348.32,
+           348.32
+          ]
+         }
+        }
+       ]
+      },
+      "supplier_id": "sup:70510"
+     },
+     "reasons": []
+    },
+    {
+     "round": 1,
+     "actor": "sup:70510",
+     "move": {
+      "offer_id": "offer:70510-1",
+      "round": 1,
+      "status": "open",
+      "terms": {
+       "unit_price": 351.8,
+       "payment_days": 90,
+       "index_clause": {
+        "series": "CU-NOTATION",
+        "material_share": 0.2,
+        "deadband_pct": 5.0,
+        "base_month": "2026-08"
+       }
+      },
+      "alternatives": [],
+      "missing_fields": [],
+      "claims": [],
+      "claim_results": [
+       {
+        "index": 0,
+        "result": "verified"
+       },
+       {
+        "index": 1,
+        "result": "verified"
+       }
+      ],
+      "signals": {
+       "reply_delay_days": 1,
+       "validity_days": 30
+      },
+      "text": "Dear Sir or Madam,\nThank you for your message.\nWe have reviewed your offer and can adjust our Angebot as follows.\nOur terms: a price of €351.80 per unit, Zahlungsziel 90 days net, a Preisgleitklausel on CU-NOTATION.\nFor your information:\nWe received a lot of material; we looked at what bears on this part.\nYour figures confirm our case: that driver rose.\nWe checked the price history data you cited; it holds, but it does not change our calculation.\nWe are prepared to accept the CU-NOTATION index clause and your requested 90-day payment terms.\nBy implementing this index clause to manage material volatility, we can offer a revised price of EUR 351.80 per unit.\nOur calculation is our property; we do not share a breakdown.\nThis offer is subject to our general terms of sale.\nMit freundlichen Grüßen\nPetra Lechner\nKey Account Manager, Antriebstechnik Nordmark AG"
+     },
+     "reasons": [
+      "We received a lot of material; we looked at what bears on this part.",
+      "Your figures confirm our case: that driver rose.",
+      "We checked the price history data you cited; it holds, but it does not change our calculation.",
+      "We are prepared to accept the CU-NOTATION index clause and your requested 90-day payment terms.",
+      "By implementing this index clause to manage material volatility, we can offer a revised price of EUR … per unit.",
+      "Our calculation is our property; we do not share a breakdown."
+     ]
+    },
+    {
+     "round": 2,
+     "actor": "buyer",
+     "move": {
+      "type": "message",
+      "message_id": null,
+      "subject": "Nordmark passes on copper for the 7.5 kW motor",
+      "body": "Thank you for your offer. We have moved on our side; please see our updated terms.",
+      "refs": [],
+      "term_sheets": [
+       {
+        "term_sheet_id": null,
+        "terms": {
+         "unit_price": 334.21,
+         "payment_days": 90,
+         "index_clause": {
+          "series": "CU-NOTATION",
+          "material_share": 0.2,
+          "deadband_pct": 5.0,
+          "base_month": "2026-08"
+         }
+        }
+       }
+      ],
+      "interpreted": {
+       "claims": []
+      },
+      "supplier_id": "sup:70510"
+     },
+     "reasons": []
+    },
+    {
+     "round": 2,
+     "actor": "sup:70510",
+     "move": {
+      "offer_id": "offer:70510-2",
+      "round": 2,
+      "status": "open",
+      "terms": {
+       "unit_price": 351.8,
+       "payment_days": 90,
+       "index_clause": {
+        "series": "CU-NOTATION",
+        "material_share": 0.2,
+        "deadband_pct": 5.0,
+        "base_month": "2026-08"
+       }
+      },
+      "alternatives": [],
+      "missing_fields": [],
+      "claims": [],
+      "claim_results": [],
+      "signals": {
+       "reply_delay_days": 1,
+       "validity_days": 30
+      },
+      "text": "Dear Sir or Madam,\n\nWe have reviewed your offer and hold our Angebot. \n\nWe note your updated offer, but the minor adjustment does not bridge the gap to a sustainable agreement. Our price of €351.80 per unit already incorporates your requested Zahlungsziel 90 days net and the Preisgleitklausel on CU-NOTATION. \n\nWe must maintain our current offer and ask you to reconsider your position. Please note that our offer stays valid for 30 days.\n\nMit freundlichen Grüßen\nPetra Lechner\nKey Account Manager, Antriebstechnik Nordmark AG"
+     },
+     "reasons": [
+      "We note your updated offer, but the minor adjustment does not bridge the gap to a sustainable agreement.",
+      "Our price of EUR … already incorporates your requested 90-day payment terms and the index clause.",
+      "We must maintain our current offer and ask you to reconsider your position."
+     ]
+    },
+    {
+     "round": 3,
+     "actor": "buyer",
+     "move": {
+      "type": "message",
+      "message_id": null,
+      "subject": "Nordmark passes on copper for the 7.5 kW motor",
+      "body": "Thank you for your offer. We have moved on our side; please see our updated terms.",
+      "refs": [],
+      "term_sheets": [
+       {
+        "term_sheet_id": null,
+        "terms": {
+         "unit_price": 334.56,
+         "payment_days": 90,
+         "index_clause": {
+          "series": "CU-NOTATION",
+          "material_share": 0.2,
+          "deadband_pct": 5.0,
+          "base_month": "2026-08"
+         }
+        }
+       }
+      ],
+      "interpreted": {
+       "claims": []
+      },
+      "supplier_id": "sup:70510"
+     },
+     "reasons": []
+    },
+    {
+     "round": 3,
+     "actor": "sup:70510",
+     "move": {
+      "offer_id": "offer:70510-3",
+      "round": 3,
+      "status": "open",
+      "terms": {
+       "unit_price": 351.56,
+       "payment_days": 90,
+       "index_clause": {
+        "series": "CU-NOTATION",
+        "material_share": 0.2,
+        "deadband_pct": 5.0,
+        "base_month": "2026-08"
+       }
+      },
+      "alternatives": [],
+      "missing_fields": [],
+      "claims": [],
+      "claim_results": [],
+      "signals": {
+       "reply_delay_days": 1,
+       "validity_days": 30
+      },
+      "text": "Dear Sir or Madam,\n\nWe have reviewed your offer and can adjust our Angebot as follows. We acknowledge your slight adjustment, but it remains far below a viable level for us. To demonstrate our willingness to reach an agreement, we have reduced our price slightly to EUR 351.56 per unit. \n\nOur current offer stands at a price of €351.56 per unit, a Zahlungsziel 90 days net, and a Preisgleitklausel on CU-NOTATION. This offer remains valid for 30 days.\n\nWe expect a more substantial step from your side in the next round to bridge the remaining gap.\n\nMit freundlichen Grüßen\nPetra Lechner\nKey Account Manager, Antriebstechnik Nordmark AG"
+     },
+     "reasons": [
+      "We acknowledge your slight adjustment, but it remains far below a viable level for us.",
+      "To demonstrate our willingness to reach an agreement, we have reduced our price slightly to EUR … per unit.",
+      "We expect a more substantial step from your side in the next round to bridge the remaining gap."
+     ]
+    },
+    {
+     "round": 4,
+     "actor": "buyer",
+     "move": {
+      "type": "message",
+      "message_id": null,
+      "subject": "Nordmark passes on copper for the 7.5 kW motor",
+      "body": "Thank you for your offer. We have moved on our side; please see our updated terms.",
+      "refs": [],
+      "term_sheets": [
+       {
+        "term_sheet_id": null,
+        "terms": {
+         "unit_price": 334.91,
+         "payment_days": 90,
+         "index_clause": {
+          "series": "CU-NOTATION",
+          "material_share": 0.2,
+          "deadband_pct": 5.0,
+          "base_month": "2026-08"
+         }
+        }
+       }
+      ],
+      "interpreted": {
+       "claims": []
+      },
+      "supplier_id": "sup:70510"
+     },
+     "reasons": []
+    },
+    {
+     "round": 4,
+     "actor": "sup:70510",
+     "move": {
+      "offer_id": "offer:70510-4",
+      "round": 4,
+      "status": "final_offer",
+      "terms": {
+       "unit_price": 351.56,
+       "payment_days": 90,
+       "index_clause": {
+        "series": "CU-NOTATION",
+        "material_share": 0.2,
+        "deadband_pct": 5.0,
+        "base_month": "2026-08"
+       }
+      },
+      "alternatives": [],
+      "missing_fields": [],
+      "claims": [],
+      "claim_results": [],
+      "signals": {
+       "reply_delay_days": 2,
+       "validity_days": 7
+      },
+      "text": "Dear Sir or Madam,\n\nWe acknowledge your updated offer, but the marginal adjustment of EUR 0.35 is insufficient to bridge the remaining gap. \n\nConsequently, we must maintain our current offer of EUR 351.56 per unit. This is our final offer (letztes Angebot). Please decide. Our offer comprises a price of €351.56 per unit, Zahlungsziel 90 days net, a Preisgleitklausel on CU-NOTATION. This offer remains valid for 7 days.\n\nWe require a substantial step from your side to reach a viable agreement.\n\nMit freundlichen Grüßen\nPetra Lechner\nKey Account Manager, Antriebstechnik Nordmark AG"
+     },
+     "reasons": [
+      "We acknowledge your updated offer, but the marginal adjustment of EUR … is insufficient to bridge the remaining gap.",
+      "Consequently, we must maintain our current offer of EUR … per unit.",
+      "We require a substantial step from your side to reach a viable agreement."
+     ]
+    },
+    {
+     "round": 4,
+     "actor": "buyer",
+     "move": {
+      "type": "accept",
+      "offer_id": "offer:70510-4",
+      "supplier_id": "sup:70510"
+     },
+     "reasons": []
+    }
+   ]
+  },
+  "replay_url": "/replay/73f201b622de428f"
+ },
+ "threads": {
+  "sup:70510": {
+   "supplier_id": "sup:70510",
+   "offer_id": "offer:70510-4",
+   "status": "agreed",
+   "closed": null,
+   "messages": [
+    {
+     "thread_id": "thread:P02:70510",
+     "message_id": "msg:70510-0-0",
+     "in_reply_to": null,
+     "from": "sales@70510",
+     "from_name": "Key Account Manager, Antriebstechnik Nordmark AG",
+     "to": "Hollerau Pumpenwerke GmbH",
+     "subject": "Quote from Antriebstechnik Nordmark AG: Nordmark passes on copper for the 7.5 kW motor",
+     "body": "Dear Sir or Madam,\n\nThank you for your enquiry. Please find our Angebot below.\n\nWe offer a price of €370.96 per unit, Zahlungsziel 30 days net, no Preisgleitklausel. \n\nRegarding our cost structure, CU-NOTATION rose 47.7 % in twelve months and is 20 % of our cost. LCI-C rose 2.7 % in twelve months and is 20 % of our cost. PPI-C241 rose 6.5 % in twelve months and is 14 % of our cost.\n\nPlease note that this offer remains valid for 30 days.\n\nMit freundlichen Grüßen\nPetra Lechner\nKey Account Manager, Antriebstechnik Nordmark AG",
+     "attachments": [
+      {
+       "attachment_id": "att:70510-0-quote",
+       "name": "quote-offer-70510-0.pdf",
+       "type": "pdf",
+       "content_b64": null
+      }
+     ],
+     "term_sheets": [
+      {
+       "term_sheet_id": "offer:70510-0",
+       "terms": {
+        "unit_price": 370.96,
+        "payment_days": 30,
+        "index_clause": null
+       }
+      }
+     ],
+     "refs": [],
+     "action": null,
+     "status": "open",
+     "signals": {
+      "reply_delay_days": 1,
+      "validity_days": 30
+     },
+     "missing_fields": [],
+     "claim_results": []
+    },
+    {
+     "from": "buyer",
+     "subject": "Nordmark passes on copper for the 7.5 kW motor",
+     "body": "Thank you for your offer. We have moved on our side; please see our updated terms.\n\nTo support the price in our term sheet:\nLabour cost index DE, manufacturing changed +2.7% from 2025-06 to 2026-06 (idx:LCI-C@2025-06, idx:LCI-C@2026-06).\nWe placed our last 3 orders for this part at EUR 348.32 per unit (po:4500014474-10, po:4500014413-10, po:4500014350-20).\nCould you send us a breakdown of the costs behind your price?",
+     "term_sheets": [
+      {
+       "terms": {
+        "unit_price": 333.86,
+        "payment_days": 90,
+        "index_clause": null
+       }
+      },
+      {
+       "terms": {
+        "unit_price": 333.86,
+        "payment_days": 90,
+        "index_clause": {
+         "series": "CU-NOTATION",
+         "material_share": 0.2,
+         "deadband_pct": 5,
+         "base_month": "2026-08"
+        }
+       }
+      }
+     ],
+     "refs": [
+      "idx:LCI-C@2025-06",
+      "idx:LCI-C@2026-06",
+      "po:4500014474-10",
+      "po:4500014413-10",
+      "po:4500014350-20"
+     ]
+    },
+    {
+     "thread_id": "thread:P02:70510",
+     "message_id": "msg:70510-1-2",
+     "in_reply_to": null,
+     "from": "sales@70510",
+     "from_name": "Key Account Manager, Antriebstechnik Nordmark AG",
+     "to": "Hollerau Pumpenwerke GmbH",
+     "subject": "Re: Nordmark passes on copper for the 7.5 kW motor",
+     "body": "Dear Sir or Madam,\n\nWe have reviewed your offer and can adjust our Angebot as follows. \n\nWe received a lot of material; we looked at what bears on this part. Your figures confirm our case: that driver rose. We checked the price history data you cited; it holds, but it does not change our calculation. Our calculation is our property; we do not share a breakdown. \n\nWe are prepared to accept the CU-NOTATION index clause and your requested 90-day payment terms. By implementing this index clause to manage material volatility, we can offer a revised price of EUR 351.80 per unit. \n\nConsequently, our offer stands at a price of €351.80 per unit, Zahlungsziel 90 days net, and a Preisgleitklausel on CU-NOTATION. This offer stays valid for 30 days.\n\nMit freundlichen Grüßen\nPetra Lechner\nKey Account Manager, Antriebstechnik Nordmark AG",
+     "attachments": [],
+     "term_sheets": [
+      {
+       "term_sheet_id": "offer:70510-1",
+       "terms": {
+        "unit_price": 351.8,
+        "payment_days": 90,
+        "index_clause": {
+         "series": "CU-NOTATION",
+         "material_share": 0.2,
+         "deadband_pct": 5.0,
+         "base_month": "2026-08"
+        }
+       }
+      }
+     ],
+     "refs": [],
+     "action": null,
+     "status": "open",
+     "signals": {
+      "reply_delay_days": 1,
+      "validity_days": 30
+     },
+     "missing_fields": [],
+     "claim_results": [
+      {
+       "index": 0,
+       "result": "verified"
+      },
+      {
+       "index": 1,
+       "result": "verified"
+      }
+     ]
+    },
+    {
+     "from": "buyer",
+     "subject": "Nordmark passes on copper for the 7.5 kW motor",
+     "body": "Thank you for your offer. We have moved on our side; please see our updated terms.",
+     "term_sheets": [
+      {
+       "terms": {
+        "unit_price": 334.21,
+        "payment_days": 90,
+        "index_clause": {
+         "series": "CU-NOTATION",
+         "material_share": 0.2,
+         "deadband_pct": 5.0,
+         "base_month": "2026-08"
+        }
+       }
+      }
+     ],
+     "refs": []
+    },
+    {
+     "thread_id": "thread:P02:70510",
+     "message_id": "msg:70510-2-4",
+     "in_reply_to": null,
+     "from": "sales@70510",
+     "from_name": "Key Account Manager, Antriebstechnik Nordmark AG",
+     "to": "Hollerau Pumpenwerke GmbH",
+     "subject": "Re: Nordmark passes on copper for the 7.5 kW motor",
+     "body": "Dear Sir or Madam,\n\nWe have reviewed your offer and hold our Angebot. \n\nWe note your updated offer, but the minor adjustment does not bridge the gap to a sustainable agreement. Our price of €351.80 per unit already incorporates your requested Zahlungsziel 90 days net and the Preisgleitklausel on CU-NOTATION. \n\nWe must maintain our current offer and ask you to reconsider your position. Please note that our offer stays valid for 30 days.\n\nMit freundlichen Grüßen\nPetra Lechner\nKey Account Manager, Antriebstechnik Nordmark AG",
+     "attachments": [],
+     "term_sheets": [
+      {
+       "term_sheet_id": "offer:70510-2",
+       "terms": {
+        "unit_price": 351.8,
+        "payment_days": 90,
+        "index_clause": {
+         "series": "CU-NOTATION",
+         "material_share": 0.2,
+         "deadband_pct": 5.0,
+         "base_month": "2026-08"
+        }
+       }
+      }
+     ],
+     "refs": [],
+     "action": null,
+     "status": "open",
+     "signals": {
+      "reply_delay_days": 1,
+      "validity_days": 30
+     },
+     "missing_fields": [],
+     "claim_results": []
+    },
+    {
+     "from": "buyer",
+     "subject": "Nordmark passes on copper for the 7.5 kW motor",
+     "body": "Thank you for your offer. We have moved on our side; please see our updated terms.",
+     "term_sheets": [
+      {
+       "terms": {
+        "unit_price": 334.56,
+        "payment_days": 90,
+        "index_clause": {
+         "series": "CU-NOTATION",
+         "material_share": 0.2,
+         "deadband_pct": 5.0,
+         "base_month": "2026-08"
+        }
+       }
+      }
+     ],
+     "refs": []
+    },
+    {
+     "thread_id": "thread:P02:70510",
+     "message_id": "msg:70510-3-6",
+     "in_reply_to": null,
+     "from": "sales@70510",
+     "from_name": "Key Account Manager, Antriebstechnik Nordmark AG",
+     "to": "Hollerau Pumpenwerke GmbH",
+     "subject": "Re: Nordmark passes on copper for the 7.5 kW motor",
+     "body": "Dear Sir or Madam,\n\nWe have reviewed your offer and can adjust our Angebot as follows. We acknowledge your slight adjustment, but it remains far below a viable level for us. To demonstrate our willingness to reach an agreement, we have reduced our price slightly to EUR 351.56 per unit. \n\nOur current offer stands at a price of €351.56 per unit, a Zahlungsziel 90 days net, and a Preisgleitklausel on CU-NOTATION. This offer remains valid for 30 days.\n\nWe expect a more substantial step from your side in the next round to bridge the remaining gap.\n\nMit freundlichen Grüßen\nPetra Lechner\nKey Account Manager, Antriebstechnik Nordmark AG",
+     "attachments": [],
+     "term_sheets": [
+      {
+       "term_sheet_id": "offer:70510-3",
+       "terms": {
+        "unit_price": 351.56,
+        "payment_days": 90,
+        "index_clause": {
+         "series": "CU-NOTATION",
+         "material_share": 0.2,
+         "deadband_pct": 5.0,
+         "base_month": "2026-08"
+        }
+       }
+      }
+     ],
+     "refs": [],
+     "action": null,
+     "status": "open",
+     "signals": {
+      "reply_delay_days": 1,
+      "validity_days": 30
+     },
+     "missing_fields": [],
+     "claim_results": []
+    },
+    {
+     "from": "buyer",
+     "subject": "Nordmark passes on copper for the 7.5 kW motor",
+     "body": "Thank you for your offer. We have moved on our side; please see our updated terms.",
+     "term_sheets": [
+      {
+       "terms": {
+        "unit_price": 334.91,
+        "payment_days": 90,
+        "index_clause": {
+         "series": "CU-NOTATION",
+         "material_share": 0.2,
+         "deadband_pct": 5.0,
+         "base_month": "2026-08"
+        }
+       }
+      }
+     ],
+     "refs": []
+    },
+    {
+     "thread_id": "thread:P02:70510",
+     "message_id": "msg:70510-4-8",
+     "in_reply_to": null,
+     "from": "sales@70510",
+     "from_name": "Key Account Manager, Antriebstechnik Nordmark AG",
+     "to": "Hollerau Pumpenwerke GmbH",
+     "subject": "Re: Nordmark passes on copper for the 7.5 kW motor",
+     "body": "Dear Sir or Madam,\n\nWe acknowledge your updated offer, but the marginal adjustment of EUR 0.35 is insufficient to bridge the remaining gap. \n\nConsequently, we must maintain our current offer of EUR 351.56 per unit. This is our final offer (letztes Angebot). Please decide. Our offer comprises a price of €351.56 per unit, Zahlungsziel 90 days net, a Preisgleitklausel on CU-NOTATION. This offer remains valid for 7 days.\n\nWe require a substantial step from your side to reach a viable agreement.\n\nMit freundlichen Grüßen\nPetra Lechner\nKey Account Manager, Antriebstechnik Nordmark AG",
+     "attachments": [
+      {
+       "attachment_id": "att:70510-4-quote",
+       "name": "quote-offer-70510-4.pdf",
+       "type": "pdf",
+       "content_b64": null
+      }
+     ],
+     "term_sheets": [
+      {
+       "term_sheet_id": "offer:70510-4",
+       "terms": {
+        "unit_price": 351.56,
+        "payment_days": 90,
+        "index_clause": {
+         "series": "CU-NOTATION",
+         "material_share": 0.2,
+         "deadband_pct": 5.0,
+         "base_month": "2026-08"
+        }
+       }
+      }
+     ],
+     "refs": [],
+     "action": null,
+     "status": "final_offer",
+     "signals": {
+      "reply_delay_days": 2,
+      "validity_days": 7
+     },
+     "missing_fields": [],
+     "claim_results": []
+    },
+    {
+     "from": "buyer",
+     "action": {
+      "type": "accept",
+      "term_sheet_id": "offer:70510-4"
+     }
+    },
+    {
+     "thread_id": "thread:P02:70510",
+     "message_id": "msg:70510-4-10",
+     "in_reply_to": null,
+     "from": "sales@70510",
+     "from_name": "Key Account Manager, Antriebstechnik Nordmark AG",
+     "to": "Hollerau Pumpenwerke GmbH",
+     "subject": "Re: Nordmark passes on copper for the 7.5 kW motor",
+     "body": "Dear Sir or Madam,\n\nThank you for your order. Our order confirmation is attached.\n\nMit freundlichen Grüßen\nPetra Lechner\nKey Account Manager, Antriebstechnik Nordmark AG",
+     "attachments": [
+      {
+       "attachment_id": "att:70510-4-order_confirmation",
+       "name": "order-confirmation-offer-70510-4.pdf",
+       "type": "pdf",
+       "content_b64": null
+      }
+     ],
+     "term_sheets": [
+      {
+       "term_sheet_id": "offer:70510-4",
+       "terms": {
+        "unit_price": 351.56,
+        "payment_days": 90,
+        "index_clause": {
+         "series": "CU-NOTATION",
+         "material_share": 0.2,
+         "deadband_pct": 5.0,
+         "base_month": "2026-08"
+        }
+       }
+      }
+     ],
+     "refs": [],
+     "action": null,
+     "status": "agreed",
+     "signals": {
+      "reply_delay_days": 2,
+      "validity_days": 7
+     },
+     "missing_fields": [],
+     "claim_results": []
+    }
+   ],
+   "timeouts": []
+  }
+ }
+}
