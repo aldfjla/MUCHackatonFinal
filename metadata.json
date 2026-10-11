@@ -1,0 +1,42 @@
+{
+  "cli_version": "0.11.4",
+  "checkpoint_id": "01M4N1RVJP62Z2C99WXGTWARSN",
+  "strategy": "manual-commit",
+  "branch": "local-alex-niko",
+  "checkpoints_count": 2,
+  "files_touched": [
+    "agent/arena_kit/agents/better_agent.py",
+    "agent/arena_kit/cli.py",
+    "agent/arena_kit/sim_cases/real_runs_v34_noidx1/P08_r1/better_noidx1_P08.json",
+    "agent/arena_kit/sim_cases/real_runs_v34_noidx1/P08_r2/better_noidx1_P08.json",
+    "agent/arena_kit/sim_cases/real_runs_v34_noidx1/P08_r3/better_noidx1_P08.json",
+    "agent/arena_kit/sim_cases/real_runs_v34_noidx1/P18_r1/better_noidx1_P18.json",
+    "agent/arena_kit/sim_cases/real_runs_v34_noidx1/P18_r2/better_noidx1_P18.json",
+    "agent/arena_kit/sim_cases/real_runs_v34_noidx1/P18_r3/better_noidx1_P18.json",
+    "agent/tests/test_better_agent.py",
+    "backlog.csv"
+  ],
+  "sessions": [
+    {
+      "metadata": "/0/metadata.json",
+      "transcript": "/0/full.jsonl",
+      "compact_transcript": "/0/transcript.jsonl",
+      "content_hash": "/0/content_hash.txt",
+      "prompt": "/0/prompt.txt"
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 4995,
+    "cache_creation_tokens": 1927931,
+    "cache_read_tokens": 184980453,
+    "output_tokens": 562714,
+    "api_call_count": 815,
+    "subagent_tokens": {
+      "input_tokens": 12,
+      "cache_creation_tokens": 7472,
+      "cache_read_tokens": 234449,
+      "output_tokens": 61,
+      "api_call_count": 5
+    }
+  }
+}
