@@ -4580,3 +4580,7 @@ you will tell me when its done right?
 <status>completed</status>
 <summary>Background command "Run belief-only and one-sheet variants on all 10 real cases" completed (exit code 0)</summary>
 </task-notification>
+
+---
+
+ok do 10 real api scenarios with better so see if we can learn something new
