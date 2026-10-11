@@ -4982,3 +4982,7 @@ ok revise and do this again with an even better model, dont memorize shit bc we 
   
   **Diff stat:** 4 files, +51 / -10 (`better_agent.py` 13, `cli.py` 10, `cost.py` 4, `test_better_agent.py` 34).
 </agent-message>
+
+---
+
+ok, I don't care any more lets just make the project ready for submission. what are the submission requirements
