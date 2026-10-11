@@ -1,5 +1,9 @@
 # Timeline: Tacto Negotiation Arena (Sat 10 Oct 2026)
 
+> **CURRENT CANDIDATE: `better`** (`arena_kit/agents/better_agent.py`, run with `--agent better`).
+> Last proven result: **v21 - niko, real practice arena, 10/10 deals, mean 0.70** (P01 0.84, P02 0.67, P03 0.92, P04 0.86, P05 0.77, P07 0.68, P08 0.45, P10 0.67, P11 0.71, P18 0.40), commit 0a53f83, git tag `v21-better-0.70`.
+> Baseline `simplify`: 0.57 (v14/v16). Mock scores are in-sample and do not prove generalisation; the real runs do.
+
 Use: presentation material and handover if we switch AI agents. Times are commit times. Scores are mean score on real practice cases (0..1) unless noted.
 
 ## Goal and rules (short)
