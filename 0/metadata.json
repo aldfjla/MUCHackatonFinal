@@ -1,0 +1,139 @@
+{
+  "cli_version": "0.11.4",
+  "checkpoint_id": "01M4M72FDJYGX8WRV1CP5MP1SP",
+  "session_id": "c839f125-523b-4765-9e0d-736b62052aff",
+  "strategy": "manual-commit",
+  "created_at": "2026-10-11T00:51:15.502127Z",
+  "branch": "local-alex-niko",
+  "checkpoints_count": 1,
+  "save_step_count": 2,
+  "files_touched": [
+    "agent/arena_kit/sim_cases/real_runs_v21/better_P02.json",
+    "agent/arena_kit/sim_cases/real_runs_v21/better_P07.json",
+    "agent/arena_kit/sim_cases/real_runs_v21/better_P08.json",
+    "agent/arena_kit/sim_cases/real_runs_v21/better_P10.json",
+    "agent/arena_kit/sim_cases/real_runs_v21/better_P18.json"
+  ],
+  "agent": "Claude Code",
+  "model": "claude-sonnet-5-5",
+  "turn_id": "a4320b2f3f3b",
+  "compact_transcript_start": 0,
+  "token_usage": {
+    "input_tokens": 2111,
+    "cache_creation_tokens": 1598393,
+    "cache_read_tokens": 152898392,
+    "output_tokens": 427420,
+    "api_call_count": 663,
+    "subagent_tokens": {
+      "input_tokens": 6,
+      "cache_creation_tokens": 5307,
+      "cache_read_tokens": 364743,
+      "output_tokens": 50,
+      "api_call_count": 3
+    }
+  },
+  "skill_events_version": 1,
+  "skill_events": [
+    {
+      "id": "claude-skill-toolu_01XisbE3fpoi7cwAoVYW8zSo",
+      "event_type": "tool_invocation",
+      "skill": {
+        "name": "claude-in-chrome"
+      },
+      "source": {
+        "agent": "claude-code",
+        "signal": "skill_tool_use",
+        "confidence": "explicit"
+      },
+      "turn_id": "280cb5401056",
+      "transcript_anchor": {
+        "unit": "line",
+        "start": 1647,
+        "end": 1648,
+        "entry_ids": [
+          "736b346a-30d5-4103-b836-0257d9b08dcf"
+        ],
+        "tool_use_id": "toolu_01XisbE3fpoi7cwAoVYW8zSo"
+      },
+      "native": {
+        "tool_name": "Skill",
+        "tool_use_id": "toolu_01XisbE3fpoi7cwAoVYW8zSo"
+      },
+      "collapse": {
+        "target": "tool_pair",
+        "label": "Skill: claude-in-chrome",
+        "default_collapsed": true
+      }
+    },
+    {
+      "id": "claude-skill-toolu_01NwTCQtA8aY9qR4HQFGsa8J",
+      "event_type": "tool_invocation",
+      "skill": {
+        "name": "anthropic-skills:deep-research"
+      },
+      "source": {
+        "agent": "claude-code",
+        "signal": "skill_tool_use",
+        "confidence": "explicit"
+      },
+      "turn_id": "adb3318188ae",
+      "transcript_anchor": {
+        "unit": "line",
+        "start": 1804,
+        "end": 1805,
+        "entry_ids": [
+          "5d32208c-4a11-4e41-9368-95090245be74"
+        ],
+        "tool_use_id": "toolu_01NwTCQtA8aY9qR4HQFGsa8J"
+      },
+      "native": {
+        "tool_name": "Skill",
+        "tool_use_id": "toolu_01NwTCQtA8aY9qR4HQFGsa8J"
+      },
+      "collapse": {
+        "target": "tool_pair",
+        "label": "Skill: anthropic-skills:deep-research",
+        "default_collapsed": true
+      }
+    }
+  ],
+  "session_metrics": {
+    "turn_count": 266
+  },
+  "initial_attribution": {
+    "calculated_at": "2026-10-11T00:51:14.459652Z",
+    "agent_lines": 5615,
+    "agent_removed": 0,
+    "human_added": 5798,
+    "human_modified": 0,
+    "human_removed": 0,
+    "total_committed": 11413,
+    "total_lines_changed": 11413,
+    "agent_percentage": 49.19828266012442,
+    "metric_version": 2
+  },
+  "prompt_attributions": [
+    {
+      "checkpoint_number": 2,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 0,
+      "agent_lines_removed": 0
+    },
+    {
+      "checkpoint_number": 3,
+      "user_lines_added": 5798,
+      "user_lines_removed": 0,
+      "agent_lines_added": 5655,
+      "agent_lines_removed": 0,
+      "user_added_per_file": {
+        "agent/arena_kit/sim_cases/real_runs_v21/better_P01.json": 1182,
+        "agent/arena_kit/sim_cases/real_runs_v21/better_P03.json": 1026,
+        "agent/arena_kit/sim_cases/real_runs_v21/better_P04.json": 903,
+        "agent/arena_kit/sim_cases/real_runs_v21/better_P05.json": 1720,
+        "agent/arena_kit/sim_cases/real_runs_v21/better_P11.json": 957,
+        "agent/arena_kit/sim_cases/real_runs_v21/log.txt": 10
+      }
+    }
+  ]
+}
