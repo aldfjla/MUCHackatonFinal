@@ -34,6 +34,9 @@ AGENTS = [
 
 
 def agent_factory(name, data):
+    if data:  # one absolute path for every load_package(): a relative ARENA_DATA silently turned better's health estimate off
+        data = str(Path(data).expanduser().resolve())
+        os.environ["ARENA_DATA"] = data
     from .agents import (
         AnchorAgent,
         BetterAgent,
@@ -94,6 +97,8 @@ def agent_factory(name, data):
 
         if why := package_problem(data):  # say it before any session opens, not once per message
             print(f"WARNING: {why} - messages will cite NO data. Pass --data <folder with world.sqlite>.", file=sys.stderr)
+        elif name in ("combined2", "better"):
+            print(f"health estimate data: {os.environ.get('ARENA_DATA')}", file=sys.stderr)
     if name == "evidence_router":
         return lambda: EvidenceAgent(ConfidentRouterAgent(), data)
     if name == "evidence_rational":
