@@ -1,26 +1,45 @@
-<section id="replay" data-transition="fade" style="background:#FBFBF8;color:#14213D;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:40px">
-<h2 style="font-family:Domine, Georgia, serif;font-size:72px;font-weight:700;line-height:1.1">One replay: a 9.5 % price increase on volute casings (P01)</h2>
-<div style="display:flex;gap:40px">
-<table style="width:1040px;font-size:27px;color:#14213D;background:#FFFFFF;border:1px solid #D8DEE9">
-<tr style="background:#14213D;color:#FBFBF8"><th style="width:14%">Message</th><th style="width:30%">Supplier</th><th style="width:30%">Agent</th><th style="width:26%">Why</th></tr>
-<tr><td>1</td><td>138.55, Nov start</td><td>130.66 @ 14 d, <b>April</b> start</td><td>0.80 anchor; latest effective date</td></tr>
-<tr style="background:#F2F4F8"><td>2</td><td>138.4 April or 135.3 January</td><td>133.63 April</td><td>matches its concession</td></tr>
-<tr><td>3-4</td><td>135.2, then 135.2 again</td><td>133.77, 133.91</td><td>minimum step, keeps the thread moving</td></tr>
-<tr style="background:#F2F4F8"><td>5</td><td>134.9</td><td>134.45 @ 30 d</td><td>payment lever, same cost to us</td></tr>
-<tr><td>6</td><td><b>final offer</b> 135.8 @ 30 d, April</td><td>accept</td><td>package beats opening in the pessimistic world</td></tr>
-</table>
-<div style="flex:1;display:flex;flex-direction:column;gap:24px">
-<div style="display:flex;flex-direction:column;gap:8px;background:#14213D;color:#FBFBF8;padding:32px;border-radius:16px">
-<p style="font-size:26px;color:#E8A860;letter-spacing:2px;text-transform:uppercase">Score</p>
-<p style="font-size:88px;font-weight:600;line-height:1;color:#E8A860">0.88</p>
-<p style="font-size:26px;line-height:1.4;color:#BFD0E6">0.69 before the agent asked for the April date itself. Five months at the old price are worth more than 2 EUR on the unit.</p>
+<section id="replay" data-transition="push" style="background:#0B0F14;color:#E2E8F0;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:24px">
+<p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:24px;letter-spacing:4px;text-transform:uppercase;color:#64748B">06 · replay · case P01 · volute casing +9.5 %</p>
+<h2 style="font-size:68px;font-weight:700;line-height:1.08;letter-spacing:-1px">One thread, message by message</h2>
+<x-embed style="position:absolute;left:128px;top:310px;width:1060px;height:590px"><!doctype html><html><head><meta charset="utf-8"><style>
+html,body{margin:0;background:transparent;font-family:ui-monospace,Menlo,Consolas,monospace;color:#E2E8F0}
+#t{box-sizing:border-box;width:1060px;height:590px;padding:26px 30px;border-radius:12px;background:#131A22;border:1px solid #1F2A35;overflow:hidden}
+.l{display:flex;gap:18px;font-size:25px;line-height:1.5;opacity:0;transform:translateY(8px);transition:opacity .35s,transform .35s}
+.l.on{opacity:1;transform:none}
+.tag{flex:0 0 96px;font-size:22px;letter-spacing:2px;padding-top:4px}
+.sup{color:#FBBF24}.buy{color:#38BDF8}.sys{color:#64748B}
+.m{color:#E2E8F0}.why{color:#64748B;font-size:23px}
+.fin{color:#F87171}.ok{color:#34D399}
+</style></head><body><div id="t"></div><script>
+var L=[["SUP","sup","138.55 · start 2026-11-01","opening ask, +9.5 % on the current 126.53"],
+["BUY","buy","130.66 · 14 d · start 2027-04-01","0.80 anchor; latest effective date the case allows; cites the 51-day notice vs the contract"],
+["SUP","sup","138.40 April · or 135.30 January","\"we did not know that - a fair point\"; prices the date itself"],
+["BUY","buy","133.63 · April","matches the supplier's visible concession"],
+["SUP","sup","135.20 · April",""],
+["BUY","buy","133.77","minimum step: keep the thread moving, never repeat a sheet"],
+["SUP","sup","135.20 · \"our calculation stays internal\"","held; resistance, not proof of a floor"],
+["BUY","buy","133.91",""],
+["SUP","sup","134.90",""],
+["BUY","buy","134.45 · 30 d","payment lever: same cost to us, cash for them"],
+["SUP","fin","FINAL OFFER · 135.80 · 30 d · April","sent at supplier message 6, as every time"],
+["BUY","ok","ACCEPT · C 1,103,429 < C open 1,153,780 · pessimistic world","score 0.88 (0.69 without the April date)"]];
+var t=document.getElementById("t");
+L.forEach(function(r,i){var d=document.createElement("div");d.className="l";
+var cls=r[1]=="fin"?"fin":r[1]=="ok"?"ok":r[1];
+d.innerHTML='<div class="tag '+cls+'">'+r[0]+'</div><div><div class="m '+(r[1]=="fin"?"fin":r[1]=="ok"?"ok":"")+'">'+r[2]+'</div>'+(r[3]?'<div class="why">'+r[3]+'</div>':'')+'</div>';
+t.appendChild(d);setTimeout(function(){d.className="l on"},300+i*420);});
+</script></body></html></x-embed>
+<div style="position:absolute;left:1232px;top:310px;width:560px;display:flex;flex-direction:column;gap:16px" data-build-in="rise">
+<div style="display:flex;flex-direction:column;gap:8px;background:#0F1F1A;padding:30px;border:1px solid #1F3A30;border-radius:12px">
+<p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:22px;letter-spacing:3px;text-transform:uppercase;color:#34D399">verdict</p>
+<p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:96px;font-weight:600;line-height:1;color:#34D399">0.88</p>
+<p style="font-size:25px;line-height:1.4;color:#94A3B8">EUR 50,350 of 56,964 possible. Five months at the old price are worth more than 2 EUR on the unit.</p>
 </div>
-<div style="display:flex;flex-direction:column;gap:8px;background:#FFFFFF;padding:32px;border:1px solid #D8DEE9;border-radius:16px">
-<p style="font-size:26px;color:#E07A1F;letter-spacing:2px;text-transform:uppercase">What the e-mail cited</p>
-<p style="font-size:26px;line-height:1.4;color:#4A5568">The letter's 51-day notice against the contract's notice period, the casting producer-price index, the labour-cost index. The supplier answered "we did not know that, a fair point" and moved.</p>
+<div style="display:flex;flex-direction:column;gap:8px;background:#131A22;padding:30px;border:1px solid #1F2A35;border-radius:12px">
+<p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:22px;letter-spacing:3px;text-transform:uppercase;color:#38BDF8">what the e-mail cited</p>
+<p style="font-size:25px;line-height:1.4;color:#94A3B8">doc:20260911-70110-P01 (51 days notice) vs ctr:4600070110 · casting PPI 2025-08 to 2026-08 · labour cost index. All verified by the arena, none contradicted.</p>
 </div>
 </div>
-</div>
-<p style="position:absolute;left:128px;bottom:64px;font-size:24px;color:#6A7179">Replay links for every session are in backlog.csv; this one is row v30 - niko, case P01</p>
-<aside>Walk the table top to bottom. Point out the three things the jury asked for: why the agent wrote that (the cited notice period), how it decided (cost over the horizon, the April date), and when it closed (the final offer passed the package test).</aside>
+<p style="position:absolute;left:128px;bottom:64px;font-family:'JetBrains Mono', 'Courier New', monospace;font-size:24px;color:#64748B">replay: backlog.csv row v30 - niko · case P01 · every session has one</p>
+<aside>Let the thread type itself in. Point out the three things the jury asks for: why the agent wrote that (the cited notice period), how it decided (cost over the horizon, the April date), and when it closed (the final offer passed the package test in the pessimistic world).</aside>
 </section>

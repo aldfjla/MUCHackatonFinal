@@ -1,27 +1,35 @@
-<section id="approach" data-transition="fade" style="background:#FBFBF8;color:#14213D;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:48px">
-<h2 style="font-family:Domine, Georgia, serif;font-size:72px;font-weight:700;line-height:1.1">Four steps, all deterministic rules</h2>
-<div style="display:flex;gap:24px">
-<div style="flex:1;display:flex;flex-direction:column;gap:16px;background:#14213D;color:#FBFBF8;padding:36px;border-radius:16px">
-<p style="font-size:26px;color:#E8A860;letter-spacing:2px;text-transform:uppercase">1 · Prepare</p>
-<h3 style="font-size:34px;font-weight:600;color:#FBFBF8">Cited evidence</h3>
-<p style="font-size:27px;line-height:1.45;color:#BFD0E6">From the data package: cost-driver indices, our purchase history, should-cost, scorecards, competing bids, contract notice periods. Each claim carries the IDs the arena verifies.</p>
+<section id="approach" data-transition="push" style="background:#0B0F14;color:#E2E8F0;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:40px">
+<p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:24px;letter-spacing:4px;text-transform:uppercase;color:#64748B">02 · the pipeline</p>
+<h2 style="font-size:72px;font-weight:700;line-height:1.08;letter-spacing:-1px">Four stages per message, all deterministic rules</h2>
+<div style="display:flex;gap:0;align-items:stretch">
+<div style="flex:1;display:flex;flex-direction:column;gap:14px;background:#131A22;padding:32px;border:1px solid #1F2A35;border-radius:12px">
+<p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:24px;letter-spacing:3px;text-transform:uppercase;color:#34D399">● prepare</p>
+<h3 style="font-size:32px;font-weight:600;color:#E2E8F0">Cited evidence</h3>
+<p style="font-size:25px;line-height:1.45;color:#94A3B8">Cost-driver indices, our purchase history, should-cost, scorecards, competing bids, contract notice periods. Each claim carries the IDs the arena verifies.</p>
 </div>
-<div style="flex:1;display:flex;flex-direction:column;gap:16px;background:#14213D;color:#FBFBF8;padding:36px;border-radius:16px">
-<p style="font-size:26px;color:#E8A860;letter-spacing:2px;text-transform:uppercase">2 · Read</p>
-<h3 style="font-size:34px;font-weight:600;color:#FBFBF8">Standing sheets and status</h3>
-<p style="font-size:27px;line-height:1.45;color:#BFD0E6">Which of our asks the supplier refused or repriced, whether it is short of cash, whether it sent a final offer. Never the leaderboard or results.</p>
+<x-connector style="width:56px;color:#38BDF8;border-width:3px" from="tl"></x-connector>
+<div style="flex:1;display:flex;flex-direction:column;gap:14px;background:#131A22;padding:32px;border:1px solid #1F2A35;border-radius:12px">
+<p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:24px;letter-spacing:3px;text-transform:uppercase;color:#34D399">● read</p>
+<h3 style="font-size:32px;font-weight:600;color:#E2E8F0">Sheets and status</h3>
+<p style="font-size:25px;line-height:1.45;color:#94A3B8">Which asks the supplier refused or repriced, whether it is short of cash, whether it sent a final offer. Never the leaderboard or results.</p>
 </div>
-<div style="flex:1;display:flex;flex-direction:column;gap:16px;background:#14213D;color:#FBFBF8;padding:36px;border-radius:16px">
-<p style="font-size:26px;color:#E8A860;letter-spacing:2px;text-transform:uppercase">3 · Decide</p>
-<h3 style="font-size:34px;font-weight:600;color:#FBFBF8">Price every package</h3>
-<p style="font-size:27px;line-height:1.45;color:#BFD0E6">Anchor at 0.80 of the ask, match the supplier's visible concession, send one to three equal-cost sheets that trade levers. Must-haves enforced by a guard on every sheet.</p>
+<x-connector style="width:56px;color:#38BDF8;border-width:3px" from="tl"></x-connector>
+<div style="flex:1;display:flex;flex-direction:column;gap:14px;background:#131A22;padding:32px;border:1px solid #1F2A35;border-radius:12px">
+<p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:24px;letter-spacing:3px;text-transform:uppercase;color:#38BDF8">● decide</p>
+<h3 style="font-size:32px;font-weight:600;color:#E2E8F0">Price every package</h3>
+<p style="font-size:25px;line-height:1.45;color:#94A3B8">Anchor at 0.80 of the ask, match the supplier's visible concession, send one to three equal-cost sheets that trade levers. A guard enforces must-haves on every sheet.</p>
 </div>
-<div style="flex:1;display:flex;flex-direction:column;gap:16px;background:#E07A1F;color:#14213D;padding:36px;border-radius:16px">
-<p style="font-size:26px;color:#14213D;letter-spacing:2px;text-transform:uppercase">4 · Close</p>
-<h3 style="font-size:34px;font-weight:600;color:#14213D">Complete package or nothing</h3>
-<p style="font-size:27px;line-height:1.45;color:#14213D">Accept when the whole package beats the opening and the best alternative in the pessimistic world. Take a passing final offer at once. Never walk while a supplier is alive.</p>
+<x-connector style="width:56px;color:#38BDF8;border-width:3px" from="tl"></x-connector>
+<div style="flex:1;display:flex;flex-direction:column;gap:14px;background:#0F1F1A;padding:32px;border:1px solid #1F3A30;border-radius:12px">
+<p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:24px;letter-spacing:3px;text-transform:uppercase;color:#34D399">● close</p>
+<h3 style="font-size:32px;font-weight:600;color:#E2E8F0">Whole package or nothing</h3>
+<p style="font-size:25px;line-height:1.45;color:#94A3B8">Accept when the package beats the opening and the best alternative in the pessimistic world. Take a passing final offer at once. Never walk while a supplier is alive.</p>
 </div>
 </div>
-<p style="position:absolute;left:128px;bottom:64px;font-size:24px;color:#6A7179">In strategic categories the price is set on a supplier-specific health estimate with an uncertainty band</p>
+<div style="display:flex;gap:16px">
+<p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:24px;letter-spacing:2px;text-transform:uppercase;color:#C084FC;background:#1A1426;padding:8px 18px;border:1px solid #33254A;border-radius:999px">0 llm calls per negotiation</p>
+<p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:24px;letter-spacing:2px;text-transform:uppercase;color:#FBBF24;background:#241D0F;padding:8px 18px;border:1px solid #473A1E;border-radius:999px">health band in strategic categories</p>
+<p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:24px;letter-spacing:2px;text-transform:uppercase;color:#94A3B8;background:#131A22;padding:8px 18px;border:1px solid #1F2A35;border-radius:999px">every decision logged</p>
+</div>
 <aside>No language model in the loop. Everything the agent says is a template plus verified facts; everything it decides is the cost function plus a few rules we can point to in the code.</aside>
 </section>

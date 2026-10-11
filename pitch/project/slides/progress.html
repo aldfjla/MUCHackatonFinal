@@ -1,40 +1,44 @@
-<section id="progress" data-transition="push" style="background:#14213D;color:#FBFBF8;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:24px">
-<h2 style="font-family:Domine, Georgia, serif;font-size:72px;font-weight:700;line-height:1.1">24 hours, 403 logged sessions: 0.10 to 0.72</h2>
-<p style="font-size:28px;color:#BFD0E6">Mean score over the ten hosted practice cases, every agent revision the team ran, in order</p>
+<section id="progress" data-transition="push" style="background:#0B0F14;color:#E2E8F0;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:24px">
+<p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:24px;letter-spacing:4px;text-transform:uppercase;color:#64748B">03 · run history</p>
+<h2 style="font-size:72px;font-weight:700;line-height:1.08;letter-spacing:-1px">24 hours, 403 logged sessions: 0.10 to 0.72</h2>
 <x-embed style="position:absolute;left:128px;top:330px;width:1180px;height:560px"><!doctype html><html><head><meta charset="utf-8"><style>
-html,body{margin:0;background:transparent;font-family:-apple-system,"Segoe UI",Helvetica,Arial,sans-serif;color:#FBFBF8}
+html,body{margin:0;background:transparent;font-family:-apple-system,"Segoe UI",Helvetica,Arial,sans-serif;color:#E2E8F0}
 svg{width:1180px;height:560px;display:block}
-.lbl{font-size:24px;fill:#BFD0E6}.val{font-size:26px;font-weight:600;fill:#FBFBF8}.ax{stroke:#3A4A6B;stroke-width:2}
+.lbl{font-size:24px;fill:#64748B;font-family:ui-monospace,Menlo,monospace}.val{font-size:26px;font-weight:600;fill:#E2E8F0;font-family:ui-monospace,Menlo,monospace}.ax{stroke:#1F2A35;stroke-width:2}
 </style></head><body><svg id="s" viewBox="0 0 1180 560"></svg><script>
 var P=[["v2 alex",0.10],["v11",0.18],["v12",0.29],["v13",0.27],["v14",0.57],["v17 alex",0.58],["v5 petra",0.61],["v8 petra",0.66],["v21",0.70],["v30",0.72],["v35",0.72]];
 var L=90,R=1150,T=40,B=480,n=P.length,ns="http://www.w3.org/2000/svg",s=document.getElementById("s");
 function X(i){return L+(R-L)*i/(n-1)}function Y(v){return B-(B-T)*v/0.8}
 function el(t,a,txt){var e=document.createElementNS(ns,t);for(var k in a)e.setAttribute(k,a[k]);if(txt)e.textContent=txt;s.appendChild(e);return e}
-[0,0.2,0.4,0.6,0.8].forEach(function(v){el("line",{x1:L,x2:R,y1:Y(v),y2:Y(v),"class":"ax",style:"stroke-dasharray:6 8"});el("text",{x:L-14,y:Y(v)+9,"text-anchor":"end","class":"lbl"},v.toFixed(1))});
+[0,0.2,0.4,0.6,0.8].forEach(function(v){el("line",{x1:L,x2:R,y1:Y(v),y2:Y(v),"class":"ax",style:"stroke-dasharray:4 10"});el("text",{x:L-14,y:Y(v)+9,"text-anchor":"end","class":"lbl"},v.toFixed(1))});
 var pts=P.map(function(p,i){return[X(i),Y(p[1])]});
-function spline(p){var d="M"+p[0][0]+","+p[0][1];for(var i=0;p.length-1-i>0;i++){var p0=p[i-1]||p[i],p1=p[i],p2=p[i+1],p3=p[i+2]||p2;var c1x=p1[0]+(p2[0]-p0[0])/6,c1y=p1[1]+(p2[1]-p0[1])/6,c2x=p2[0]-(p3[0]-p1[0])/6,c2y=p2[1]-(p3[1]-p1[1])/6;d+=" C"+c1x+","+c1y+" "+c2x+","+c2y+" "+p2[0]+","+p2[1]}return d}
-var g=el("linearGradient",{id:"gr",x1:"0",y1:"0",x2:"0",y2:"1"});g.innerHTML='<stop offset="0" stop-color="#E8A860" stop-opacity="0.45"/><stop offset="1" stop-color="#E8A860" stop-opacity="0"/>';
+function spline(p){var d="M"+p[0][0]+","+p[0][1];for(var i=0;p.length-1-i>0;i++){var p0=p[i-1]||p[i],p1=p[i],p2=p[i+1],p3=p[i+2]||p2;d+=" C"+(p1[0]+(p2[0]-p0[0])/6)+","+(p1[1]+(p2[1]-p0[1])/6)+" "+(p2[0]-(p3[0]-p1[0])/6)+","+(p2[1]-(p3[1]-p1[1])/6)+" "+p2[0]+","+p2[1]}return d}
+var g=el("linearGradient",{id:"gr",x1:"0",y1:"0",x2:"0",y2:"1"});g.innerHTML='<stop offset="0" stop-color="#38BDF8" stop-opacity="0.35"/><stop offset="1" stop-color="#38BDF8" stop-opacity="0"/>';
+var g2=el("linearGradient",{id:"ln",x1:"0",y1:"0",x2:"1",y2:"0"});g2.innerHTML='<stop offset="0" stop-color="#38BDF8"/><stop offset="1" stop-color="#34D399"/>';
 var area=el("path",{d:spline(pts)+" L"+R+","+B+" L"+L+","+B+" Z",fill:"url(#gr)",opacity:"0"});
-var path=el("path",{d:spline(pts),fill:"none",stroke:"#E8A860","stroke-width":"6","stroke-linecap":"round"});
-var len=path.getTotalLength();path.style.strokeDasharray=len;path.style.strokeDashoffset=len;
-path.style.transition="stroke-dashoffset 2.6s cubic-bezier(.4,0,.2,1)";
+var path=el("path",{d:spline(pts),fill:"none",stroke:"url(#ln)","stroke-width":"6","stroke-linecap":"round"});
+var len=path.getTotalLength();path.style.strokeDasharray=len;path.style.strokeDashoffset=len;path.style.transition="stroke-dashoffset 2.6s cubic-bezier(.4,0,.2,1)";
 setTimeout(function(){path.style.strokeDashoffset=0;area.style.transition="opacity 1.2s 1.6s";area.style.opacity=1},200);
-P.forEach(function(p,i){var c=el("circle",{cx:pts[i][0],cy:pts[i][1],r:0,fill:i>=8?"#E8A860":"#FBFBF8",stroke:"#14213D","stroke-width":"3"});c.style.transition="r .35s "+(0.3+2.3*i/(n-1))+"s";setTimeout(function(){c.setAttribute("r",i>=8?12:9)},50);
-var t=el("text",{x:pts[i][0],y:pts[i][1]-22,"text-anchor":"middle","class":"val",opacity:0},p[1].toFixed(2));t.style.transition="opacity .4s "+(0.5+2.3*i/(n-1))+"s";setTimeout(function(){t.setAttribute("opacity",1)},50);
+P.forEach(function(p,i){var last=i>=8;var c=el("circle",{cx:pts[i][0],cy:pts[i][1],r:0,fill:last?"#34D399":"#0B0F14",stroke:last?"#34D399":"#38BDF8","stroke-width":"4"});c.style.transition="r .35s "+(0.3+2.3*i/(n-1))+"s";setTimeout(function(){c.setAttribute("r",last?12:9)},50);
+if(last){var ring=el("circle",{cx:pts[i][0],cy:pts[i][1],r:12,fill:"none",stroke:"#34D399","stroke-width":"3",opacity:0});ring.style.transition="r .9s "+(0.6+2.3*i/(n-1))+"s, opacity .9s "+(0.6+2.3*i/(n-1))+"s";setTimeout(function(){ring.setAttribute("r",34);ring.setAttribute("opacity",0.0001)},60);setTimeout(function(){ring.setAttribute("opacity",0.7)},40);}
+var t=el("text",{x:pts[i][0],y:pts[i][1]-24,"text-anchor":"middle","class":"val",opacity:0},p[1].toFixed(2));t.style.transition="opacity .4s "+(0.5+2.3*i/(n-1))+"s";setTimeout(function(){t.setAttribute("opacity",1)},50);
 el("text",{x:pts[i][0],y:B+36,"text-anchor":"middle","class":"lbl"},p[0]);});
-el("text",{x:R,y:T-8,"text-anchor":"end","class":"lbl"},"score 0..1");
+el("text",{x:R,y:T-8,"text-anchor":"end","class":"lbl"},"mean score, ten cases");
 </script></body></html></x-embed>
-<div style="position:absolute;left:1340px;top:330px;width:452px;display:flex;flex-direction:column;gap:20px" data-build-in="rise">
-<div style="display:flex;flex-direction:column;gap:6px;background:#1E2D52;padding:28px;border-radius:16px">
-<p style="font-size:26px;color:#E8A860;letter-spacing:2px;text-transform:uppercase">The two big jumps</p>
-<p style="font-size:27px;line-height:1.4;color:#FBFBF8"><b>0.29 to 0.57</b>: match the supplier's visible concession, accept the final offer, 24-month contracts, cited evidence.</p>
-<p style="font-size:27px;line-height:1.4;color:#FBFBF8"><b>0.58 to 0.70</b>: price every package with the supplier-health term and an uncertainty band.</p>
+<div style="position:absolute;left:1340px;top:330px;width:452px;display:flex;flex-direction:column;gap:16px" data-build-in="rise">
+<div style="display:flex;flex-direction:column;gap:8px;background:#131A22;padding:28px;border:1px solid #1F2A35;border-radius:12px">
+<p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:22px;letter-spacing:3px;text-transform:uppercase;color:#38BDF8">0.29 → 0.57</p>
+<p style="font-size:25px;line-height:1.4;color:#94A3B8">Match the supplier's visible concession, accept the final offer, 24-month contracts, cited evidence.</p>
 </div>
-<div style="display:flex;flex-direction:column;gap:6px;background:#1E2D52;padding:28px;border-radius:16px">
-<p style="font-size:26px;color:#E8A860;letter-spacing:2px;text-transform:uppercase">Last two levers</p>
-<p style="font-size:27px;line-height:1.4;color:#FBFBF8">Latest effective date in every sheet: P01 0.69 to 0.88. No index sheet in the first message: P08 0.53 to 0.56.</p>
+<div style="display:flex;flex-direction:column;gap:8px;background:#131A22;padding:28px;border:1px solid #1F2A35;border-radius:12px">
+<p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:22px;letter-spacing:3px;text-transform:uppercase;color:#38BDF8">0.58 → 0.70</p>
+<p style="font-size:25px;line-height:1.4;color:#94A3B8">Price every package with the supplier-health term and an uncertainty band.</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:8px;background:#0F1F1A;padding:28px;border:1px solid #1F3A30;border-radius:12px">
+<p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:22px;letter-spacing:3px;text-transform:uppercase;color:#34D399">0.70 → 0.72</p>
+<p style="font-size:25px;line-height:1.4;color:#94A3B8">Latest effective date in every sheet (P01 0.69 → 0.88). No index sheet in the first message (P08 0.53 → 0.56).</p>
 </div>
 </div>
-<p style="position:absolute;left:128px;bottom:64px;font-size:24px;color:#8FA3C4">Source: backlog.csv, first row per version and case; Alex's and Petra's revisions included where they ran all ten cases</p>
+<p style="position:absolute;left:128px;bottom:64px;font-family:'JetBrains Mono', 'Courier New', monospace;font-size:24px;color:#64748B">source backlog.csv · first row per version and case · all three teammates' agents where they ran all ten cases</p>
 <aside>Let the curve draw. Three teammates' agents are on it. The two big jumps were concession matching and the supplier-health pricing; the last two levers were found on Sunday morning by reading the arena's own cost breakdowns.</aside>
 </section>

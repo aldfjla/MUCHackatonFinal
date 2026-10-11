@@ -1,24 +1,28 @@
-<section id="cases" data-transition="fade" style="background:#FBFBF8;color:#14213D;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:24px">
-<h2 style="font-family:Domine, Georgia, serif;font-size:72px;font-weight:700;line-height:1.1">EUR 1.13 million saved of 1.56 million possible, ten cases</h2>
-<p style="font-size:28px;color:#4A5568">Per case: the saving the agent captured (orange) and what the best possible deal would still have added (grey), in EUR over the case horizon</p>
-<x-embed style="position:absolute;left:128px;top:330px;width:1664px;height:560px"><!doctype html><html><head><meta charset="utf-8"><style>
-html,body{margin:0;background:transparent;font-family:-apple-system,"Segoe UI",Helvetica,Arial,sans-serif}
-svg{width:1664px;height:560px;display:block}.lbl{font-size:25px;fill:#4A5568}.sc{font-size:30px;font-weight:600;fill:#14213D}.eur{font-size:24px;fill:#6A7179}
-</style></head><body><svg id="s" viewBox="0 0 1664 560"></svg><script>
-var D=[["P01",50350,6613,.88],["P02",31842,15512,.67],["P03",311245,26026,.92],["P04",1994,323,.86],["P05",63420,18701,.77],["P07",62199,29587,.68],["P08",99007,76571,.56],["P10",404818,198748,.67],["P11",67496,27582,.71],["P18",36910,35612,.51]];
-var ns="http://www.w3.org/2000/svg",s=document.getElementById("s"),W=1664,H=560,L=20,T=70,B=470,bw=110,gap=(W-L*2-bw*10)/9,max=620000;
-function el(t,a,txt){var e=document.createElementNS(ns,t);for(var k in a)e.setAttribute(k,a[k]);if(txt)e.textContent=txt;s.appendChild(e);return e}
-function h(v){return (B-T)*v/max}function k(v){return v>=1e6?(v/1e6).toFixed(2)+"M":Math.round(v/1000)+"k"}
-D.forEach(function(d,i){var x=L+i*(bw+gap),hs=h(d[1]),hl=h(d[2]);
-var r1=el("rect",{x:x,y:B,width:bw,height:0,fill:"#E07A1F",rx:6});var r2=el("rect",{x:x,y:B,width:bw,height:0,fill:"#C9D0DC",rx:6});
-r1.style.transition="all .9s cubic-bezier(.3,0,.2,1) "+(i*0.12)+"s";r2.style.transition="all .9s cubic-bezier(.3,0,.2,1) "+(0.5+i*0.12)+"s";
-setTimeout(function(){r1.setAttribute("y",B-hs);r1.setAttribute("height",hs);r2.setAttribute("y",B-hs-hl);r2.setAttribute("height",hl)},80);
-el("text",{x:x+bw/2,y:B+34,"text-anchor":"middle","class":"lbl"},d[0]);
-var t=el("text",{x:x+bw/2,y:B-hs-hl-14,"text-anchor":"middle","class":"sc",opacity:0},d[3].toFixed(2));t.style.transition="opacity .5s "+(1.4+i*0.12)+"s";setTimeout(function(){t.setAttribute("opacity",1)},80);
-var e=el("text",{x:x+bw/2,y:B+64,"text-anchor":"middle","class":"eur",opacity:0},k(d[1])+" of "+k(d[1]+d[2]));e.style.transition="opacity .5s "+(1.4+i*0.12)+"s";setTimeout(function(){e.setAttribute("opacity",1)},80);});
-el("line",{x1:L,x2:W-L,y1:B,y2:B,stroke:"#C9D0DC","stroke-width":"2"});
-el("text",{x:W-L,y:T-30,"text-anchor":"end","class":"lbl"},"score above each bar; bars in EUR, same scale");
+<section id="cases" data-transition="fade" style="background:#0B0F14;color:#E2E8F0;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:24px">
+<p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:24px;letter-spacing:4px;text-transform:uppercase;color:#64748B">04 · scenario wall · v35</p>
+<h2 style="font-size:72px;font-weight:700;line-height:1.08;letter-spacing:-1px">EUR 1.13 M saved of 1.56 M possible, ten of ten closed</h2>
+<x-embed style="position:absolute;left:128px;top:320px;width:1664px;height:580px"><!doctype html><html><head><meta charset="utf-8"><style>
+html,body{margin:0;background:transparent;font-family:-apple-system,"Segoe UI",Helvetica,Arial,sans-serif;color:#E2E8F0}
+#w{display:grid;grid-template-columns:repeat(5,1fr);gap:16px;width:1664px}
+.t{box-sizing:border-box;height:272px;padding:22px 24px;border-radius:12px;background:#131A22;border:1px solid #1F2A35;opacity:0;transform:scale(.6);display:flex;flex-direction:column;justify-content:space-between}
+.t.on{animation:land .42s cubic-bezier(.2,.8,.2,1) forwards}
+@keyframes land{0%{opacity:.2;transform:scale(.6)}60%{transform:scale(1.08)}100%{opacity:1;transform:scale(1)}}
+.t.ring{animation:land .42s cubic-bezier(.2,.8,.2,1) forwards, pulse .7s .42s ease-out}
+@keyframes pulse{0%{box-shadow:0 0 0 0 var(--c)}100%{box-shadow:0 0 0 14px transparent}}
+.id{font-family:ui-monospace,Menlo,monospace;font-size:24px;letter-spacing:3px;color:#64748B;text-transform:uppercase}
+.sc{font-family:ui-monospace,Menlo,monospace;font-size:64px;font-weight:600;line-height:1}
+.bar{height:10px;border-radius:5px;background:#1F2A35;overflow:hidden;margin:10px 0}
+.fill{height:10px;width:0;border-radius:5px;transition:width 1s cubic-bezier(.3,0,.2,1)}
+.eur{font-family:ui-monospace,Menlo,monospace;font-size:24px;color:#94A3B8}
+.nm{font-size:24px;color:#94A3B8;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+</style></head><body><div id="w"></div><script>
+var D=[["P01","volute casing +9.5 %",.88,50350,56964],["P02","motor, copper clause",.67,31842,47353],["P03","converter renewal",.92,311245,337271],["P04","bearing renewal",.86,1994,2317],["P05","RFQ pump shaft",.77,63420,82121],["P07","fastener bundle",.68,62199,91786],["P08","1.4404 bar, alloy",.56,99007,175578],["P10","seal allocation cut",.67,404818,603565],["P11","bearing bracket quality",.71,67496,95078],["P18","1.4404 bar, Werdenfels",.51,36910,72522]];
+function col(s){return s>=0.8?"#34D399":s>=0.6?"#38BDF8":"#FBBF24"}function k(v){return v>=1e6?(v/1e6).toFixed(2)+"M":Math.round(v/1000)+"k"}
+var w=document.getElementById("w");
+D.forEach(function(d,i){var c=col(d[2]);var t=document.createElement("div");t.className="t";t.style.setProperty("--c",c);
+t.innerHTML='<div><div class="id">'+d[0]+'</div><div class="nm">'+d[1]+'</div></div><div><div class="sc" style="color:'+c+'">'+d[2].toFixed(2)+'</div><div class="bar"><div class="fill" style="background:'+c+'"></div></div><div class="eur">'+k(d[3])+' saved · '+k(d[4]-d[3])+' left</div></div>';
+w.appendChild(t);setTimeout(function(){t.className="t ring";setTimeout(function(){t.querySelector(".fill").style.width=Math.round(d[2]*100)+"%"},200)},150+i*170);});
 </script></body></html></x-embed>
-<p style="position:absolute;left:128px;bottom:64px;font-size:24px;color:#6A7179">Source: arena cost breakdowns of the v35 deals (backlog.csv). The grey part on P08, P10, P18 sits below any price those suppliers ever offered.</p>
-<aside>The grey remainder is the honest part: on the raw-material and capacity cases the best possible cost lies below every price the supplier ever put on a sheet. That is where a different kind of leverage would be needed, not a better bargaining script.</aside>
+<p style="position:absolute;left:128px;bottom:64px;font-family:'JetBrains Mono', 'Courier New', monospace;font-size:24px;color:#64748B">green ≥ 0.80 · blue ≥ 0.60 · amber below · "left" = what the best possible deal would still add · source: arena cost breakdowns, backlog.csv</p>
+<aside>Each tile lands like a scenario verdict. The amber ones are the raw-material cases: there the best possible cost lies below every price the supplier ever put on a sheet, so a better script would not have closed that gap.</aside>
 </section>

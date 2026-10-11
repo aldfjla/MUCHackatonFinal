@@ -1,32 +1,32 @@
-<section id="craft" data-transition="fade" style="background:#EEF1F6;color:#14213D;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:40px">
-<h2 style="font-family:Domine, Georgia, serif;font-size:72px;font-weight:700;line-height:1.1">Craft: one change at a time, judged by the real arena</h2>
-<div style="display:flex;gap:24px">
-<div style="flex:1;display:flex;flex-direction:column;gap:8px;background:#FFFFFF;padding:32px;border:1px solid #D8DEE9;border-radius:16px">
-<p style="font-size:80px;font-weight:600;line-height:1;color:#14213D">474</p>
-<p style="font-size:26px;line-height:1.4;color:#4A5568">tests, including the concurrent play loop and every flag's on and off path</p>
+<section id="craft" data-transition="push" style="background:#0B0F14;color:#E2E8F0;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:32px">
+<p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:24px;letter-spacing:4px;text-transform:uppercase;color:#64748B">10 · craft</p>
+<h2 style="font-size:68px;font-weight:700;line-height:1.08;letter-spacing:-1px">One change at a time, judged by the real arena</h2>
+<x-embed style="position:absolute;left:128px;top:310px;width:1664px;height:230px"><!doctype html><html><head><meta charset="utf-8"><style>
+html,body{margin:0;background:transparent;font-family:ui-monospace,Menlo,Consolas,monospace;color:#E2E8F0}
+#r{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;width:1664px}
+.c{box-sizing:border-box;height:230px;padding:28px 30px;border-radius:12px;background:#131A22;border:1px solid #1F2A35;display:flex;flex-direction:column;justify-content:space-between;opacity:0;transform:translateY(10px) scale(.98)}
+.c.on{animation:rise .5s ease-out forwards}
+@keyframes rise{to{opacity:1;transform:none}}
+.n{font-size:84px;font-weight:600;line-height:1}
+.d{font-family:-apple-system,"Segoe UI",Helvetica,Arial,sans-serif;font-size:24px;line-height:1.35;color:#94A3B8}
+.ring{animation:rise .5s ease-out forwards, pulse .8s .6s ease-out}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(52,211,153,.55)}100%{box-shadow:0 0 0 14px rgba(52,211,153,0)}}
+</style></head><body><div id="r"></div><script>
+var C=[[474,"#E2E8F0","tests: the concurrent play loop and every flag's on and off path",2.2],[403,"#38BDF8","real sessions logged with costs, score, replay, commit, data version",2.2],[4,"#E2E8F0","verified, tagged revisions; the submitted one reproduced 100 sessions in a row",1.2],[0,"#34D399","language-model calls per negotiation · keys in the repo",0.8]];
+var r=document.getElementById("r");
+C.forEach(function(c,i){var d=document.createElement("div");d.className="c";d.innerHTML='<div class="n" style="color:'+c[1]+'">0</div><div class="d">'+c[2]+'</div>';r.appendChild(d);
+setTimeout(function(){d.className=i==3?"c ring":"c on";var n=d.querySelector(".n"),t0=null,dur=c[3]*1000;function step(ts){if(!t0)t0=ts;var p=Math.min(1,(ts-t0)/dur);p=1-Math.pow(1-p,3);n.textContent=Math.round(c[0]*p);if(1-p>0)requestAnimationFrame(step)}requestAnimationFrame(step)},200+i*180);});
+</script></body></html></x-embed>
+<div style="position:absolute;left:128px;top:580px;width:1664px;display:flex;gap:20px" data-build-in="rise">
+<div style="flex:1;display:flex;flex-direction:column;gap:10px;background:#131A22;padding:30px;border:1px solid #1F2A35;border-radius:12px">
+<p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:22px;letter-spacing:3px;text-transform:uppercase;color:#38BDF8">method</p>
+<p style="font-size:25px;line-height:1.45;color:#94A3B8">Candidate vs unchanged baseline on identical cases; promote only what repeats; rejected ideas stay as default-off flags with their result in the comment. A fitted mock arena for crash and regression checks, never for tuning: it is in-sample and text-blind.</p>
 </div>
-<div style="flex:1;display:flex;flex-direction:column;gap:8px;background:#FFFFFF;padding:32px;border:1px solid #D8DEE9;border-radius:16px">
-<p style="font-size:80px;font-weight:600;line-height:1;color:#14213D">440+</p>
-<p style="font-size:26px;line-height:1.4;color:#4A5568">real sessions logged with costs, score, replay link, commit and data version</p>
-</div>
-<div style="flex:1;display:flex;flex-direction:column;gap:8px;background:#FFFFFF;padding:32px;border:1px solid #D8DEE9;border-radius:16px">
-<p style="font-size:80px;font-weight:600;line-height:1;color:#14213D">3</p>
-<p style="font-size:26px;line-height:1.4;color:#4A5568">verified, tagged revisions; the submitted one reproduced 100 sessions in a row</p>
-</div>
-<div style="flex:1;display:flex;flex-direction:column;gap:8px;background:#14213D;color:#FBFBF8;padding:32px;border-radius:16px">
-<p style="font-size:80px;font-weight:600;line-height:1;color:#E8A860">0</p>
-<p style="font-size:26px;line-height:1.4;color:#BFD0E6">language-model calls per negotiation; no keys in the repo</p>
+<div style="flex:1;display:flex;flex-direction:column;gap:10px;background:#131A22;padding:30px;border:1px solid #1F2A35;border-radius:12px">
+<p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:22px;letter-spacing:3px;text-transform:uppercase;color:#34D399">explainability</p>
+<p style="font-size:25px;line-height:1.45;color:#94A3B8">Every decision writes its rule, the package cost breakdown, the health band and the concession history into the result. Every e-mail cites only facts the arena can verify; zero contradicted claims across all sessions.</p>
 </div>
 </div>
-<div style="display:flex;gap:24px">
-<div style="flex:1;display:flex;flex-direction:column;gap:12px;background:#FFFFFF;padding:32px;border:1px solid #D8DEE9;border-radius:16px">
-<h3 style="font-size:32px;font-weight:600;color:#E07A1F">Method</h3>
-<p style="font-size:27px;line-height:1.45;color:#4A5568">Candidate vs unchanged baseline on identical cases; promote only what repeats; rejected ideas stay as default-off flags with their result in the comment. A fitted mock arena for crash and regression checks, never for tuning: it is in-sample and text-blind.</p>
-</div>
-<div style="flex:1;display:flex;flex-direction:column;gap:12px;background:#FFFFFF;padding:32px;border:1px solid #D8DEE9;border-radius:16px">
-<h3 style="font-size:32px;font-weight:600;color:#E07A1F">Explainability</h3>
-<p style="font-size:27px;line-height:1.45;color:#4A5568">Every decision writes its rule, the cost breakdown of the package, the health band and the concession history into the result. Every e-mail cites only facts the arena can verify; zero contradicted claims across all sessions.</p>
-</div>
-</div>
+<p style="position:absolute;left:128px;bottom:64px;font-family:'JetBrains Mono', 'Courier New', monospace;font-size:24px;color:#64748B">backlog.csv · TIMELINE.md · LEARNINGS_v36.md · COMPARISON_better_vs_merged.md · agent/arena_kit/sim_cases/real_runs_*</p>
 <aside>If asked about the mock: it was fitted on our own transcripts and could not predict any real-arena result, so we stopped trusting it for decisions and kept it for regression checks.</aside>
 </section>
